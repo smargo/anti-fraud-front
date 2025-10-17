@@ -1,0 +1,28 @@
+{
+  "name": "anti-fraud-frontend",
+  "version": "1.0.0",
+  "description": "反欺诈系统前端",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx max dev",
+    "build": "npx max build",
+    "start": "npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["antifraud", "react", "antd"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ant-design/icons": "^6.0.0",
+    "@ant-design/pro-components": "^2.8.10",
+    "@umijs/max": "^4.4.12",
+    "antd": "^5.26.7",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}
