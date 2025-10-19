@@ -7,16 +7,19 @@
 ## 功能特点
 
 ### 1. 双重确认机制
+
 - **Popconfirm组件**：提供美观的确认对话框
 - **详细信息展示**：显示要删除的版本号
 - **风险提示**：明确告知用户删除后无法恢复
 
 ### 2. 加载状态反馈
+
 - **按钮加载状态**：删除过程中按钮显示加载动画
 - **禁用操作**：删除过程中禁用相关操作
 - **状态管理**：防止重复提交
 
 ### 3. 错误处理
+
 - **网络错误**：显示具体的错误信息
 - **业务错误**：显示后端返回的错误消息
 - **用户友好**：提供清晰的错误提示
@@ -24,11 +27,13 @@
 ## 使用位置
 
 ### 1. 版本管理面板 (VersionManagementPanel)
+
 - **位置**：事件配置页面的版本管理区域
 - **触发**：点击"删除草稿"按钮
 - **确认**：Popconfirm确认对话框
 
 ### 2. 版本历史模态框 (VersionHistoryModal)
+
 - **位置**：版本历史列表的操作列
 - **触发**：点击草稿版本行的"删除"按钮
 - **确认**：Popconfirm确认对话框
@@ -40,6 +45,7 @@
 ```
 
 ### 确认对话框内容
+
 - **标题**：确认删除草稿版本
 - **描述**：
   - 确定要删除草稿版本 [版本号] 吗？
@@ -49,11 +55,13 @@
 ## API接口
 
 ### 删除草稿版本
+
 ```typescript
-DELETE /api/event-config-version/{versionId}
+DELETE / api / event - config - version / { versionId };
 ```
 
 **响应格式**：
+
 ```json
 {
   "code": "SUCCESS",
@@ -65,16 +73,19 @@ DELETE /api/event-config-version/{versionId}
 ## 组件更新
 
 ### 1. VersionManagementPanel
+
 - 添加了删除按钮的加载状态
 - 使用Popconfirm提供确认交互
 - 改进了草稿版本的信息展示
 
 ### 2. VersionHistoryModal
+
 - 为草稿版本添加删除操作
 - 支持批量删除的加载状态管理
 - 删除后自动关闭模态框并刷新数据
 
 ### 3. 服务层 (eventConfigVersion.ts)
+
 - 添加了`deleteDraftVersion` API调用
 - 更新了`discardDraft`函数实现
 - 统一的错误处理机制
@@ -82,6 +93,7 @@ DELETE /api/event-config-version/{versionId}
 ## 测试页面
 
 访问 `/version-test` 页面可以测试删除功能：
+
 - 版本管理面板测试
 - 版本历史模态框测试
 - API调用测试

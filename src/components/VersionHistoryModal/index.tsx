@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, Table, Space, Tag, Button, message, Popconfirm } from 'antd';
-import { EventConfigVersion, rollbackToVersion, discardDraft } from '@/services/eventConfigVersion';
+import {
+  EventConfigVersion,
+  rollbackToVersion,
+  discardDraft,
+} from '@/services/antifraud/eventConfigVersion';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -61,9 +65,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
       key: 'version',
       render: (version: string, record: EventConfigVersion) => (
         <Space>
-          <Tag color={record.status === 'DRAFT' ? 'orange' : 'blue'}>
-            {version}
-          </Tag>
+          <Tag color={record.status === 'DRAFT' ? 'orange' : 'blue'}>{version}</Tag>
           {record.status === 'ACTIVE' && <Tag color="green">当前</Tag>}
         </Space>
       ),
@@ -72,7 +74,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
       title: '类型',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => status === 'DRAFT' ? '草稿' : '发布',
+      render: (status: string) => (status === 'DRAFT' ? '草稿' : '发布'),
     },
     {
       title: '创建人',
@@ -89,7 +91,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
       title: '发布时间',
       dataIndex: 'publishedDate',
       key: 'publishedDate',
-      render: (date: string) => date ? moment(date).format('YYYY-MM-DD HH:mm') : '-',
+      render: (date: string) => (date ? moment(date).format('YYYY-MM-DD HH:mm') : '-'),
     },
     {
       title: '描述',
@@ -103,8 +105,8 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
       render: (_, record: EventConfigVersion) => (
         <Space>
           {record.status === 'ACTIVE' && (
-            <Button 
-              size="small" 
+            <Button
+              size="small"
               type="primary"
               loading={loading}
               onClick={() => handleRollback(record)}
@@ -117,7 +119,9 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
               title="确认删除草稿版本"
               description={
                 <div>
-                  <p>确定要删除草稿版本 <strong>{record.version}</strong> 吗？</p>
+                  <p>
+                    确定要删除草稿版本 <strong>{record.version}</strong> 吗？
+                  </p>
                   <p style={{ color: '#ff4d4f', margin: 0 }}>
                     <ExclamationCircleOutlined /> 删除后将无法恢复，请谨慎操作。
                   </p>
@@ -130,8 +134,8 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
               onConfirm={() => handleDeleteDraft(record)}
               disabled={deleting === record.id}
             >
-              <Button 
-                size="small" 
+              <Button
+                size="small"
                 danger
                 loading={deleting === record.id}
                 icon={<DeleteOutlined />}
@@ -146,13 +150,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   ];
 
   return (
-    <Modal
-      title="版本历史"
-      open={visible}
-      onCancel={onCancel}
-      width={800}
-      footer={null}
-    >
+    <Modal title="版本历史" open={visible} onCancel={onCancel} width={800} footer={null}>
       <Table
         dataSource={versionHistory}
         columns={columns}

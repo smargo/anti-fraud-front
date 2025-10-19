@@ -1,12 +1,16 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { EventConfigVersion, EventConfigVersionInfo, saveDraft } from '@/services/eventConfigVersion';
+import {
+  EventConfigVersion,
+  EventConfigVersionInfo,
+  saveDraft,
+} from '@/services/antifraud/eventConfigVersion';
 
 interface EventConfigVersionContextType {
   // 状态
   versionInfo: EventConfigVersionInfo;
   hasUnsavedChanges: boolean;
   isSubmitting: boolean;
-  
+
   // 方法
   setVersionInfo: (info: EventConfigVersionInfo) => void;
   setHasUnsavedChanges: (hasChanges: boolean) => void;
@@ -14,7 +18,9 @@ interface EventConfigVersionContextType {
   saveDraftConfig: (configData: any) => Promise<void>;
 }
 
-const EventConfigVersionContext = createContext<EventConfigVersionContextType | undefined>(undefined);
+const EventConfigVersionContext = createContext<EventConfigVersionContextType | undefined>(
+  undefined,
+);
 
 export const useEventConfigVersionContext = () => {
   const context = useContext(EventConfigVersionContext);
@@ -37,21 +43,22 @@ export const EventConfigVersionProvider: React.FC<EventConfigVersionProviderProp
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const saveDraftConfig = useCallback(async (configData: any) => {
-    if (!versionInfo.workingDraftVersion) {
-      throw new Error('没有可保存的草稿版本');
-    }
+  const saveDraftConfig = useCallback(
+    async (configData: any) => {
+      if (!versionInfo.workingDraftVersion) {
+        throw new Error('没有可保存的草稿版本');
+      }
 
-    setIsSubmitting(true);
-    try {
-      await saveDraft(versionInfo.workingDraftVersion.id, configData);
-      setHasUnsavedChanges(false);
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [versionInfo.workingDraftVersion]);
+      setIsSubmitting(true);
+      try {
+        await saveDraft(versionInfo.workingDraftVersion.id, configData);
+        setHasUnsavedChanges(false);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [versionInfo.workingDraftVersion],
+  );
 
   const value: EventConfigVersionContextType = {
     versionInfo,

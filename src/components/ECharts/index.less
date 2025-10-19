@@ -1,0 +1,181 @@
+/* ECharts 组件样式 */
+.echarts-card {
+  .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+
+    .ant-card-head-title {
+      font-weight: 600;
+      color: #262626;
+    }
+  }
+
+  .ant-card-body {
+    padding: 16px;
+  }
+}
+
+/* ECharts 图表容器样式 */
+.echarts-container {
+  position: relative;
+
+  .echarts-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+}
+
+/* 响应式图表样式 */
+@media (max-width: 768px) {
+  .echarts-card {
+    .ant-card-body {
+      padding: 12px;
+    }
+  }
+}
+
+/* 图表工具栏样式 */
+.echarts-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  gap: 8px;
+
+  .ant-btn {
+    height: 32px;
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+}
+
+/* 图表标题样式 */
+.echarts-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* 图表图例样式 */
+.echarts-legend {
+  margin-bottom: 16px;
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 16px;
+    font-size: 12px;
+    color: #666;
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      margin-right: 6px;
+    }
+  }
+}
+
+/* 图表数据标签样式 */
+.echarts-label {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 图表提示框样式 */
+.echarts-tooltip {
+  background: rgba(0, 0, 0, 0.8);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  padding: 8px 12px;
+
+  .tooltip-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .tooltip-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+
+    .tooltip-marker {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+  }
+}
+
+/* 图表动画样式 */
+.echarts-animation {
+  transition: all 0.3s ease;
+}
+
+/* 图表交互样式 */
+.echarts-interactive {
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+/* 图表加载状态样式 */
+.echarts-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* 图表错误状态样式 */
+.echarts-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #999;
+
+  .error-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .error-message {
+    font-size: 14px;
+  }
+}
+
+/* 图表空数据样式 */
+.echarts-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #999;
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .empty-message {
+    font-size: 14px;
+  }
+}
+

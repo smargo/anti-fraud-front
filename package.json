@@ -4,25 +4,67 @@
   "description": "反欺诈系统前端",
   "main": "index.js",
   "scripts": {
-    "dev": "npx max dev",
-    "build": "npx max build",
+    "dev": "max dev",
+    "build": "max build",
     "start": "npm run dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "lint": "npm run lint:js && npm run lint:prettier && npm run tsc",
+    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
+    "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
+    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx",
+    "lint:prettier": "prettier -c --write \"**/**.{js,jsx,tsx,ts,less,md,json}\" --end-of-line auto",
+    "prettier": "prettier -c --write \"**/**.{js,jsx,tsx,ts,less,md,json}\"",
+    "tsc": "tsc --noEmit",
+    "prepare": "husky install",
+    "jest": "jest",
+    "test:coverage": "npm run jest -- --coverage",
+    "test:update": "npm run jest -- -u"
   },
-  "keywords": ["antifraud", "react", "antd"],
+  "keywords": [
+    "antifraud",
+    "react",
+    "antd"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
     "@ant-design/pro-components": "^2.8.10",
-    "@umijs/max": "^4.4.12",
+    "@ant-design/use-emotion-css": "^1.0.4",
+    "@formily/antd-v5": "^1.2.4",
+    "@formily/core": "^2.2.24",
+    "@formily/react": "^2.2.24",
+    "@formily/reactive": "^2.2.24",
+    "@types/crypto-js": "^4.2.1",
+    "@types/lodash": "^4.14.202",
+    "@umijs/max": "^4.5.2",
     "antd": "^5.26.7",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.10",
+    "echarts": "^5.4.3",
+    "echarts-for-react": "^3.0.2",
+    "lodash": "^4.17.21",
+    "qiankun": "^2.10.16",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "umi-presets-pro": "^2.0.3"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.0"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
+    "**/*.{js,jsx,tsx,ts,less,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=12.0.0"
   }
 }

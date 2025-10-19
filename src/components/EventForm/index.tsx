@@ -31,19 +31,13 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit, onCancel
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-    >
+    <Form form={form} layout="vertical">
       <Form.Item
         name="eventNo"
         label="事件编号"
         rules={[{ required: true, message: '请输入事件编号' }]}
       >
-        <Input 
-          placeholder="请输入事件编号" 
-          disabled={!!initialValues?.id}
-        />
+        <Input placeholder="请输入事件编号" disabled={!!initialValues?.id} />
       </Form.Item>
 
       <Form.Item
@@ -59,12 +53,7 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit, onCancel
         label="事件描述"
         rules={[{ max: 256, message: '事件描述不能超过256个字符' }]}
       >
-        <TextArea 
-          placeholder="请输入事件描述" 
-          rows={3}
-          maxLength={256}
-          showCount
-        />
+        <TextArea placeholder="请输入事件描述" rows={3} maxLength={256} showCount />
       </Form.Item>
 
       <Form.Item>
@@ -79,4 +68,4 @@ const EventForm: React.FC<EventFormProps> = ({ initialValues, onSubmit, onCancel
   );
 };
 
-export default EventForm; 
+export default EventForm;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { message } from 'antd';
-import { getDictsByCodeNoList } from '@/services/dict';
+import { getDictsByCodeNoList } from '@/services/dict/dict';
 import { DictItem, DictDataMap } from '@/types/dict';
 
 /**
@@ -36,9 +36,9 @@ export const useDictData = (initialCodeList: string[] = []): UseDictDataReturn =
     try {
       setLoading(true);
       const result = await getDictsByCodeNoList(codeNoList);
-      setDictData(prev => ({
+      setDictData((prev) => ({
         ...prev,
-        ...result
+        ...result,
       }));
     } catch (error) {
       console.error('加载字典数据失败:', error);
@@ -56,28 +56,34 @@ export const useDictData = (initialCodeList: string[] = []): UseDictDataReturn =
   }, [codeList, loadDictData]);
 
   // 获取指定代码的字典选项
-  const getDictOptions = useCallback((codeNo: string): DictItem[] => {
-    return dictData[codeNo] || [];
-  }, [dictData]);
+  const getDictOptions = useCallback(
+    (codeNo: string): DictItem[] => {
+      return dictData[codeNo] || [];
+    },
+    [dictData],
+  );
 
   // 获取指定代码的字典选项，转换为 ProTable valueEnum 格式
-  const getDictValueEnum = useCallback((codeNo: string): ValueEnum => {
-    const options = dictData[codeNo] || [];
-    return options.reduce((acc, option) => {
-      acc[option.itemNo] = {
-        text: option.itemDescribe,
-        value: option.itemNo,
-      };
-      return acc;
-    }, {} as ValueEnum);
-  }, [dictData]);
+  const getDictValueEnum = useCallback(
+    (codeNo: string): ValueEnum => {
+      const options = dictData[codeNo] || [];
+      return options.reduce((acc, option) => {
+        acc[option.itemNo] = {
+          text: option.itemDescribe,
+          value: option.itemNo,
+        };
+        return acc;
+      }, {} as ValueEnum);
+    },
+    [dictData],
+  );
 
   // 初始化加载 - 使用useRef避免重复执行
   useEffect(() => {
     if (!initializedRef.current && initialCodeList.length > 0) {
       initializedRef.current = true;
       setCodeList(initialCodeList);
-      
+
       // 直接调用API
       const loadInitialData = async () => {
         try {
