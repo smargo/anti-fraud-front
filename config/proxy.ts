@@ -21,7 +21,7 @@ const getApiServerUrl = () => {
   }
 
   // 默认配置
-  const defaultApiServer = 'http://afsfront.be.bbit.hncy58dev:8100';
+  const defaultApiServer = 'http://localhost:8080';
   console.log(`[Proxy Config] Using default API server: ${defaultApiServer}`);
   return defaultApiServer;
 };
