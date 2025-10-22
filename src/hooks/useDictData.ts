@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { message } from 'antd';
 import { getDictsByCodeNoList } from '@/services/dict/dict';
-import { DictItem, DictDataMap } from '@/types/dict';
+import { DictDataMap, DictItem } from '@/types/dict';
+import { message } from 'antd';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * ProTable valueEnum 类型定义
@@ -38,7 +38,7 @@ export const useDictData = (initialCodeList: string[] = []): UseDictDataReturn =
       const result = await getDictsByCodeNoList(codeNoList);
       setDictData((prev) => ({
         ...prev,
-        ...result,
+        ...result.data,
       }));
     } catch (error) {
       console.error('加载字典数据失败:', error);
@@ -89,7 +89,7 @@ export const useDictData = (initialCodeList: string[] = []): UseDictDataReturn =
         try {
           setLoading(true);
           const result = await getDictsByCodeNoList(initialCodeList);
-          setDictData(result || {});
+          setDictData(result.data || {});
         } catch (error) {
           console.error('加载字典数据失败:', error);
           message.error('加载字典数据失败');
