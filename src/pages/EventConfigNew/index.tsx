@@ -109,6 +109,9 @@ const EventConfig: React.FC = () => {
     if (selected) {
       message.success(`已切换到版本: ${selected.versionCode}`);
     }
+
+    // 选择版本后关闭版本历史窗口 - 与原页面一致
+    setVersionHistoryVisible(false);
   };
 
   // 处理版本更新
