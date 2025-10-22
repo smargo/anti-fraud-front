@@ -1,6 +1,6 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Alert, Button } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
+import { Alert, Button } from 'antd';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 /**
  * 错误边界组件Props
@@ -84,4 +84,3 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 export default ErrorBoundary;
-

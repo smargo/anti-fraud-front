@@ -1,4 +1,3 @@
-// Jest 全局变量设置
 const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),

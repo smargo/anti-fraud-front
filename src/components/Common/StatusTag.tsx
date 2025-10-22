@@ -1,10 +1,7 @@
 import { Tag } from 'antd';
 import React from 'react';
-
-interface SelectOption {
-  value: string | number;
-  label: string;
-}
+import { SelectOption } from '../../types/index';
+import { STATUS_COLOR_MAP } from '../../utils/constants';
 
 interface StatusTagProps {
   value: string;
@@ -12,7 +9,7 @@ interface StatusTagProps {
   colorMap?: Record<string, string>;
 }
 
-const StatusTag: React.FC<StatusTagProps> = ({ value, options, colorMap = {} }) => {
+const StatusTag: React.FC<StatusTagProps> = ({ value, options, colorMap = STATUS_COLOR_MAP }) => {
   const option = options.find((opt) => opt.value === value);
   const color = colorMap[value] || 'default';
 
@@ -20,4 +17,3 @@ const StatusTag: React.FC<StatusTagProps> = ({ value, options, colorMap = {} }) 
 };
 
 export default StatusTag;
-

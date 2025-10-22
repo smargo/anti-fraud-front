@@ -14,8 +14,6 @@ export const LOCAL_DEV_PERMISSIONS = [
   'antifraud:datasource:readonly',
   'antifraud:dict:readonly',
   'antifraud:ruleManagement:readonly',
-  'antifraud:microAppDemo:readonly',
-  'antifraud:utilsDemo:readonly',
   '/dashboard',
   '/event',
   '/field',
@@ -36,7 +34,7 @@ export type LocalDevPermissionCode = (typeof LOCAL_DEV_PERMISSIONS)[number];
  * 创建本地开发环境的权限对象列表
  * 用于 getInitialState 中的用户权限配置
  */
-export const createLocalDevPermissions = (): any[] => {
+export const createLocalDevPermissions = (): PhoenixAPI.AuthorityListItem[] => {
   return LOCAL_DEV_PERMISSIONS.map((code) => ({
     code,
     name: code,
@@ -48,6 +46,8 @@ export const createLocalDevPermissions = (): any[] => {
     lastModifiedBy: 'system',
     type: 'MENU',
     version: 1,
+    menu: {} as PhoenixAPI.MenuTreeItem,
+    menuId: code,
   }));
 };
 

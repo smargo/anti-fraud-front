@@ -1,13 +1,15 @@
 import { withColumns } from '@/utils';
-import { ProTable, ProColumns } from '@ant-design/pro-components';
+import { ProColumns, ProTable } from '@ant-design/pro-components';
 
-interface PureTableProps {
+export default ({
+  columns = [],
+  dataSource = [],
+  options = {},
+}: {
   columns: ProColumns[];
   dataSource: any;
   options?: any;
-}
-
-const PureTable: React.FC<PureTableProps> = ({ columns = [], dataSource = [], options = {} }) => {
+}) => {
   const defaultOptions = {
     search: false,
     options: false,
@@ -29,6 +31,3 @@ const PureTable: React.FC<PureTableProps> = ({ columns = [], dataSource = [], op
     />
   );
 };
-
-export default PureTable;
-

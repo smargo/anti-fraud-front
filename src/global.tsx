@@ -1,7 +1,6 @@
-import './public-path';
 import '@umijs/max';
 import { Button, message, notification } from 'antd';
-import defaultSettings from './config/defaultSettings';
+import defaultSettings from '../config/defaultSettings';
 
 // 需要过滤的警告消息常量
 const FILTERED_WARNINGS = [
@@ -113,7 +112,7 @@ if (pwa) {
     );
     notification.open({
       message: '有新内容',
-      description: '请点击"刷新"按钮或者手动刷新页面',
+      description: '请点击“刷新”按钮或者手动刷新页面',
       btn,
       key,
       onClose: async () => null,

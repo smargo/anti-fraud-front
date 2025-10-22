@@ -12,7 +12,7 @@ export default async () => {
     ...config,
     testEnvironmentOptions: {
       ...(config?.testEnvironmentOptions || {}),
-      url: 'http://localhost:8002',
+      url: 'http://localhost:8000',
     },
     setupFiles: [...(config.setupFiles || []), './tests/setupTests.jsx'],
     globals: {
@@ -21,4 +21,3 @@ export default async () => {
     },
   };
 };
-

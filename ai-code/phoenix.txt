@@ -1,0 +1,290 @@
+## 服务实现模式
+
+### 标准服务结构
+在 `/src/services`新建业务文件夹，目录和 router.ts 保持一致
+
+```typescript
+// 示例服务文件结构
+import { request } from '@umijs/max';
+import type { PhoenixAPI } from './typings';
+
+// 列表操作
+export async function getUserList(params: PhoenixAPI.PageParams) {
+  return request<PhoenixAPI.UserList>('/api/users', {
+    method: 'GET',
+    params,
+  });
+}
+
+// CRUD 操作
+export async function createUser(data: Partial<PhoenixAPI.UserListItem>) {
+  return request<PhoenixAPI.NoResultRespones>('/api/users', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function updateUser(id: string, data: Partial<PhoenixAPI.UserListItem>) {
+  return request<PhoenixAPI.NoResultRespones>(`/api/users/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+export async function deleteUser(id: string) {
+  return request<PhoenixAPI.NoResultRespones>(`/api/users/${id}`, {
+    method: 'DELETE',
+  });
+}
+```
+
+### 查询页面模板
+
+#### columns定义的模板
+重要：const columns的定义放在函数式组件内部，否则获取不到 react 组件内部的状态
+
+
+```  
+{
+  title: '交易编码',
+  dataIndex: 'txnCode',
+  key: 'txnCode',
+  search: true,
+  width: 100,
+}
+```
+#### protable模板
+
+```typescript
+import { ProTable } from '@ant-design/pro-components';
+import type { ProColumns } from '@ant-design/pro-components';
+import { userList } from '@/services/phoenix/users.ts';
+import { RowDataProps }  from './types.ts'
+
+const columns: ProColumns<RowDataProps>[] = [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    key: 'name',
+    search: true,
+    render: (text) => <EllipsisMiddle text={text} />,
+  },
+  {
+    title: '交易编码',
+    dataIndex: 'txnCode',
+    key: 'txnCode',
+    search: true,
+    width: 100,
+  },
+
+  // ... 更多列
+];
+
+const MyTable = () => (
+  <PageContainer>
+    <ProTable<LmtDefItem>
+      actionRef={actionRef}
+      rowKey="id"
+      scroll={{ y: 490 }} // 固定高度
+      columns={columns}
+      pagination={{
+        showQuickJumper: true,
+        pageSizeOptions: [10, 20, 30, 50],
+        showSizeChanger: true
+      }}
+      search={{ labelWidth: 100, showHiddenNum: true }}
+      request={userList}
+    />
+  </PageContainer>
+);
+```
+
+### 详情实现模板
+
+引入组件 `src/components/DetailDrawer.tsx`
+查看详情方法定义在 services 对应的菜单目录中。
+
+实现方法
+```typescript
+import detailDrawerOpen from '@/components/Common/DetailDrawer';
+{
+  title: '操作',
+  dataIndex: 'option',
+  valueType: 'option',
+  fixed: 'right', // 注意这点，固定在右侧
+  width: 100,
+  hideInDescriptions: true,
+  render: (_, record) => {
+    return [
+      <Access accessible={true} fallback={<></>} key="detail">
+        <a
+          key="detail"
+          onClick={async () => {
+            try {
+              const { data } = await getUserDetail({ userId: record.userId, showAll: true });
+              detailDrawerOpen({
+                data: data,
+                width: 900,
+                desTitle: '用户信息',
+                columns: detailColumns,
+              });
+            } catch (error) {
+              console.log('error:', error);
+            }
+          }}
+        >
+          查看
+        </a>
+      </Access>,
+    ];
+  },
+},
+```
+
+
+### 编辑场景模板
+采用 formily 框架
+
+实现方式
+
+```typescript
+import { roleList } from '@/services/phoenix/role';
+import { filterOption } from '@/utils';
+import {
+  ArrayItems,
+  Cascader,
+  DatePicker,
+  Editable,
+  Form,
+  FormGrid,
+  FormItem,
+  FormLayout,
+  Input,
+  Select,
+  Switch,
+} from '@formily/antd-v5';
+import { createForm, registerValidateFormats } from '@formily/core';
+import { createSchemaField } from '@formily/react';
+import { action } from '@formily/reactive';
+import { Modal, Spin } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
+import { REG_EXP } from '@/utils/constants';
+
+registerValidateFormats({
+  allowLowerCaseOrNumberReg: REG_EXP.LOWERCASE_OR_NUMBER,
+  allowPhone: REG_EXP.PHONE,
+});
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    FormGrid,
+    FormLayout,
+    Input,
+    DatePicker,
+    Cascader,
+    Select,
+    ArrayItems,
+    Editable,
+    Switch,
+  },
+  scope: {
+    fetchRoleList: async (field: any) => {
+      const transform = (data = []) => {
+        return (data || []).map((role: any) => {
+          return {
+            label: role?.name,
+            value: role?.id,
+          };
+        });
+      };
+
+      field.loading = true;
+      roleList({ current: 1, pageSize: 9999 }).then(
+        action.bound?.((data) => {
+          field.dataSource = transform(data.data);
+          field.loading = false;
+        }),
+      );
+    },
+  },
+});
+
+export type EditFormProps = {
+  listItem?: Partial<PhoenixAPI.UserListItem> | undefined;
+  open: boolean | false;
+  title: string;
+  handleSubmit: (fields: PhoenixAPI.UserListItem) => void;
+  handleCancel: () => void;
+};
+export default (props: EditFormProps) => {
+  const [loading, setLoading] = useState(false);
+  const { listItem, open, title, handleSubmit, handleCancel } = props;
+  const form = useMemo(
+    () =>
+      createForm({
+        validateFirst: true,
+        initialValues: { enabled: true, ...listItem },
+      }),
+    [listItem, open],
+  );
+
+  useEffect(() => {
+    form.setValues({ enabled: true, ...listItem }, 'overwrite');
+    setLoading(false);
+  }, [open, listItem]);
+
+  const schema = {
+    type: 'object',
+    properties: {
+      username: {
+        type: 'string',
+        title: '账户名',
+        required: true,
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+        'x-component-props': {
+          disabled: !!listItem,
+          placeholder: '请输入小写字母或数字',
+        },
+        'x-validator': [
+          {
+            format: 'allowLowerCaseOrNumberReg',
+            message: '只允许输入小写字母、数字',
+          },
+        ],
+      },
+      enabled: {
+        type: 'boolean',
+        title: '是否启用',
+        'x-decorator': 'FormItem',
+        'x-component': 'Switch',
+        'x-component-props': {},
+      },
+    },
+  };
+  const submit = (fields) => {
+    setLoading(true);
+    handleSubmit(fields);
+    setLoading(false);
+  };
+  return (
+    <Modal
+      title={title}
+      open={open}
+      onOk={() => {
+        form.submit(submit);
+      }}
+      confirmLoading={loading}
+      onCancel={handleCancel}
+      maskClosable={false}
+    >
+      <Spin spinning={loading}>
+        <Form form={form} labelCol={5} wrapperCol={16} onAutoSubmit={submit}>
+          <SchemaField schema={schema} />
+        </Form>
+      </Spin>
+    </Modal>
+  );
+};
+```

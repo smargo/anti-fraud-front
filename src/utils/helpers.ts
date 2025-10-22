@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState, RefObject } from 'react';
-import dayjs from 'dayjs';
 import { SelectOption } from '@/types';
+import dayjs from 'dayjs';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 
 // 定义 AxiosError 接口，避免直接导入 axios
 interface AxiosError {
@@ -258,13 +258,10 @@ export const getOptionLabel = (
  * @returns ProTable的valueEnum对象
  */
 export const createValueEnum = (options: SelectOption[]): Record<string, { text: string }> => {
-  return options.reduce(
-    (acc, option) => {
-      acc[option.value] = { text: option.label };
-      return acc;
-    },
-    {} as Record<string, { text: string }>,
-  );
+  return options.reduce((acc, option) => {
+    acc[option.value] = { text: option.label };
+    return acc;
+  }, {} as Record<string, { text: string }>);
 };
 
 //////////////////////////////////////////////////////////////////////////

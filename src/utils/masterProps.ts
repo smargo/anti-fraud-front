@@ -5,4 +5,3 @@ export const setMasterProps = (props: any) => {
 };
 
 export const getMasterProps = () => masterProps;
-
