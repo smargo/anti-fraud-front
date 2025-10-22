@@ -2,41 +2,41 @@
  * EventConfig 主页面容器
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { Tabs, Spin, Button, message } from 'antd';
+import ErrorBoundary from '@/components/Common/ErrorBoundary';
+import { useDictData } from '@/hooks/useDictData';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { PageContainer } from '@ant-design/pro-components';
+import { Button, message, Spin, Tabs } from 'antd';
+import React, { useRef } from 'react';
 import { useNavigate } from 'umi';
+import BasicInfoTab from './components/BasicInfoTab';
+import DeriveFieldConfigTab from './components/DeriveFieldConfigTab';
+import EventIndicatorConfigTab from './components/EventIndicatorConfigTab';
+import FieldConfigTab from './components/FieldConfigTab';
+import StageConfigTab from './components/StageConfigTab';
+import StatementDependencyConfigTab from './components/StatementDependencyConfigTab';
+import VersionControl from './components/VersionControl';
+import CopyVersionModal from './components/VersionControl/CopyVersionModal';
+import CreateVersionModal from './components/VersionControl/CreateVersionModal';
+import VersionHistoryModal from './components/VersionControl/VersionHistoryModal';
+import { DICT_CODE_LIST, TAB_CONFIG } from './constants';
 import { useEventConfig } from './hooks/useEventConfig';
 import { useVersionControl } from './hooks/useVersionControl';
-import { useDictData } from '@/hooks/useDictData';
-import ErrorBoundary from '@/components/Common/ErrorBoundary';
-import { DICT_CODE_LIST, TAB_CONFIG } from './constants';
-import VersionControl from './components/VersionControl';
-import VersionHistoryModal from './components/VersionControl/VersionHistoryModal';
-import CreateVersionModal from './components/VersionControl/CreateVersionModal';
-import CopyVersionModal from './components/VersionControl/CopyVersionModal';
-import BasicInfoTab from './components/BasicInfoTab';
-import FieldConfigTab from './components/FieldConfigTab';
-import DeriveFieldConfigTab from './components/DeriveFieldConfigTab';
-import StageConfigTab from './components/StageConfigTab';
-import EventIndicatorConfigTab from './components/EventIndicatorConfigTab';
-import StatementDependencyConfigTab from './components/StatementDependencyConfigTab';
-import './index.less';
+import type { EventConfigTabKey } from './types';
 
 const EventConfig: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // 表格引用 - 用于刷新所有表格数据
   const fieldActionRef = useRef<any>();
   const deriveFieldActionRef = useRef<any>();
   const stageActionRef = useRef<any>();
   const eventIndicatorActionRef = useRef<any>();
   const statementDependencyActionRef = useRef<any>();
-  
+
   // 使用字典数据管理Hook
   const { getDictOptions, loading: dictLoading } = useDictData(DICT_CODE_LIST);
-  
+
   // 获取各种选项
   const fieldTypeOptions = getDictOptions('event_field_type_option');
   const deriveFieldProcessTypeOptions = getDictOptions('event_derive_field_process_type_option');
@@ -79,17 +79,15 @@ const EventConfig: React.FC = () => {
     refreshVersionHistory,
     handleCreateDraft,
     handleRollbackToVersion,
+    handleActivateVersion,
+    handleDeleteDraftVersion,
+    hasDraftVersion,
     handleCreateVersion,
     handleCopyVersion,
     showVersionHistory,
     showCreateVersionModal,
     showCopyVersionModal,
-  } = useVersionControl(
-    eventNo,
-    versionInfo,
-    updateVersionInfo,
-    updateCurrentVersion
-  );
+  } = useVersionControl(eventNo, versionInfo, updateVersionInfo, updateCurrentVersion);
 
   // 刷新所有表格数据 - 与原页面一致
   const refreshAllTables = () => {
@@ -101,12 +99,12 @@ const EventConfig: React.FC = () => {
   };
 
   const handleSelectVersion = (versionId: string) => {
-    const selected = versionInfo.versionHistory.find(v => v.id === versionId) || null;
+    const selected = versionInfo.versionHistory.find((v) => v.id === versionId) || null;
     updateCurrentVersion(selected);
-    
+
     // 刷新所有表格数据 - 与原页面一致
     refreshAllTables();
-    
+
     // 显示成功消息 - 与原页面一致
     if (selected) {
       message.success(`已切换到版本: ${selected.versionCode}`);
@@ -139,7 +137,7 @@ const EventConfig: React.FC = () => {
   }
 
   return (
-    <PageContainer 
+    <PageContainer
       title={pageTitle}
       extra={[
         <Button key="back" icon={<ArrowLeftOutlined />} onClick={() => navigate('/event-list')}>
@@ -159,11 +157,14 @@ const EventConfig: React.FC = () => {
             onCreateDraft={handleCreateDraft}
             onShowVersionHistory={showVersionHistory}
             onShowCreateVersionModal={showCreateVersionModal}
-          onSelectVersion={handleSelectVersion}
+            onSelectVersion={handleSelectVersion}
           />
 
           {/* Tab页面 */}
-          <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          <Tabs
+            activeKey={activeTab}
+            onChange={(key: string) => setActiveTab(key as EventConfigTabKey)}
+          >
             {/* 基础信息 Tab */}
             <Tabs.TabPane tab={TAB_CONFIG.basic.label} key={TAB_CONFIG.basic.key}>
               <BasicInfoTab
@@ -238,9 +239,15 @@ const EventConfig: React.FC = () => {
             visible={versionHistoryVisible}
             eventNo={eventNo}
             versionHistory={versionInfo.versionHistory}
+            versionStatusOptions={versionStatusOptions}
             actionRef={versionHistoryActionRef}
             onCancel={() => setVersionHistoryVisible(false)}
+            onSelectVersion={handleSelectVersion}
+            onActivateVersion={handleActivateVersion}
             onCopyVersion={showCopyVersionModal}
+            onRollbackVersion={handleRollbackToVersion}
+            onDeleteDraftVersion={handleDeleteDraftVersion}
+            hasDraftVersion={hasDraftVersion}
           />
 
           {/* 创建版本弹窗 */}

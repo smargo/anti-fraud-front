@@ -3,10 +3,10 @@
  */
 
 // 导入其他类型定义
-export * from './fieldTypes';
 export * from './deriveFieldTypes';
-export * from './stageTypes';
 export * from './eventIndicatorTypes';
+export * from './fieldTypes';
+export * from './stageTypes';
 export * from './statementDependencyTypes';
 
 // 事件基本信息
@@ -45,7 +45,13 @@ export interface EventLoadProp {
 }
 
 // Tab类型
-export type EventConfigTabKey = 'basic' | 'fields' | 'derive' | 'stages' | 'indicators' | 'dependencies';
+export type EventConfigTabKey =
+  | 'basic'
+  | 'fields'
+  | 'derive'
+  | 'stages'
+  | 'indicators'
+  | 'dependencies';
 
 // 版本控制相关
 export interface VersionControlState {
@@ -77,9 +83,15 @@ export interface VersionHistoryModalProps {
   visible: boolean;
   eventNo: string;
   versionHistory: EventConfigVersion[];
+  versionStatusOptions: any[];
   actionRef: React.RefObject<any>;
   onCancel: () => void;
+  onSelectVersion: (versionId: string) => void;
+  onActivateVersion: (versionId: string) => void;
   onCopyVersion: (version: EventConfigVersion) => void;
+  onRollbackVersion: (versionId: string) => void;
+  onDeleteDraftVersion: (versionId: string) => void;
+  hasDraftVersion: () => boolean;
 }
 
 // 创建版本弹窗Props

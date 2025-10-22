@@ -2,9 +2,18 @@
  * 事件配置API服务
  */
 
+import {
+  getVersionInfo as getVersionInfoFromApi,
+  versionApi,
+} from '@/services/antifraud/eventConfigVersion';
 import { request } from 'umi';
-import { versionApi, getVersionInfo as getVersionInfoFromApi } from '@/services/antifraud/eventConfigVersion';
-import type { EventDetail, EventConfigVersion, EventConfigVersionInfo, BasicInfoFormValues, ApiResponse } from '../types';
+import type {
+  ApiResponse,
+  BasicInfoFormValues,
+  EventConfigVersion,
+  EventConfigVersionInfo,
+  EventDetail,
+} from '../types';
 
 // 获取事件详情 - 完全按照原页面逻辑
 export const getEventByEventNo = async (eventNo: string): Promise<EventDetail | null> => {
@@ -12,7 +21,7 @@ export const getEventByEventNo = async (eventNo: string): Promise<EventDetail | 
     const response = await request(`/api/events/eventNo/${eventNo}`, {
       method: 'GET',
     });
-    return response; // 直接返回响应，与原页面一致
+    return response.data; // 直接返回响应，与原页面一致
   } catch (error) {
     console.error('获取事件详情失败:', error);
     return null;
@@ -56,7 +65,10 @@ export const createDraft = async (eventNo: string): Promise<ApiResponse<EventCon
 };
 
 // 回滚到指定版本
-export const rollbackToVersion = async (eventNo: string, versionId: string): Promise<ApiResponse> => {
+export const rollbackToVersion = async (
+  eventNo: string,
+  versionId: string,
+): Promise<ApiResponse> => {
   try {
     await versionApi.rollbackToVersion(versionId);
     return {
@@ -72,12 +84,19 @@ export const rollbackToVersion = async (eventNo: string, versionId: string): Pro
 };
 
 // 保存草稿
-export const saveDraft = async (eventNo: string, versionId: string, data: any): Promise<ApiResponse> => {
+export const saveDraft = async (
+  eventNo: string,
+  versionId: string,
+  data: any,
+): Promise<ApiResponse> => {
   try {
-    const response: ApiResponse = await request(`/api/event-config-version/${versionId}/save-draft`, {
-      method: 'POST',
-      data: { eventNo, ...data },
-    });
+    const response: ApiResponse = await request(
+      `/api/event-config-version/${versionId}/save-draft`,
+      {
+        method: 'POST',
+        data: { eventNo, ...data },
+      },
+    );
     return response;
   } catch (error) {
     return {
@@ -88,7 +107,10 @@ export const saveDraft = async (eventNo: string, versionId: string, data: any): 
 };
 
 // 创建新版本
-export const createVersion = async (eventNo: string, versionData: Partial<EventConfigVersion>): Promise<ApiResponse<EventConfigVersion>> => {
+export const createVersion = async (
+  eventNo: string,
+  versionData: Partial<EventConfigVersion>,
+): Promise<ApiResponse<EventConfigVersion>> => {
   try {
     const version = await versionApi.createVersion({
       eventNo,
@@ -109,9 +131,16 @@ export const createVersion = async (eventNo: string, versionData: Partial<EventC
 };
 
 // 复制版本
-export const copyVersion = async (eventNo: string, sourceVersionId: string, versionData: Partial<EventConfigVersion>): Promise<ApiResponse<EventConfigVersion>> => {
+export const copyVersion = async (
+  eventNo: string,
+  sourceVersionId: string,
+  versionData: Partial<EventConfigVersion>,
+): Promise<ApiResponse<EventConfigVersion>> => {
   try {
-    const version = await versionApi.copyVersion(sourceVersionId, versionData.versionCode || `v${Date.now()}`);
+    const version = await versionApi.copyVersion(
+      sourceVersionId,
+      versionData.versionCode || `v${Date.now()}`,
+    );
     return {
       code: 'SUCCESS',
       message: '复制版本成功',
@@ -126,7 +155,10 @@ export const copyVersion = async (eventNo: string, sourceVersionId: string, vers
 };
 
 // 更新事件基础信息
-export const updateEventBasicInfo = async (eventNo: string, values: BasicInfoFormValues): Promise<ApiResponse> => {
+export const updateEventBasicInfo = async (
+  eventNo: string,
+  values: BasicInfoFormValues,
+): Promise<ApiResponse> => {
   try {
     const response: ApiResponse = await request(`/api/event/${eventNo}`, {
       method: 'PUT',

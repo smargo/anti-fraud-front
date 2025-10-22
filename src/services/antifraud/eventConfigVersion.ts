@@ -63,7 +63,7 @@ export const versionApi = {
       method: 'POST',
       data,
     });
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '创建版本失败');
@@ -75,7 +75,7 @@ export const versionApi = {
     const response: ApiResponse<EventConfigVersion> = await request(
       `/api/event-config-version/current/${eventNo}`,
     );
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '获取当前版本失败');
@@ -87,7 +87,7 @@ export const versionApi = {
     const response: ApiResponse<EventConfigVersion[]> = await request(
       `/api/event-config-version/history/${eventNo}`,
     );
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '获取版本历史失败');
@@ -105,22 +105,20 @@ export const versionApi = {
       pageSize?: number;
     },
   ): Promise<{
-    records: EventConfigVersion[];
+    data: EventConfigVersion[];
     total: number;
-    current: number;
-    pageSize: number;
+    success: boolean;
   }> => {
-    const response: ApiResponse<{
-      records: EventConfigVersion[];
+    const response: {
+      data: EventConfigVersion[];
       total: number;
-      current: number;
-      pageSize: number;
-    }> = await request(`/api/event-config-version/history/${eventNo}/page`, {
+      success: boolean;
+    } = await request(`/api/event-config-version/history/${eventNo}/page`, {
       method: 'GET',
       params,
     });
-    if (response.code === 'SUCCESS') {
-      return response.data;
+    if (response.success) {
+      return response;
     } else {
       throw new Error(response.message || '获取版本历史失败');
     }
@@ -132,7 +130,7 @@ export const versionApi = {
       `/api/event-config-version/${versionId}/activate`,
       { method: 'POST' },
     );
-    if (response.code !== 'SUCCESS') {
+    if (response.code !== '0') {
       throw new Error(response.message || '激活版本失败');
     }
   },
@@ -140,10 +138,12 @@ export const versionApi = {
   // 复制版本
   copyVersion: async (versionId: string, newVersionCode: string): Promise<EventConfigVersion> => {
     const response: ApiResponse<EventConfigVersion> = await request(
-      `/api/event-config-version/${versionId}/copy?newVersionCode=${encodeURIComponent(newVersionCode)}`,
+      `/api/event-config-version/${versionId}/copy?newVersionCode=${encodeURIComponent(
+        newVersionCode,
+      )}`,
       { method: 'POST' },
     );
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '复制版本失败');
@@ -156,7 +156,7 @@ export const versionApi = {
       `/api/event-config-version/${versionId}/rollback`,
       { method: 'POST' },
     );
-    if (response.code !== 'SUCCESS') {
+    if (response.code !== '0') {
       throw new Error(response.message || '版本回滚失败');
     }
   },
@@ -167,7 +167,7 @@ export const versionApi = {
       `/api/event-config-version/${versionId}/submit`,
       { method: 'POST' },
     );
-    if (response.code !== 'SUCCESS') {
+    if (response.code !== '0') {
       throw new Error(response.message || '提交审批失败');
     }
   },
@@ -178,7 +178,7 @@ export const versionApi = {
       `/api/event-config-version/${versionId}/approve?approver=${encodeURIComponent(approver)}`,
       { method: 'POST' },
     );
-    if (response.code !== 'SUCCESS') {
+    if (response.code !== '0') {
       throw new Error(response.message || '审批通过失败');
     }
   },
@@ -189,7 +189,7 @@ export const versionApi = {
       `/api/event-config-version/${versionId}/reject?reason=${encodeURIComponent(reason)}`,
       { method: 'POST' },
     );
-    if (response.code !== 'SUCCESS') {
+    if (response.code !== '0') {
       throw new Error(response.message || '审批拒绝失败');
     }
   },
@@ -199,7 +199,7 @@ export const versionApi = {
     const response: ApiResponse<ConfigChangeLog[]> = await request(
       `/api/event-config-version/${versionId}/change-logs`,
     );
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '获取变更日志失败');
@@ -211,7 +211,7 @@ export const versionApi = {
     const response: ApiResponse<any[]> = await request(
       `/api/event-config-version/${versionId}/change-statistics`,
     );
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '获取变更统计失败');
@@ -223,7 +223,7 @@ export const versionApi = {
     const response: ApiResponse<any> = await request(
       `/api/event-config-version/compare?versionId1=${versionId1}&versionId2=${versionId2}`,
     );
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '版本对比失败');
@@ -235,7 +235,7 @@ export const versionApi = {
     const response: ApiResponse<boolean> = await request(`/api/event-config-version/${versionId}`, {
       method: 'DELETE',
     });
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       return response.data;
     } else {
       throw new Error(response.message || '删除草稿版本失败');
