@@ -6,6 +6,7 @@
 export interface DeriveFieldItem {
   id: string;
   eventNo: string;
+  versionCode: string;
   fieldName: string;
   fieldType: string;
   fieldDesc?: string;

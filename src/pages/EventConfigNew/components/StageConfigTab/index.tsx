@@ -1,5 +1,5 @@
 /**
- * 字段配置Tab组件 - 完全按照原页面逻辑实现
+ * 阶段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
 import React, { useRef } from 'react';
@@ -7,26 +7,27 @@ import { ProTable } from '@ant-design/pro-table';
 import { Button, Space, Tooltip, Modal, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { queryEventFields, createEventField, updateEventField, deleteEventField } from '../../services/fieldConfigApi';
+import { queryStages, createStage, updateStage, deleteStage } from '../../services/stageConfigApi';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
-import FieldModal from './FieldModal';
-import FieldViewModal from './FieldViewModal';
-import type { FieldConfigTabProps, FieldItem } from '../../types';
+import StageModal from './StageModal';
+import StageViewModal from './StageViewModal';
+import type { StageConfigTabProps, StageItem } from '../../types';
 
-const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
+const StageConfigTab: React.FC<StageConfigTabProps> = ({
   eventNo,
   versionCode,
   isReadOnly,
-  fieldTypeOptions,
+  eventStageOptions,
+  stageBeanOptions,
   actionRef,
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [editingField, setEditingField] = React.useState<FieldItem | null>(null);
+  const [editingStage, setEditingStage] = React.useState<StageItem | null>(null);
   const [viewModalVisible, setViewModalVisible] = React.useState(false);
-  const [viewingField, setViewingField] = React.useState<FieldItem | null>(null);
+  const [viewingStage, setViewingStage] = React.useState<StageItem | null>(null);
 
-  // 字段列定义 - 完全按照原页面
-  const fieldColumns: any[] = [
+  // 阶段列定义 - 完全按照原页面
+  const stageColumns = [
     {
       title: '事件编号',
       dataIndex: 'eventNo',
@@ -35,102 +36,89 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
       search: false,
     },
     {
-      title: '字段名称',
-      dataIndex: 'fieldName',
-      key: 'fieldName',
-      width: 150,
-      search: {
-        placeholder: '请输入字段名称',
-        allowClear: true,
-      },
-    },
-    {
-      title: '字段类型',
-      dataIndex: 'fieldType',
-      key: 'fieldType',
-      width: 120,
-      render: (fieldType: string) => {
-        return getDictText(fieldTypeOptions, fieldType);
+      title: '阶段编号',
+      dataIndex: 'stageNo',
+      key: 'stageNo',
+      width: 80,
+      render: (stage: string) => {
+        return getDictText(eventStageOptions, stage);
       },
       search: {
         valueType: 'select',
-        valueEnum: convertDictToValueEnum(fieldTypeOptions),
-        placeholder: '请选择字段类型',
+        valueEnum: convertDictToValueEnum(eventStageOptions),
+        placeholder: '请选择阶段编号',
         allowClear: true,
       },
     },
     {
-      title: '字段描述',
-      dataIndex: 'fieldDesc',
-      key: 'fieldDesc',
+      title: '阶段名称',
+      dataIndex: 'stageName',
+      key: 'stageName',
       width: 150,
-      ellipsis: true,
-      render: (text: string) => (
-        <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '150px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
-            {text || '-'}
-          </div>
-        </Tooltip>
-      ),
-      search: {
-        placeholder: '请输入字段描述',
-        allowClear: true,
-      },
+      search: false,
     },
     {
-      title: '校验脚本',
-      dataIndex: 'validateScript',
-      key: 'validateScript',
-      width: 150,
+      title: '阶段组件',
+      dataIndex: 'stageBean',
+      key: 'stageBean',
+      width: 200,
       ellipsis: true,
-      render: (text: string) => (
-        <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '200px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
-            {text || '-'}
-          </div>
-        </Tooltip>
-      ),
+      render: (_, record: StageItem) => {
+        const bean = record.stageBean;
+        const beanStr = String(bean || '');
+        const dictText = getDictText(stageBeanOptions, beanStr);
+        const displayText = dictText ? `${beanStr}-${dictText}` : beanStr || '-';
+        return (
+          <Tooltip title={displayText} placement="topLeft">
+            <span style={{ 
+              display: 'block',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>
+              {displayText}
+            </span>
+          </Tooltip>
+        );
+      },
+      search: false,
+    },
+    {
+      title: '阶段参数',
+      dataIndex: 'stageParam',
+      key: 'stageParam',
+      width: 150,
+      render: (statementNo: string) => statementNo || '-',
       search: false,
     },
     {
       title: '创建时间',
       dataIndex: 'createdDate',
       key: 'createdDate',
-      search: false,
-      width: 160,
+      width: 170,
       render: (date: string) => moment(date).format('YYYY-MM-DD HH:mm:ss'),
+      search: false,
     },
     {
       title: '操作',
       key: 'option',
       valueType: 'option',
-      search: false,
       width: 200,
       fixed: 'right' as const,
-      render: (_: any, record: FieldItem) => (
+      render: (_: any, record: StageItem) => (
         <Space size="middle">
-          <a onClick={() => handleFieldView(record)}>
+          <a onClick={() => handleStageView(record)}>
             查看
           </a>
           <a 
-            onClick={isReadOnly ? undefined : () => handleFieldEdit(record)}
+            onClick={isReadOnly ? undefined : () => handleStageEdit(record)}
             style={{ color: isReadOnly ? '#ccc' : undefined }}
           >
             编辑
           </a>
           <Popconfirm
-            title="确定要删除这个字段吗？"
-            onConfirm={() => handleFieldDelete(record.id)}
+            title="确定要删除这个阶段吗？"
+            onConfirm={() => handleStageDelete(record.id)}
             okText="确定"
             cancelText="取消"
             disabled={isReadOnly}
@@ -147,20 +135,20 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
     },
   ];
 
-  // 字段相关处理
-  const handleFieldAdd = () => {
-    setEditingField(null);
+  // 阶段相关处理
+  const handleStageAdd = () => {
+    setEditingStage(null);
     setModalVisible(true);
   };
 
-  const handleFieldEdit = (record: FieldItem) => {
-    setEditingField(record);
+  const handleStageEdit = (record: StageItem) => {
+    setEditingStage(record);
     setModalVisible(true);
   };
 
-  const handleFieldDelete = async (id: string) => {
+  const handleStageDelete = async (id: string) => {
     try {
-      const response = await deleteEventField(id);
+      const response = await deleteStage(id);
       if (response.code === 'SUCCESS') {
         message.success('删除成功');
         actionRef?.current?.reload();
@@ -172,19 +160,19 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
     }
   };
 
-  const handleFieldSubmit = async (values: any) => {
+  const handleStageSubmit = async (values: any) => {
     setModalVisible(false);
     actionRef?.current?.reload();
   };
 
-  const handleFieldViewCancel = () => {
+  const handleStageViewCancel = () => {
     setViewModalVisible(false);
-    setViewingField(null);
+    setViewingStage(null);
   };
 
-  // 字段查看处理
-  const handleFieldView = (record: FieldItem) => {
-    setViewingField(record);
+  // 阶段查看处理
+  const handleStageView = (record: StageItem) => {
+    setViewingStage(record);
     setViewModalVisible(true);
   };
 
@@ -247,15 +235,15 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
           <VersionInfoDisplay />
           <ProTable
             actionRef={actionRef}
-            columns={fieldColumns}
+            columns={stageColumns}
             request={async (params) => {
-              const response = await queryEventFields({
+              const response = await queryStages({
                 ...params,
                 eventNo: eventNo,
                 versionCode: versionCode,
               });
               return {
-                data: response.records || [],
+                data: response.records || response.data || [],
                 total: response.total || 0,
                 success: true,
               };
@@ -264,42 +252,45 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
             pagination={{
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total: number) => `共 ${total} 条记录`,
+              showTotal: (total) => `共 ${total} 条记录`,
             }}
+            scroll={{ x: 1200 }}
             toolBarRender={() => [
               <Button 
                 type="primary" 
                 icon={<PlusOutlined />} 
-                onClick={handleFieldAdd} 
+                onClick={handleStageAdd} 
                 key="add"
                 disabled={isReadOnly}
               >
-                新增字段
+                新增阶段
               </Button>,
             ]}
           />
         </>
       )}
 
-      {/* 字段编辑Modal */}
-      <FieldModal
+      {/* 阶段编辑Modal */}
+      <StageModal
         visible={modalVisible}
-        editingField={editingField}
-        fieldTypeOptions={fieldTypeOptions}
-        forceReset={!editingField}
-        onSubmit={handleFieldSubmit}
+        editingStage={editingStage}
+        eventStageOptions={eventStageOptions}
+        stageBeanOptions={stageBeanOptions}
+        forceReset={!editingStage}
+        onSubmit={handleStageSubmit}
         onCancel={() => setModalVisible(false)}
       />
 
-      {/* 字段查看Modal */}
-      <FieldViewModal
+      {/* 阶段查看Modal */}
+      <StageViewModal
         visible={viewModalVisible}
-        viewingField={viewingField}
-        fieldTypeOptions={fieldTypeOptions}
-        onCancel={handleFieldViewCancel}
+        viewingStage={viewingStage}
+        eventStageOptions={eventStageOptions}
+        stageBeanOptions={stageBeanOptions}
+        onCancel={handleStageViewCancel}
       />
     </div>
   );
 };
 
-export default FieldConfigTab;
+export default StageConfigTab;

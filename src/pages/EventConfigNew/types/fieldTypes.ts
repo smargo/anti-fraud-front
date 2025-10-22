@@ -6,6 +6,7 @@
 export interface FieldItem {
   id: string;
   eventNo: string;
+  versionCode: string;
   fieldName: string;
   fieldType: string;
   fieldDesc: string;

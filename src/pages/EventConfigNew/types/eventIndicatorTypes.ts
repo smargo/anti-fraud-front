@@ -6,6 +6,7 @@
 export interface EventIndicatorItem {
   id: string;
   eventNo: string;
+  versionCode: string;
   eventName?: string;
   indicatorNo: string;
   indicatorName: string;

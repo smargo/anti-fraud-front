@@ -2,7 +2,7 @@
  * EventConfig 工具函数
  */
 
-import { EventConfigVersion } from './types';
+import { EventConfigVersion } from '../types';
 
 /**
  * 选择最佳版本（生效版本 > 草稿版本）
@@ -56,7 +56,7 @@ export const shouldShowEditInterface = (
 };
 
 /**
- * 生成页面标题
+ * 生成页面标题 - 完全按照原页面逻辑
  */
 export const getPageTitle = (eventDetail: any, eventNo: string): string => {
   if (eventDetail) {

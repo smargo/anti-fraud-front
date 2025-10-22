@@ -7,35 +7,38 @@ import type { DeriveFieldItem, DeriveFieldFormValues, ApiResponse, PaginationPar
 
 // 查询衍生字段列表
 export const queryDeriveFields = async (params: PaginationParams): Promise<ApiResponse<DeriveFieldItem[]>> => {
-  const response = await request('/api/derive-field/page', {
+  const page: { data: DeriveFieldItem[]; total: number; success: boolean } = await request('/api/deriveFields/list', {
     method: 'GET',
     params,
   });
-  return response;
+  return {
+    code: page.success ? 'SUCCESS' : 'FAILED',
+    message: '',
+    records: page.data,
+    total: page.total,
+    success: page.success,
+  } as unknown as ApiResponse<DeriveFieldItem[]>;
 };
 
 // 创建衍生字段
 export const createDeriveField = async (values: DeriveFieldFormValues): Promise<ApiResponse<DeriveFieldItem>> => {
-  const response = await request('/api/derive-field', {
+  return await request('/api/deriveFields', {
     method: 'POST',
     data: values,
   });
-  return response;
 };
 
 // 更新衍生字段
 export const updateDeriveField = async (id: string, values: DeriveFieldFormValues): Promise<ApiResponse<DeriveFieldItem>> => {
-  const response = await request(`/api/derive-field/${id}`, {
+  return await request(`/api/deriveFields/${id}`, {
     method: 'PUT',
     data: values,
   });
-  return response;
 };
 
 // 删除衍生字段
 export const deleteDeriveField = async (id: string): Promise<ApiResponse> => {
-  const response = await request(`/api/derive-field/${id}`, {
+  return await request(`/api/deriveFields/${id}`, {
     method: 'DELETE',
   });
-  return response;
 };

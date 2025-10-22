@@ -2,6 +2,13 @@
  * EventConfig 主类型定义
  */
 
+// 导入其他类型定义
+export * from './fieldTypes';
+export * from './deriveFieldTypes';
+export * from './stageTypes';
+export * from './eventIndicatorTypes';
+export * from './statementDependencyTypes';
+
 // 事件基本信息
 export interface EventDetail {
   id: string;
@@ -62,6 +69,7 @@ export interface VersionControlProps {
   onCreateDraft: () => void;
   onShowVersionHistory: () => void;
   onShowCreateVersionModal: () => void;
+  onSelectVersion: (versionId: string) => void;
 }
 
 // 版本历史弹窗Props
@@ -105,9 +113,46 @@ export interface BasicInfoTabProps {
 // 字段配置Tab Props
 export interface FieldConfigTabProps {
   eventNo: string;
-  versionId?: string;
+  versionCode?: string;
   isReadOnly: boolean;
   fieldTypeOptions: any[];
+  actionRef?: React.RefObject<any>;
+}
+
+// 衍生字段配置Tab Props
+export interface DeriveFieldConfigTabProps {
+  eventNo: string;
+  versionCode?: string;
+  isReadOnly: boolean;
+  fieldTypeOptions: any[];
+  deriveFieldProcessTypeOptions: any[];
+  actionRef?: React.RefObject<any>;
+}
+
+// 阶段配置Tab Props
+export interface StageConfigTabProps {
+  eventNo: string;
+  versionCode?: string;
+  isReadOnly: boolean;
+  eventStageOptions: any[];
+  stageBeanOptions: any[];
+  actionRef?: React.RefObject<any>;
+}
+
+// 事件指标配置Tab Props
+export interface EventIndicatorConfigTabProps {
+  eventNo: string;
+  versionCode?: string;
+  isReadOnly: boolean;
+  actionRef?: React.RefObject<any>;
+}
+
+// 语句依赖配置Tab Props
+export interface StatementDependencyConfigTabProps {
+  eventNo: string;
+  versionCode?: string;
+  isReadOnly: boolean;
+  actionRef?: React.RefObject<any>;
 }
 
 // 字段弹窗Props
@@ -125,6 +170,81 @@ export interface FieldViewModalProps {
   visible: boolean;
   viewingField: FieldItem | null;
   fieldTypeOptions: any[];
+  onCancel: () => void;
+}
+
+// 衍生字段弹窗Props
+export interface DeriveFieldModalProps {
+  visible: boolean;
+  editingDeriveField: DeriveFieldItem | null;
+  fieldTypeOptions: any[];
+  deriveFieldProcessTypeOptions: any[];
+  forceReset: boolean;
+  onSubmit: (values: DeriveFieldFormValues) => void;
+  onCancel: () => void;
+}
+
+// 衍生字段查看弹窗Props
+export interface DeriveFieldViewModalProps {
+  visible: boolean;
+  viewingDeriveField: DeriveFieldItem | null;
+  fieldTypeOptions: any[];
+  deriveFieldProcessTypeOptions: any[];
+  onCancel: () => void;
+}
+
+// 阶段弹窗Props
+export interface StageModalProps {
+  visible: boolean;
+  editingStage: StageItem | null;
+  eventStageOptions: any[];
+  stageBeanOptions: any[];
+  forceReset: boolean;
+  onSubmit: (values: StageFormValues) => void;
+  onCancel: () => void;
+}
+
+// 阶段查看弹窗Props
+export interface StageViewModalProps {
+  visible: boolean;
+  viewingStage: StageItem | null;
+  eventStageOptions: any[];
+  stageBeanOptions: any[];
+  onCancel: () => void;
+}
+
+// 事件指标弹窗Props
+export interface EventIndicatorModalProps {
+  visible: boolean;
+  editingEventIndicator: EventIndicatorItem | null;
+  eventNo: string;
+  forceReset: boolean;
+  onSubmit: (values: EventIndicatorFormValues) => void;
+  onCancel: () => void;
+}
+
+// 事件指标查看弹窗Props
+export interface EventIndicatorViewModalProps {
+  visible: boolean;
+  viewingEventIndicator: EventIndicatorItem | null;
+  onCancel: () => void;
+}
+
+// 语句依赖弹窗Props
+export interface StatementDependencyModalProps {
+  visible: boolean;
+  editingStatementDependency: StatementDependencyItem | null;
+  eventNo: string;
+  versionCode?: string;
+  forceReset: boolean;
+  onSubmit: (values: StatementDependencyFormValues) => void;
+  onCancel: () => void;
+}
+
+// 语句依赖查看弹窗Props
+export interface StatementDependencyViewModalProps {
+  visible: boolean;
+  viewingStatementDependency: StatementDependencyItem | null;
   onCancel: () => void;
 }
 

@@ -49,7 +49,7 @@ export const useEventConfig = () => {
     }
   }, [location.search]);
 
-  // 加载事件详情
+  // 加载事件详情 - 完全按照原页面逻辑
   const loadEventDetail = useCallback(async (eventNo: string) => {
     try {
       setLoading(true);

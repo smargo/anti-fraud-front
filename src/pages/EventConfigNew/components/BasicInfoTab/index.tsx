@@ -1,11 +1,10 @@
 /**
- * 基础信息Tab组件
+ * 基础信息Tab组件 - 完全按照原页面逻辑实现
  */
 
 import React from 'react';
 import { Form, Input, Select, Button, Row, Col, message } from 'antd';
 import { updateEventBasicInfo } from '../../services/eventConfigApi';
-import { shouldShowEditInterface } from '../../utils';
 import type { BasicInfoTabProps } from '../../types';
 
 const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
@@ -35,67 +34,52 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
   const handleSubmit = async (values: any) => {
     try {
       setLoading(true);
-      const response = await updateEventBasicInfo(eventDetail!.eventNo, values);
-      if (response.code === 'SUCCESS') {
-        message.success('保存基础信息成功');
+      if (currentVersion) {
+        // 更新版本表中的事件信息
+        const { updateVersion } = await import('@/services/antifraud/eventConfigVersion');
+        await updateVersion(currentVersion.id, {
+          eventType: values.eventType,
+          eventGroup: values.eventGroup,
+        });
+        message.success('基础信息更新成功');
         onVersionUpdate?.();
       } else {
-        message.error(response.message || '保存基础信息失败');
+        message.error('当前没有可编辑的版本');
       }
     } catch (error) {
-      message.error('保存基础信息失败');
+      message.error(error?.message || '操作失败');
     } finally {
       setLoading(false);
     }
   };
 
-  // 检查是否应该显示编辑界面
-  const showEditInterface = shouldShowEditInterface(configEventLoadProp, isReadOnly);
-
   // 无版本显示
   const NoVersionDisplay = () => (
-    <div style={{ textAlign: 'center', padding: '50px 0' }}>
-      <p>请先创建版本或选择版本</p>
+    <div style={{ 
+      marginBottom: 16, 
+      padding: 24, 
+      background: '#fafafa', 
+      borderRadius: 4, 
+      textAlign: 'center',
+      border: '1px dashed #d9d9d9'
+    }}>
+      <div style={{ marginBottom: 16 }}>
+        <span style={{ fontSize: 16, color: '#666' }}>该事件暂无配置版本</span>
+      </div>
+      <div style={{ color: '#999' }}>
+        请先创建版本，然后开始配置事件信息
+      </div>
     </div>
   );
 
-  // 版本信息显示
-  const VersionInfoDisplay = () => (
-    <div style={{ marginBottom: 16, padding: '12px 16px', backgroundColor: '#f5f5f5', borderRadius: 4 }}>
-      <Row gutter={16}>
-        <Col span={6}>
-          <strong>版本代码：</strong>{currentVersion?.versionCode || '无'}
-        </Col>
-        <Col span={6}>
-          <strong>事件类型：</strong>{currentVersion?.eventType || '无'}
-        </Col>
-        <Col span={6}>
-          <strong>事件分组：</strong>{currentVersion?.eventGroup || '无'}
-        </Col>
-        <Col span={6}>
-          <strong>状态：</strong>{isReadOnly ? '只读' : '可编辑'}
-        </Col>
-      </Row>
-    </div>
-  );
-
-  // 无版本选择显示
-  const NoVersionSelectedDisplay = () => (
-    <div style={{ textAlign: 'center', padding: '50px 0' }}>
-      <p>请选择要编辑的版本</p>
-    </div>
-  );
+  // 版本信息显示 - 原页面返回null，不显示版本信息
+  const VersionInfoDisplay = () => null;
 
   return (
     <div>
-      {/* 根据状态显示不同的界面 */}
+      {/* 根据状态显示不同的界面 - 完全按照原页面逻辑 */}
       {!configEventLoadProp || !configEventLoadProp.specifyVersion || !configEventLoadProp.specifyVersion.id || !configEventLoadProp.specifyVersion.versionCode ? (
         <NoVersionDisplay />
-      ) : !showEditInterface ? (
-        <>
-          <VersionInfoDisplay />
-          <NoVersionSelectedDisplay />
-        </>
       ) : (
         <>
           <VersionInfoDisplay />

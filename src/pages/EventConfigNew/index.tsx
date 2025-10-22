@@ -2,9 +2,11 @@
  * EventConfig 主页面容器
  */
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PageContainer } from '@ant-design/pro-components';
-import { Tabs, Spin } from 'antd';
+import { Tabs, Spin, Button, message } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { useNavigate } from 'umi';
 import { useEventConfig } from './hooks/useEventConfig';
 import { useVersionControl } from './hooks/useVersionControl';
 import { useDictData } from '@/hooks/useDictData';
@@ -16,9 +18,22 @@ import CreateVersionModal from './components/VersionControl/CreateVersionModal';
 import CopyVersionModal from './components/VersionControl/CopyVersionModal';
 import BasicInfoTab from './components/BasicInfoTab';
 import FieldConfigTab from './components/FieldConfigTab';
+import DeriveFieldConfigTab from './components/DeriveFieldConfigTab';
+import StageConfigTab from './components/StageConfigTab';
+import EventIndicatorConfigTab from './components/EventIndicatorConfigTab';
+import StatementDependencyConfigTab from './components/StatementDependencyConfigTab';
 import './index.less';
 
 const EventConfig: React.FC = () => {
+  const navigate = useNavigate();
+  
+  // 表格引用 - 用于刷新所有表格数据
+  const fieldActionRef = useRef<any>();
+  const deriveFieldActionRef = useRef<any>();
+  const stageActionRef = useRef<any>();
+  const eventIndicatorActionRef = useRef<any>();
+  const statementDependencyActionRef = useRef<any>();
+  
   // 使用字典数据管理Hook
   const { getDictOptions, loading: dictLoading } = useDictData(DICT_CODE_LIST);
   
@@ -76,6 +91,28 @@ const EventConfig: React.FC = () => {
     updateCurrentVersion
   );
 
+  // 刷新所有表格数据 - 与原页面一致
+  const refreshAllTables = () => {
+    fieldActionRef.current?.reload();
+    deriveFieldActionRef.current?.reload();
+    stageActionRef.current?.reload();
+    eventIndicatorActionRef.current?.reload();
+    statementDependencyActionRef.current?.reload();
+  };
+
+  const handleSelectVersion = (versionId: string) => {
+    const selected = versionInfo.versionHistory.find(v => v.id === versionId) || null;
+    updateCurrentVersion(selected);
+    
+    // 刷新所有表格数据 - 与原页面一致
+    refreshAllTables();
+    
+    // 显示成功消息 - 与原页面一致
+    if (selected) {
+      message.success(`已切换到版本: ${selected.versionCode}`);
+    }
+  };
+
   // 处理版本更新
   const handleVersionUpdate = () => {
     loadVersionInfo(eventNo);
@@ -102,7 +139,14 @@ const EventConfig: React.FC = () => {
   }
 
   return (
-    <PageContainer title={pageTitle}>
+    <PageContainer 
+      title={pageTitle}
+      extra={[
+        <Button key="back" icon={<ArrowLeftOutlined />} onClick={() => navigate('/event-list')}>
+          返回事件列表
+        </Button>,
+      ]}
+    >
       <ErrorBoundary>
         <div className="eventConfig">
           {/* 版本控制组件 */}
@@ -115,6 +159,7 @@ const EventConfig: React.FC = () => {
             onCreateDraft={handleCreateDraft}
             onShowVersionHistory={showVersionHistory}
             onShowCreateVersionModal={showCreateVersionModal}
+          onSelectVersion={handleSelectVersion}
           />
 
           {/* Tab页面 */}
@@ -136,38 +181,55 @@ const EventConfig: React.FC = () => {
             <Tabs.TabPane tab={TAB_CONFIG.fields.label} key={TAB_CONFIG.fields.key}>
               <FieldConfigTab
                 eventNo={eventNo}
-                versionId={currentVersion?.id}
+                versionCode={currentVersion?.versionCode}
                 isReadOnly={isReadOnly}
                 fieldTypeOptions={fieldTypeOptions}
+                actionRef={fieldActionRef}
               />
             </Tabs.TabPane>
 
             {/* 衍生字段 Tab */}
             <Tabs.TabPane tab={TAB_CONFIG.derive.label} key={TAB_CONFIG.derive.key}>
-              <div style={{ textAlign: 'center', padding: '50px 0' }}>
-                <p>衍生字段配置 - 待实现</p>
-              </div>
+              <DeriveFieldConfigTab
+                eventNo={eventNo}
+                versionCode={currentVersion?.versionCode}
+                isReadOnly={isReadOnly}
+                fieldTypeOptions={fieldTypeOptions}
+                deriveFieldProcessTypeOptions={deriveFieldProcessTypeOptions}
+                actionRef={deriveFieldActionRef}
+              />
             </Tabs.TabPane>
 
             {/* 阶段配置 Tab */}
             <Tabs.TabPane tab={TAB_CONFIG.stages.label} key={TAB_CONFIG.stages.key}>
-              <div style={{ textAlign: 'center', padding: '50px 0' }}>
-                <p>阶段配置 - 待实现</p>
-              </div>
+              <StageConfigTab
+                eventNo={eventNo}
+                versionCode={currentVersion?.versionCode}
+                isReadOnly={isReadOnly}
+                eventStageOptions={eventStageOptions}
+                stageBeanOptions={stageBeanOptions}
+                actionRef={stageActionRef}
+              />
             </Tabs.TabPane>
 
             {/* 事件指标 Tab */}
             <Tabs.TabPane tab={TAB_CONFIG.indicators.label} key={TAB_CONFIG.indicators.key}>
-              <div style={{ textAlign: 'center', padding: '50px 0' }}>
-                <p>事件指标配置 - 待实现</p>
-              </div>
+              <EventIndicatorConfigTab
+                eventNo={eventNo}
+                versionCode={currentVersion?.versionCode}
+                isReadOnly={isReadOnly}
+                actionRef={eventIndicatorActionRef}
+              />
             </Tabs.TabPane>
 
             {/* 语句依赖 Tab */}
             <Tabs.TabPane tab={TAB_CONFIG.dependencies.label} key={TAB_CONFIG.dependencies.key}>
-              <div style={{ textAlign: 'center', padding: '50px 0' }}>
-                <p>语句依赖配置 - 待实现</p>
-              </div>
+              <StatementDependencyConfigTab
+                eventNo={eventNo}
+                versionCode={currentVersion?.versionCode}
+                isReadOnly={isReadOnly}
+                actionRef={statementDependencyActionRef}
+              />
             </Tabs.TabPane>
           </Tabs>
 

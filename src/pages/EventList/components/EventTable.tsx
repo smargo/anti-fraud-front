@@ -7,7 +7,7 @@ import { ProTable } from '@ant-design/pro-table';
 import type { ActionType } from '@ant-design/pro-components';
 import {Button, Space, Popconfirm, Tooltip} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-// 使用 window.location 进行页面跳转
+import { useNavigate } from 'umi';
 import moment from 'moment';
 import { fetchEventList, handleEventDelete } from '../helper';
 import type { EventItem } from '../types';
@@ -25,6 +25,8 @@ const EventTable: React.FC<EventTableProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const navigate = useNavigate();
+
   // 表格列定义
   const columns: any[] = [
     {
@@ -33,7 +35,7 @@ const EventTable: React.FC<EventTableProps> = ({
       key: 'eventNo',
       width: 120,
       render: (_: any, record: EventItem) => (
-        <a onClick={() => window.location.href = `/event/config?eventNo=${record.eventNo}`}>
+        <a onClick={() => navigate(`/event/config?eventNo=${record.eventNo}`)}>
           {record.eventNo}
         </a>
       ),

@@ -6,6 +6,7 @@
 export interface StageItem {
   id: string;
   eventNo: string;
+  versionCode: string;
   stageName: string;
   stageDesc: string;
   stageOrder: number;

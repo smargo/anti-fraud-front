@@ -1,5 +1,5 @@
 /**
- * 字段配置Tab组件 - 完全按照原页面逻辑实现
+ * 衍生字段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
 import React, { useRef } from 'react';
@@ -7,26 +7,27 @@ import { ProTable } from '@ant-design/pro-table';
 import { Button, Space, Tooltip, Modal, message, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { queryEventFields, createEventField, updateEventField, deleteEventField } from '../../services/fieldConfigApi';
+import { queryDeriveFields, createDeriveField, updateDeriveField, deleteDeriveField } from '../../services/deriveFieldConfigApi';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
-import FieldModal from './FieldModal';
-import FieldViewModal from './FieldViewModal';
-import type { FieldConfigTabProps, FieldItem } from '../../types';
+import DeriveFieldModal from './DeriveFieldModal';
+import DeriveFieldViewModal from './DeriveFieldViewModal';
+import type { DeriveFieldConfigTabProps, DeriveFieldItem } from '../../types';
 
-const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
+const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
   eventNo,
   versionCode,
   isReadOnly,
   fieldTypeOptions,
+  deriveFieldProcessTypeOptions,
   actionRef,
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [editingField, setEditingField] = React.useState<FieldItem | null>(null);
+  const [editingDeriveField, setEditingDeriveField] = React.useState<DeriveFieldItem | null>(null);
   const [viewModalVisible, setViewModalVisible] = React.useState(false);
-  const [viewingField, setViewingField] = React.useState<FieldItem | null>(null);
+  const [viewingDeriveField, setViewingDeriveField] = React.useState<DeriveFieldItem | null>(null);
 
-  // 字段列定义 - 完全按照原页面
-  const fieldColumns: any[] = [
+  // 衍生字段列定义 - 完全按照原页面
+  const deriveFieldColumns = [
     {
       title: '事件编号',
       dataIndex: 'eventNo',
@@ -38,17 +39,13 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
       title: '字段名称',
       dataIndex: 'fieldName',
       key: 'fieldName',
-      width: 150,
-      search: {
-        placeholder: '请输入字段名称',
-        allowClear: true,
-      },
+      width: 120,
     },
     {
       title: '字段类型',
       dataIndex: 'fieldType',
       key: 'fieldType',
-      width: 120,
+      width: 90,
       render: (fieldType: string) => {
         return getDictText(fieldTypeOptions, fieldType);
       },
@@ -66,7 +63,7 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
       width: 150,
       ellipsis: true,
       render: (text: string) => (
-        <Tooltip placement="topLeft">
+        <Tooltip>
           <div style={{ 
             maxWidth: '150px', 
             overflow: 'hidden', 
@@ -83,10 +80,27 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
       },
     },
     {
-      title: '校验脚本',
-      dataIndex: 'validateScript',
-      key: 'validateScript',
-      width: 150,
+      title: '处理类型',
+      dataIndex: 'processType',
+      key: 'processType',
+      search: false,
+      width: 120,
+      render: (processType: string) => {
+        return getDictText(deriveFieldProcessTypeOptions, processType);
+      },
+      search: {
+        valueType: 'select',
+        valueEnum: convertDictToValueEnum(deriveFieldProcessTypeOptions),
+        placeholder: '请选择处理类型',
+        allowClear: true,
+      },
+    },
+    {
+      title: '处理脚本',
+      dataIndex: 'processScript',
+      key: 'processScript',
+      width: 200,
+      search: false,
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
@@ -100,7 +114,13 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
           </div>
         </Tooltip>
       ),
+    },
+    {
+      title: '处理Bean',
+      dataIndex: 'processBean',
+      key: 'processBean',
       search: false,
+      width: 120,
     },
     {
       title: '创建时间',
@@ -117,20 +137,20 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
       search: false,
       width: 200,
       fixed: 'right' as const,
-      render: (_: any, record: FieldItem) => (
+      render: (_: any, record: DeriveFieldItem) => (
         <Space size="middle">
-          <a onClick={() => handleFieldView(record)}>
+          <a onClick={() => handleDeriveFieldView(record)}>
             查看
           </a>
           <a 
-            onClick={isReadOnly ? undefined : () => handleFieldEdit(record)}
+            onClick={isReadOnly ? undefined : () => handleDeriveFieldEdit(record)}
             style={{ color: isReadOnly ? '#ccc' : undefined }}
           >
             编辑
           </a>
           <Popconfirm
-            title="确定要删除这个字段吗？"
-            onConfirm={() => handleFieldDelete(record.id)}
+            title="确定要删除这个衍生字段吗？"
+            onConfirm={() => handleDeriveFieldDelete(record.id)}
             okText="确定"
             cancelText="取消"
             disabled={isReadOnly}
@@ -147,20 +167,20 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
     },
   ];
 
-  // 字段相关处理
-  const handleFieldAdd = () => {
-    setEditingField(null);
+  // 衍生字段相关处理
+  const handleDeriveFieldAdd = () => {
+    setEditingDeriveField(null);
     setModalVisible(true);
   };
 
-  const handleFieldEdit = (record: FieldItem) => {
-    setEditingField(record);
+  const handleDeriveFieldEdit = (record: DeriveFieldItem) => {
+    setEditingDeriveField(record);
     setModalVisible(true);
   };
 
-  const handleFieldDelete = async (id: string) => {
+  const handleDeriveFieldDelete = async (id: string) => {
     try {
-      const response = await deleteEventField(id);
+      const response = await deleteDeriveField(id);
       if (response.code === 'SUCCESS') {
         message.success('删除成功');
         actionRef?.current?.reload();
@@ -172,19 +192,19 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
     }
   };
 
-  const handleFieldSubmit = async (values: any) => {
+  const handleDeriveFieldSubmit = async (values: any) => {
     setModalVisible(false);
     actionRef?.current?.reload();
   };
 
-  const handleFieldViewCancel = () => {
+  const handleDeriveFieldViewCancel = () => {
     setViewModalVisible(false);
-    setViewingField(null);
+    setViewingDeriveField(null);
   };
 
-  // 字段查看处理
-  const handleFieldView = (record: FieldItem) => {
-    setViewingField(record);
+  // 衍生字段查看处理
+  const handleDeriveFieldView = (record: DeriveFieldItem) => {
+    setViewingDeriveField(record);
     setViewModalVisible(true);
   };
 
@@ -247,15 +267,15 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
           <VersionInfoDisplay />
           <ProTable
             actionRef={actionRef}
-            columns={fieldColumns}
+            columns={deriveFieldColumns}
             request={async (params) => {
-              const response = await queryEventFields({
+              const response = await queryDeriveFields({
                 ...params,
                 eventNo: eventNo,
                 versionCode: versionCode,
               });
               return {
-                data: response.records || [],
+                data: response.records || response.data || [],
                 total: response.total || 0,
                 success: true,
               };
@@ -264,42 +284,45 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
             pagination={{
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total: number) => `共 ${total} 条记录`,
+              showTotal: (total) => `共 ${total} 条记录`,
             }}
+            scroll={{ x: 1200 }}
             toolBarRender={() => [
               <Button 
                 type="primary" 
                 icon={<PlusOutlined />} 
-                onClick={handleFieldAdd} 
+                onClick={handleDeriveFieldAdd} 
                 key="add"
                 disabled={isReadOnly}
               >
-                新增字段
+                新增衍生字段
               </Button>,
             ]}
           />
         </>
       )}
 
-      {/* 字段编辑Modal */}
-      <FieldModal
+      {/* 衍生字段编辑Modal */}
+      <DeriveFieldModal
         visible={modalVisible}
-        editingField={editingField}
+        editingDeriveField={editingDeriveField}
         fieldTypeOptions={fieldTypeOptions}
-        forceReset={!editingField}
-        onSubmit={handleFieldSubmit}
+        deriveFieldProcessTypeOptions={deriveFieldProcessTypeOptions}
+        forceReset={!editingDeriveField}
+        onSubmit={handleDeriveFieldSubmit}
         onCancel={() => setModalVisible(false)}
       />
 
-      {/* 字段查看Modal */}
-      <FieldViewModal
+      {/* 衍生字段查看Modal */}
+      <DeriveFieldViewModal
         visible={viewModalVisible}
-        viewingField={viewingField}
+        viewingDeriveField={viewingDeriveField}
         fieldTypeOptions={fieldTypeOptions}
-        onCancel={handleFieldViewCancel}
+        deriveFieldProcessTypeOptions={deriveFieldProcessTypeOptions}
+        onCancel={handleDeriveFieldViewCancel}
       />
     </div>
   );
 };
 
-export default FieldConfigTab;
+export default DeriveFieldConfigTab;

@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { Modal, ProTable, Button, Space, Tag, Popconfirm, message } from 'antd';
+import { Modal, Button, Space, Tag, Popconfirm, message } from 'antd';
+import { ProTable } from '@ant-design/pro-table';
 import { EyeOutlined, CopyOutlined, RollbackOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import moment from 'moment';

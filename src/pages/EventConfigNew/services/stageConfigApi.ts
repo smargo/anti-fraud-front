@@ -7,35 +7,38 @@ import type { StageItem, StageFormValues, ApiResponse, PaginationParams } from '
 
 // 查询阶段列表
 export const queryStages = async (params: PaginationParams): Promise<ApiResponse<StageItem[]>> => {
-  const response = await request('/api/stage/page', {
+  const page: { data: StageItem[]; total: number; success: boolean } = await request('/api/stage/page', {
     method: 'GET',
     params,
   });
-  return response;
+  return {
+    code: page.success ? 'SUCCESS' : 'FAILED',
+    message: '',
+    records: page.data,
+    total: page.total,
+    success: page.success,
+  } as unknown as ApiResponse<StageItem[]>;
 };
 
 // 创建阶段
 export const createStage = async (values: StageFormValues): Promise<ApiResponse<StageItem>> => {
-  const response = await request('/api/stage', {
+  return await request('/api/stage', {
     method: 'POST',
     data: values,
   });
-  return response;
 };
 
 // 更新阶段
 export const updateStage = async (id: string, values: StageFormValues): Promise<ApiResponse<StageItem>> => {
-  const response = await request(`/api/stage/${id}`, {
+  return await request(`/api/stage/${id}`, {
     method: 'PUT',
     data: values,
   });
-  return response;
 };
 
 // 删除阶段
 export const deleteStage = async (id: string): Promise<ApiResponse> => {
-  const response = await request(`/api/stage/${id}`, {
+  return await request(`/api/stage/${id}`, {
     method: 'DELETE',
   });
-  return response;
 };

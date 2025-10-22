@@ -50,7 +50,7 @@ export default [
       {
         path: '/event/config',
         name: '事件配置',
-        component: './EventConfig',
+        component: './EventConfigNew',
         hideInMenu: true,
         access: 'antifraud:event:readonly',
       },

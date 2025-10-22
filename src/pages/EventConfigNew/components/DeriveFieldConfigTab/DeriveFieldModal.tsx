@@ -1,18 +1,19 @@
 /**
- * 字段配置Modal组件 - 完全按照原页面逻辑实现
+ * 衍生字段编辑Modal组件 - 完全按照原页面逻辑实现
  */
 
 import React, { useEffect } from 'react';
 import { Modal, Form, Input, Select, Button, Space, Tooltip, message } from 'antd';
-import { createEventField, updateEventField } from '../../services/fieldConfigApi';
-import type { FieldModalProps, FieldItem } from '../../types';
+import { createDeriveField, updateDeriveField } from '../../services/deriveFieldConfigApi';
+import type { DeriveFieldModalProps, DeriveFieldItem } from '../../types';
 
 const { TextArea } = Input;
 
-const FieldModal: React.FC<FieldModalProps> = ({
+const DeriveFieldModal: React.FC<DeriveFieldModalProps> = ({
   visible,
-  editingField,
+  editingDeriveField,
   fieldTypeOptions,
+  deriveFieldProcessTypeOptions,
   forceReset,
   onSubmit,
   onCancel,
@@ -23,21 +24,21 @@ const FieldModal: React.FC<FieldModalProps> = ({
   // 当编辑字段或强制重置时，更新表单
   useEffect(() => {
     if (visible) {
-      if (editingField) {
-        form.setFieldsValue(editingField);
+      if (editingDeriveField) {
+        form.setFieldsValue(editingDeriveField);
       } else {
         form.resetFields();
       }
     }
-  }, [visible, editingField, form, forceReset]);
+  }, [visible, editingDeriveField, form, forceReset]);
 
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
       
-      if (editingField) {
-        const response = await updateEventField(editingField.id, values);
+      if (editingDeriveField) {
+        const response = await updateDeriveField(editingDeriveField.id, values);
         if (response.code === 'SUCCESS') {
           message.success('更新成功');
           onSubmit(values);
@@ -45,7 +46,7 @@ const FieldModal: React.FC<FieldModalProps> = ({
           message.error(response.message || '更新失败');
         }
       } else {
-        const response = await createEventField(values);
+        const response = await createDeriveField(values);
         if (response.code === 'SUCCESS') {
           message.success('创建成功');
           onSubmit(values);
@@ -62,11 +63,11 @@ const FieldModal: React.FC<FieldModalProps> = ({
 
   return (
     <Modal
-      title={editingField ? '编辑字段' : '新增字段'}
+      title={editingDeriveField ? '编辑衍生字段' : '新增衍生字段'}
       open={visible}
       onCancel={onCancel}
       footer={null}
-      width={600}
+      width={800}
     >
       <Form
         form={form}
@@ -84,12 +85,8 @@ const FieldModal: React.FC<FieldModalProps> = ({
           />
         </Form.Item>
         
-        <Form.Item name="fieldType" label="字段类型" rules={[{ required: true, message: '请选择字段类型' }]}>
-          <Select 
-            placeholder="请选择字段类型"
-            loading={loading}
-            disabled={loading}
-          >
+        <Form.Item name="fieldType" label="字段类型" rules={[{ required: true }]}>
+          <Select placeholder="请选择字段类型">
             {fieldTypeOptions.map((option: any) => (
               <Select.Option key={option.itemNo} value={option.itemNo}>
                 {option.itemDescribe}
@@ -99,7 +96,6 @@ const FieldModal: React.FC<FieldModalProps> = ({
         </Form.Item>
         
         <Form.Item name="fieldDesc" label="字段描述" rules={[
-          { required: true, message: '请输入字段描述' },
           { max: 512, message: '字段描述不能超过512个字符' }
         ]}>
           <TextArea 
@@ -110,15 +106,25 @@ const FieldModal: React.FC<FieldModalProps> = ({
           />
         </Form.Item>
         
+        <Form.Item name="processType" label="处理类型" rules={[{ required: true }]}>
+          <Select placeholder="请选择处理类型">
+            {deriveFieldProcessTypeOptions.map((option: any) => (
+              <Select.Option key={option.itemNo} value={option.itemNo}>
+                {option.itemDescribe}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        
         <Form.Item 
-          name="validateScript" 
+          name="processScript" 
           label={
             <span>
-              校验脚本
+              处理脚本
               <Tooltip 
                 title={
                   <div style={{ maxWidth: '400px' }}>
-                    <div style={{ marginBottom: '8px', fontWeight: 'bold', color: '#fff' }}>Groovy校验脚本模板：</div>
+                    <div style={{ marginBottom: '8px', fontWeight: 'bold', color: '#fff' }}>Groovy衍生字段计算模板：</div>
                     <pre 
                       style={{ 
                         background: '#1e1e1e', 
@@ -135,23 +141,45 @@ const FieldModal: React.FC<FieldModalProps> = ({
                         userSelect: 'all'
                       }}
                       onClick={() => {
-                        const templateCode = `def validate(Map<String, Object> params) {
-    def u = params.get("userName");
-    return u !=null && !u.isEmpty();
+                        const templateCode = `def calculate(params) {
+    // 获取输入数据
+    def amount = params.get('amount') ?: 0
+    def rate = params.get('rate') ?: 0.1
+    def discount = params.get('discount') ?: 0
+    
+    // 计算逻辑
+    def result = amount * rate
+    if (discount > 0) {
+        result = result * (1 - discount)
+    }
+    
+    return result
 }`;
-                        form.setFieldsValue({ validateScript: templateCode });
+                        form.setFieldsValue({ processScript: templateCode });
                       }}
                       title="点击复制模板代码到输入框"
                     >
-{`def validate(Map<String, Object> params) {
-    def u = params.get("userName");
-    return u !=null && !u.isEmpty();
+{`def calculate(params) {
+    // 获取输入数据
+    def amount = params.get('amount') ?: 0
+    def rate = params.get('rate') ?: 0.1
+    def discount = params.get('discount') ?: 0
+    
+    // 计算逻辑
+    def result = amount * rate
+    if (discount > 0) {
+        result = result * (1 - discount)
+    }
+    
+    return result
 }`}
                     </pre>
                     <div style={{ marginTop: '8px', fontSize: '12px', color: '#e6e6e6' }}>
                       参数说明：<br/>
-                      • params: 当前所有的输入字段<br/>
-                      • 返回true表示验证通过，false表示验证失败<br/>
+                      • params: 包含所有事件字段<br/>
+                      • 使用 params.get('字段名') 获取字段值<br/>
+                      • 使用 ?: 操作符提供默认值<br/>
+                      • 返回计算结果<br/>
                       <span style={{ color: '#52c41a', fontWeight: 'bold' }}>💡 点击上方代码可复制到输入框</span>
                     </div>
                   </div>
@@ -165,13 +193,18 @@ const FieldModal: React.FC<FieldModalProps> = ({
           }
         >
           <TextArea 
-            placeholder={`请输入groovy校验脚本（可选），样例：
-def validate(Map<String, Object> params) {
-    def u = params.get("userName");
-    return u !=null && !u.isEmpty();
-}`} 
-            rows={4}
-            maxLength={1024}
+            placeholder="请输入处理脚本" 
+            rows={6}
+            showCount
+          />
+        </Form.Item>
+        
+        <Form.Item name="processBean" label="处理Bean" rules={[
+          { max: 128, message: '处理Bean不能超过128个字符' }
+        ]}>
+          <Input 
+            placeholder="请输入处理Bean类名" 
+            maxLength={128}
             showCount
           />
         </Form.Item>
@@ -179,7 +212,7 @@ def validate(Map<String, Object> params) {
         <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit" loading={loading}>
-              {editingField ? '更新' : '创建'}
+              {editingDeriveField ? '更新' : '创建'}
             </Button>
             <Button onClick={onCancel}>取消</Button>
           </Space>
@@ -189,4 +222,4 @@ def validate(Map<String, Object> params) {
   );
 };
 
-export default FieldModal;
+export default DeriveFieldModal;
