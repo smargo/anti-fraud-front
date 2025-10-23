@@ -243,7 +243,6 @@ const EventConfig: React.FC = () => {
           <VersionHistoryModal
             visible={versionHistoryVisible}
             eventNo={eventNo}
-            versionHistory={versionInfo.versionHistory}
             versionStatusOptions={versionStatusOptions}
             actionRef={versionHistoryActionRef}
             onCancel={() => setVersionHistoryVisible(false)}

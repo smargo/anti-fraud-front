@@ -13,7 +13,6 @@ import type { EventConfigVersion, VersionHistoryModalProps } from '../../types';
 const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   visible,
   eventNo,
-  versionHistory,
   versionStatusOptions,
   actionRef,
   onCancel,
