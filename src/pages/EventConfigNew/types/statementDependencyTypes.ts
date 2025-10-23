@@ -17,6 +17,12 @@ export interface StatementDependencyItem {
   lastModifiedBy: string;
 }
 
+export interface StatementDependencyItemPageResponse {
+  success: boolean;
+  total: number;
+  data: StatementDependencyItem[];
+}
+
 // 语句依赖表单值
 export interface StatementDependencyFormValues {
   statementNo: string;

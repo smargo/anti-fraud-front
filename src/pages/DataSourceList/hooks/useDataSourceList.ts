@@ -2,9 +2,9 @@
  * DataSourceList 页面自定义 Hooks
  */
 
-import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
-import type { DataSourceItem } from './types';
+import { useRef, useState } from 'react';
+import type { DataSourceItem } from '../types';
 
 export const useDataSourceList = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -57,4 +57,3 @@ export const useDataSourceList = () => {
     reloadTable,
   };
 };
-

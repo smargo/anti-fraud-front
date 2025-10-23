@@ -2,11 +2,11 @@
  * DataSourceList 页面辅助函数
  */
 
+import { dataSourceApi } from '@/services/antifraud/datasource';
+import { getDictText, type DictItem } from '@/utils/dictUtils';
 import { message } from 'antd';
 import moment from 'moment';
-import { getDictText, type DictItem } from '@/utils/dictUtils';
-import { dataSourceApi } from '@/services/antifraud/datasource';
-import type { DataSourceItem, DataSourceFormValues } from './types';
+import type { DataSourceFormValues, DataSourceItem } from './types';
 
 /**
  * 格式化日期时间
@@ -22,15 +22,15 @@ export const formatDateTime = (date: string, separator: string = '-') => {
 export const handleDataSourceDelete = async (dataSourceNo: string, onSuccess?: () => void) => {
   try {
     const response = await dataSourceApi.delete(dataSourceNo);
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       message.success('删除成功');
       onSuccess?.();
     } else {
       message.error(response.message || '删除失败');
     }
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error.message) {
+      message.error('删除异常：' + error.message);
     } else {
       message.error('删除失败：' + (error.message || '未知错误'));
     }
@@ -51,7 +51,7 @@ export const handleDataSourceFormSubmit = async (
         ...values,
         id: editingDataSource.id,
       });
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('更新成功');
       } else {
         message.error(response.message || '更新失败');
@@ -59,7 +59,7 @@ export const handleDataSourceFormSubmit = async (
       }
     } else {
       const response = await dataSourceApi.create(values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('创建成功');
       } else {
         message.error(response.message || '创建失败');
@@ -68,8 +68,8 @@ export const handleDataSourceFormSubmit = async (
     }
     onSuccess?.();
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error.message) {
+      message.error(error.message);
     } else {
       message.error('操作失败：' + (error.message || '未知错误'));
     }
@@ -82,41 +82,7 @@ export const handleDataSourceFormSubmit = async (
 export const fetchDataSourceList = async (params: any) => {
   try {
     const response = await dataSourceApi.list(params);
-    
-    // 确保返回 ProTable 期望的格式
-    if (response && typeof response === 'object') {
-      // 如果响应包含 records 字段（分页数据）
-      if (response.records && Array.isArray(response.records)) {
-        return {
-          data: response.records,
-          success: true,
-          total: response.total || 0,
-        };
-      }
-      // 如果响应直接是数组
-      if (Array.isArray(response)) {
-        return {
-          data: response,
-          success: true,
-          total: response.length,
-        };
-      }
-      // 如果响应包含 data 字段
-      if (response.data && Array.isArray(response.data)) {
-        return {
-          data: response.data,
-          success: true,
-          total: response.total || response.data.length,
-        };
-      }
-    }
-    
-    // 默认情况：返回空数组
-    return {
-      data: [],
-      success: true,
-      total: 0,
-    };
+    return response;
   } catch (error) {
     console.error('获取数据源列表失败:', error);
     return {

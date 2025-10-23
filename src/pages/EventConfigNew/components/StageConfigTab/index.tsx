@@ -2,16 +2,16 @@
  * 阶段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
-import React, { useRef } from 'react';
-import { ProTable } from '@ant-design/pro-table';
-import { Button, Space, Tooltip, Modal, message, Popconfirm } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import { queryStages, createStage, updateStage, deleteStage } from '../../services/stageConfigApi';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
+import { PlusOutlined } from '@ant-design/icons';
+import { ProTable } from '@ant-design/pro-table';
+import { Button, message, Popconfirm, Space, Tooltip } from 'antd';
+import moment from 'moment';
+import React from 'react';
+import { deleteStage, queryStages } from '../../services/stageConfigApi';
+import type { StageConfigTabProps, StageItem } from '../../types';
 import StageModal from './StageModal';
 import StageViewModal from './StageViewModal';
-import type { StageConfigTabProps, StageItem } from '../../types';
 
 const StageConfigTab: React.FC<StageConfigTabProps> = ({
   eventNo,
@@ -70,12 +70,14 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
         const displayText = dictText ? `${beanStr}-${dictText}` : beanStr || '-';
         return (
           <Tooltip title={displayText} placement="topLeft">
-            <span style={{ 
-              display: 'block',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <span
+              style={{
+                display: 'block',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {displayText}
             </span>
           </Tooltip>
@@ -107,10 +109,8 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
       fixed: 'right' as const,
       render: (_: any, record: StageItem) => (
         <Space size="middle">
-          <a onClick={() => handleStageView(record)}>
-            查看
-          </a>
-          <a 
+          <a onClick={() => handleStageView(record)}>查看</a>
+          <a
             onClick={isReadOnly ? undefined : () => handleStageEdit(record)}
             style={{ color: isReadOnly ? '#ccc' : undefined }}
           >
@@ -123,9 +123,15 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
             cancelText="取消"
             disabled={isReadOnly}
           >
-            <a 
+            <a
               style={{ color: isReadOnly ? '#ccc' : 'red' }}
-              onClick={isReadOnly ? undefined : () => {}}
+              onClick={
+                isReadOnly
+                  ? undefined
+                  : () => {
+                      console.log('开始删除阶段');
+                    }
+              }
             >
               删除
             </a>
@@ -178,20 +184,20 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
 
   // 无版本显示
   const NoVersionDisplay = () => (
-    <div style={{ 
-      marginBottom: 16, 
-      padding: 24, 
-      background: '#fafafa', 
-      borderRadius: 4, 
-      textAlign: 'center',
-      border: '1px dashed #d9d9d9'
-    }}>
+    <div
+      style={{
+        marginBottom: 16,
+        padding: 24,
+        background: '#fafafa',
+        borderRadius: 4,
+        textAlign: 'center',
+        border: '1px dashed #d9d9d9',
+      }}
+    >
       <div style={{ marginBottom: 16 }}>
         <span style={{ fontSize: 16, color: '#666' }}>该事件暂无配置版本</span>
       </div>
-      <div style={{ color: '#999' }}>
-        请先创建版本，然后开始配置事件信息
-      </div>
+      <div style={{ color: '#999' }}>请先创建版本，然后开始配置事件信息</div>
     </div>
   );
 
@@ -200,20 +206,20 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
 
   // 无版本选择显示
   const NoVersionSelectedDisplay = () => (
-    <div style={{ 
-      marginBottom: 16, 
-      padding: 24, 
-      background: '#fafafa', 
-      borderRadius: 4, 
-      textAlign: 'center',
-      border: '1px dashed #d9d9d9'
-    }}>
+    <div
+      style={{
+        marginBottom: 16,
+        padding: 24,
+        background: '#fafafa',
+        borderRadius: 4,
+        textAlign: 'center',
+        border: '1px dashed #d9d9d9',
+      }}
+    >
       <div style={{ marginBottom: 16 }}>
         <span style={{ fontSize: 16, color: '#666' }}>请先选择一个版本进行编辑</span>
       </div>
-      <div style={{ color: '#999' }}>
-        在版本控制面板中选择要编辑的版本
-      </div>
+      <div style={{ color: '#999' }}>在版本控制面板中选择要编辑的版本</div>
     </div>
   );
 
@@ -242,11 +248,7 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
                 eventNo: eventNo,
                 versionCode: versionCode,
               });
-              return {
-                data: response.records || response.data || [],
-                total: response.total || 0,
-                success: true,
-              };
+              return response;
             }}
             rowKey="id"
             pagination={{
@@ -256,10 +258,10 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
             }}
             scroll={{ x: 1200 }}
             toolBarRender={() => [
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />} 
-                onClick={handleStageAdd} 
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={handleStageAdd}
                 key="add"
                 disabled={isReadOnly}
               >

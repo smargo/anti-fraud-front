@@ -2,10 +2,10 @@
  * 阶段编辑Modal组件 - 完全按照原页面逻辑实现
  */
 
+import { Button, Form, Input, Modal, Select, Space, message } from 'antd';
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, Space, message } from 'antd';
 import { createStage, updateStage } from '../../services/stageConfigApi';
-import type { StageModalProps, StageItem } from '../../types';
+import type { StageModalProps } from '../../types';
 
 const StageModal: React.FC<StageModalProps> = ({
   visible,
@@ -36,19 +36,19 @@ const StageModal: React.FC<StageModalProps> = ({
 
       if (editingStage) {
         const response = await updateStage({ ...values, id: editingStage.id });
-        if (response.code === 'SUCCESS') {
+        if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
         } else {
-          message.error(response.message || '更新失败');
+          throw new Error(response.message || '更新失败');
         }
       } else {
         const response = await createStage(values);
         if (response.code === 'SUCCESS') {
-          message.success('创建成功');
+          message.success('0');
           onSubmit(values);
         } else {
-          message.error(response.message || '创建失败');
+          throw new Error(response.message || '创建失败');
         }
       }
     } catch (error: any) {
@@ -71,10 +71,14 @@ const StageModal: React.FC<StageModalProps> = ({
         layout="vertical"
         onFinish={handleSubmit}
         initialValues={{
-          stageNo: 'validate'
+          stageNo: 'validate',
         }}
       >
-        <Form.Item name="stageNo" label="阶段编号" rules={[{ required: true, message: '请选择阶段编号' }]}>
+        <Form.Item
+          name="stageNo"
+          label="阶段编号"
+          rules={[{ required: true, message: '请选择阶段编号' }]}
+        >
           <Select placeholder="请选择阶段编号">
             {eventStageOptions.map((option: any) => (
               <Select.Option key={option.itemNo} value={option.itemNo}>
@@ -84,25 +88,24 @@ const StageModal: React.FC<StageModalProps> = ({
           </Select>
         </Form.Item>
 
-        <Form.Item name="stageName" label="阶段名称" rules={[
-          { required: true, message: '请输入阶段名称' },
-          { max: 256, message: '阶段名称不能超过256个字符' }
-        ]}>
-          <Input 
-            placeholder="请输入阶段名称" 
-            maxLength={256}
-            showCount
-          />
+        <Form.Item
+          name="stageName"
+          label="阶段名称"
+          rules={[
+            { required: true, message: '请输入阶段名称' },
+            { max: 256, message: '阶段名称不能超过256个字符' },
+          ]}
+        >
+          <Input placeholder="请输入阶段名称" maxLength={256} showCount />
         </Form.Item>
 
-        <Form.Item name="stageBean" label="阶段组件" rules={[{ required: true, message: '请选择阶段组件' }]}>
-          <Select 
-            placeholder="请选择阶段组件" 
-            allowClear
-            showSearch
-            optionFilterProp="children"
-          >
-            {stageBeanOptions.map(option => (
+        <Form.Item
+          name="stageBean"
+          label="阶段组件"
+          rules={[{ required: true, message: '请选择阶段组件' }]}
+        >
+          <Select placeholder="请选择阶段组件" allowClear showSearch optionFilterProp="children">
+            {stageBeanOptions.map((option) => (
               <Select.Option key={option.itemNo} value={option.itemNo}>
                 {option.itemDescribe}-{option.itemNo}
               </Select.Option>
@@ -110,16 +113,14 @@ const StageModal: React.FC<StageModalProps> = ({
           </Select>
         </Form.Item>
 
-        <Form.Item name="stageParam" label="阶段参数" rules={[
-          { max: 512, message: '阶段参数不能超过512个字符' }
-        ]}>
-          <Input 
-            placeholder="请输入阶段参数（可选）" 
-            maxLength={512}
-            showCount
-          />
+        <Form.Item
+          name="stageParam"
+          label="阶段参数"
+          rules={[{ max: 512, message: '阶段参数不能超过512个字符' }]}
+        >
+          <Input placeholder="请输入阶段参数（可选）" maxLength={512} showCount />
         </Form.Item>
-        
+
         <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit" loading={loading}>

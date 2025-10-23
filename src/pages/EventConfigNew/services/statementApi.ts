@@ -1,3 +1,4 @@
+import { ApiResponse } from '@/pages/EventConfigNew/types';
 import { request } from '@umijs/max';
 
 export interface StatementDO {
@@ -13,11 +14,17 @@ export interface StatementDO {
   mongoOperationType?: string;
   mongoDatabase?: string;
   mongoCollection?: string;
-  
+
   createdDate: string;
   createdBy?: string;
   lastModifiedDate?: string;
   lastModifiedBy?: string;
+}
+
+export interface StatementItem {
+  code: string;
+  message: string;
+  data: StatementDO;
 }
 
 export interface StatementQueryVO {
@@ -30,7 +37,7 @@ export interface StatementQueryVO {
 
 export const statementApi = {
   // 根据ID获取语句
-  getById: async (id: number): Promise<StatementDO> => {
+  getById: async (id: number): Promise<StatementItem> => {
     const response = await request(`/api/statements/${id}`, {
       method: 'GET',
     });
@@ -38,7 +45,7 @@ export const statementApi = {
   },
 
   // 根据语句编号获取语句
-  getByStatementNo: async (statementNo: string): Promise<StatementDO> => {
+  getByStatementNo: async (statementNo: string): Promise<StatementItem> => {
     const response = await request(`/api/statements/by-statement-no/${statementNo}`, {
       method: 'GET',
     });
@@ -46,7 +53,9 @@ export const statementApi = {
   },
 
   // 分页查询语句
-  list: async (params: StatementQueryVO): Promise<{
+  list: async (
+    params: StatementQueryVO,
+  ): Promise<{
     records: StatementDO[];
     total: number;
     current: number;
@@ -86,7 +95,10 @@ export const statementApi = {
   },
 
   // 根据事件编号和版本代码获取语句列表
-  getByEventNoAndVersionCode: async (eventNo: string, versionCode: string): Promise<StatementDO[]> => {
+  getByEventNoAndVersionCode: async (
+    eventNo: string,
+    versionCode: string,
+  ): Promise<ApiResponse<StatementDO[]>> => {
     const response = await request('/api/statements/by-event-no-and-version-code', {
       method: 'GET',
       params: { eventNo, versionCode },
@@ -95,7 +107,11 @@ export const statementApi = {
   },
 
   // 搜索语句（支持按编号和描述模糊搜索）
-  search: async (keyword: string = '', current: number = 1, pageSize: number = 20): Promise<{
+  search: async (
+    keyword: string = '',
+    current: number = 1,
+    pageSize: number = 20,
+  ): Promise<{
     records: StatementDO[];
     total: number;
     current: number;

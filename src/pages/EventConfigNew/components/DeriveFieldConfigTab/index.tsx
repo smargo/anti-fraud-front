@@ -2,16 +2,16 @@
  * 衍生字段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
-import React, { useRef } from 'react';
-import { ProTable } from '@ant-design/pro-table';
-import { Button, Space, Tooltip, Modal, message, Popconfirm } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import { queryDeriveFields, createDeriveField, updateDeriveField, deleteDeriveField } from '../../services/deriveFieldConfigApi';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
+import { PlusOutlined } from '@ant-design/icons';
+import { ProTable } from '@ant-design/pro-table';
+import { Button, message, Popconfirm, Space, Tooltip } from 'antd';
+import moment from 'moment';
+import React from 'react';
+import { deleteDeriveField, queryDeriveFields } from '../../services/deriveFieldConfigApi';
+import type { DeriveFieldConfigTabProps, DeriveFieldItem } from '../../types';
 import DeriveFieldModal from './DeriveFieldModal';
 import DeriveFieldViewModal from './DeriveFieldViewModal';
-import type { DeriveFieldConfigTabProps, DeriveFieldItem } from '../../types';
 
 const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
   eventNo,
@@ -64,12 +64,14 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip>
-          <div style={{ 
-            maxWidth: '150px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '150px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '-'}
           </div>
         </Tooltip>
@@ -104,12 +106,14 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '200px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '200px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '-'}
           </div>
         </Tooltip>
@@ -139,10 +143,8 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
       fixed: 'right' as const,
       render: (_: any, record: DeriveFieldItem) => (
         <Space size="middle">
-          <a onClick={() => handleDeriveFieldView(record)}>
-            查看
-          </a>
-          <a 
+          <a onClick={() => handleDeriveFieldView(record)}>查看</a>
+          <a
             onClick={isReadOnly ? undefined : () => handleDeriveFieldEdit(record)}
             style={{ color: isReadOnly ? '#ccc' : undefined }}
           >
@@ -155,9 +157,15 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
             cancelText="取消"
             disabled={isReadOnly}
           >
-            <a 
+            <a
               style={{ color: isReadOnly ? '#ccc' : 'red' }}
-              onClick={isReadOnly ? undefined : () => {}}
+              onClick={
+                isReadOnly
+                  ? undefined
+                  : () => {
+                      console.log('开始删除衍生字段');
+                    }
+              }
             >
               删除
             </a>
@@ -179,16 +187,12 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
   };
 
   const handleDeriveFieldDelete = async (id: string) => {
-    try {
-      const response = await deleteDeriveField(id);
-      if (response.code === 'SUCCESS') {
-        message.success('删除成功');
-        actionRef?.current?.reload();
-      } else {
-        message.error(response.message || '删除失败');
-      }
-    } catch (error: any) {
-      message.error(error?.message || '操作失败');
+    const response = await deleteDeriveField(id);
+    if (response.code === '0') {
+      message.success('删除成功');
+      actionRef?.current?.reload();
+    } else {
+      throw new Error(response.message || '删除失败');
     }
   };
 
@@ -210,20 +214,20 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
 
   // 无版本显示
   const NoVersionDisplay = () => (
-    <div style={{ 
-      marginBottom: 16, 
-      padding: 24, 
-      background: '#fafafa', 
-      borderRadius: 4, 
-      textAlign: 'center',
-      border: '1px dashed #d9d9d9'
-    }}>
+    <div
+      style={{
+        marginBottom: 16,
+        padding: 24,
+        background: '#fafafa',
+        borderRadius: 4,
+        textAlign: 'center',
+        border: '1px dashed #d9d9d9',
+      }}
+    >
       <div style={{ marginBottom: 16 }}>
         <span style={{ fontSize: 16, color: '#666' }}>该事件暂无配置版本</span>
       </div>
-      <div style={{ color: '#999' }}>
-        请先创建版本，然后开始配置事件信息
-      </div>
+      <div style={{ color: '#999' }}>请先创建版本，然后开始配置事件信息</div>
     </div>
   );
 
@@ -232,20 +236,20 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
 
   // 无版本选择显示
   const NoVersionSelectedDisplay = () => (
-    <div style={{ 
-      marginBottom: 16, 
-      padding: 24, 
-      background: '#fafafa', 
-      borderRadius: 4, 
-      textAlign: 'center',
-      border: '1px dashed #d9d9d9'
-    }}>
+    <div
+      style={{
+        marginBottom: 16,
+        padding: 24,
+        background: '#fafafa',
+        borderRadius: 4,
+        textAlign: 'center',
+        border: '1px dashed #d9d9d9',
+      }}
+    >
       <div style={{ marginBottom: 16 }}>
         <span style={{ fontSize: 16, color: '#666' }}>请先选择一个版本进行编辑</span>
       </div>
-      <div style={{ color: '#999' }}>
-        在版本控制面板中选择要编辑的版本
-      </div>
+      <div style={{ color: '#999' }}>在版本控制面板中选择要编辑的版本</div>
     </div>
   );
 
@@ -288,10 +292,10 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
             }}
             scroll={{ x: 1200 }}
             toolBarRender={() => [
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />} 
-                onClick={handleDeriveFieldAdd} 
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={handleDeriveFieldAdd}
                 key="add"
                 disabled={isReadOnly}
               >

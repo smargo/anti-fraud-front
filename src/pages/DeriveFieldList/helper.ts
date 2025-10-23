@@ -2,11 +2,15 @@
  * DeriveFieldList 页面辅助函数
  */
 
+import {
+  createDeriveField,
+  deleteDeriveField,
+  queryDeriveFields,
+  updateDeriveField,
+} from '@/services/antifraud/deriveField';
 import { message } from 'antd';
 import moment from 'moment';
-import { getDictText } from '@/utils/dictUtils';
-import { createDeriveField, updateDeriveField, deleteDeriveField, queryDeriveFields } from '@/services/antifraud/deriveField';
-import type { DeriveFieldItem, DeriveFieldFormValues } from './types';
+import type { DeriveFieldFormValues, DeriveFieldItem } from './types';
 
 /**
  * 格式化日期时间
@@ -22,7 +26,7 @@ export const formatDateTime = (date: string, separator: string = '-') => {
 export const handleDeriveFieldDelete = async (id: number, onSuccess?: () => void) => {
   try {
     const response = await deleteDeriveField(id);
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       message.success('删除成功');
       onSuccess?.();
     } else {
@@ -48,7 +52,7 @@ export const handleDeriveFieldFormSubmit = async (
   try {
     if (editingDeriveField) {
       const response = await updateDeriveField(editingDeriveField.id!, values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('更新成功');
       } else {
         message.error(response.message || '更新失败');
@@ -56,7 +60,7 @@ export const handleDeriveFieldFormSubmit = async (
       }
     } else {
       const response = await createDeriveField(values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('创建成功');
       } else {
         message.error(response.message || '创建失败');
@@ -65,8 +69,8 @@ export const handleDeriveFieldFormSubmit = async (
     }
     onSuccess?.();
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error.message) {
+      message.error(error.message);
     } else {
       message.error('操作失败：' + (error.message || '未知错误'));
     }
@@ -79,4 +83,3 @@ export const handleDeriveFieldFormSubmit = async (
 export const fetchDeriveFieldList = async (params: any) => {
   return queryDeriveFields(params);
 };
-

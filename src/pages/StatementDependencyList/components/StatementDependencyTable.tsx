@@ -2,11 +2,11 @@
  * StatementDependencyTable 组件
  */
 
-import React from 'react';
+import { queryStatementDependenciesWithNames } from '@/services/antifraud/statementDependency';
+import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
 import { Button, Card, Tooltip } from 'antd';
-import type { ActionType } from '@ant-design/pro-components';
-import { queryStatementDependenciesWithNames } from '@/services/antifraud/statementDependency';
+import React from 'react';
 import type { StatementDependencyItem } from '../types';
 
 interface StatementDependencyTableProps {
@@ -48,12 +48,14 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '100px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '100px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -71,12 +73,14 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '130px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '130px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -91,11 +95,13 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            overflow: 'hidden',
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -110,12 +116,14 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '130px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '130px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -129,10 +137,7 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
       width: 80,
       fixed: 'right',
       render: (_: any, record: StatementDependencyItem) => (
-        <Button 
-          type="link" 
-          onClick={() => onView(record)}
-        >
+        <Button type="link" onClick={() => onView(record)}>
           查看
         </Button>
       ),
@@ -150,14 +155,10 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
           const searchParams = {
             ...params,
           };
-          
+
           const response = await queryStatementDependenciesWithNames(searchParams);
           // 如果返回的是分页对象，直接返回
-          return {
-            data: response.records || response.data || [],
-            total: response.total,
-            success: true,
-          };
+          return response;
         }}
         pagination={{
           showSizeChanger: true,
@@ -172,4 +173,3 @@ const StatementDependencyTable: React.FC<StatementDependencyTableProps> = ({
 };
 
 export default StatementDependencyTable;
-

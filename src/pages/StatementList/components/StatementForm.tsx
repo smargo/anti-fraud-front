@@ -2,21 +2,21 @@
  * StatementForm 组件
  */
 
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Space, Row, Col, Select, Modal, message, Tooltip, Alert } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
 import { dataSourceApi, DataSourceDO } from '@/services/antifraud/datasource';
+import { SearchOutlined } from '@ant-design/icons';
+import { Alert, Button, Col, Form, Input, message, Modal, Row, Select, Space, Tooltip } from 'antd';
+import React, { useEffect, useState } from 'react';
 import type { StatementFormProps } from '../types';
 
 const { TextArea } = Input;
 
-const StatementForm: React.FC<StatementFormProps> = ({ 
-  initialValues, 
-  onSubmit, 
-  onCancel, 
-  mongoOperateOptions, 
+const StatementForm: React.FC<StatementFormProps> = ({
+  initialValues,
+  onSubmit,
+  onCancel,
+  mongoOperateOptions,
   loading,
-  forceReset 
+  forceReset,
 }) => {
   const [form] = Form.useForm();
   const [mongoForm] = Form.useForm(); // MongoDB辅助窗口的独立Form
@@ -32,7 +32,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
   // 加载所有数据源
   const loadAllDataSources = async () => {
     try {
-      const response = await dataSourceApi.list({ current: 1, pageSize: 1000 }); // 假设数据源不会超过1000条
+      const response = await dataSourceApi.list({ current: 1, pageSize: 10000 }); // 假设数据源不会超过10000条
       setDataSourceOptions(response.data || []);
     } catch (error) {
       console.error('加载数据源失败:', error);
@@ -45,7 +45,9 @@ const StatementForm: React.FC<StatementFormProps> = ({
       form.setFieldsValue(initialValues);
       // 如果有数据源编号，从已加载的数据源列表中找到对应的数据源信息
       if (initialValues.dataSourceNo && dataSourceOptions.length > 0) {
-        const dataSource = dataSourceOptions.find(ds => ds.dataSourceNo === initialValues.dataSourceNo);
+        const dataSource = dataSourceOptions.find(
+          (ds) => ds.dataSourceNo === initialValues.dataSourceNo,
+        );
         setSelectedDataSource(dataSource || null);
       }
     } else {
@@ -57,14 +59,16 @@ const StatementForm: React.FC<StatementFormProps> = ({
   // 单独处理数据源选择，当数据源加载完成后
   useEffect(() => {
     if (initialValues?.dataSourceNo && dataSourceOptions.length > 0) {
-      const dataSource = dataSourceOptions.find(ds => ds.dataSourceNo === initialValues.dataSourceNo);
+      const dataSource = dataSourceOptions.find(
+        (ds) => ds.dataSourceNo === initialValues.dataSourceNo,
+      );
       setSelectedDataSource(dataSource || null);
     }
   }, [dataSourceOptions, initialValues?.dataSourceNo]);
 
   // 数据源选择变化处理
   const handleDataSourceChange = (value: string) => {
-    const dataSource = dataSourceOptions.find(ds => ds.dataSourceNo === value);
+    const dataSource = dataSourceOptions.find((ds) => ds.dataSourceNo === value);
     setSelectedDataSource(dataSource || null);
   };
 
@@ -72,22 +76,18 @@ const StatementForm: React.FC<StatementFormProps> = ({
   const generateMongoJson = () => {
     const formValues = form.getFieldsValue();
     const mongoValues = mongoForm.getFieldsValue(); // 从MongoDB辅助窗口的Form获取值
-    const { 
-      mongoOperationType, 
-      mongoDatabase, 
-      mongoCollection
-    } = formValues;
-    const { 
-      mongoQuery, 
+    const { mongoOperationType, mongoDatabase, mongoCollection } = formValues;
+    const {
+      mongoQuery,
       mongoSort,
       mongoLimit,
       mongoSkip,
       mongoMaxTimeMS,
       mongoProjection,
       mongoPipeline,
-      mongoOptions
+      mongoOptions,
     } = mongoValues;
-    
+
     if (!mongoOperationType || !mongoDatabase || !mongoCollection) {
       message.warning('请先填写MongoDB操作类型、数据库名和集合名');
       return;
@@ -108,14 +108,14 @@ const StatementForm: React.FC<StatementFormProps> = ({
             }
           }
           break;
-          
+
         case 'aggregate':
           if (mongoPipeline) {
             try {
               const pipeline = JSON.parse(mongoPipeline);
               // 对于aggregate操作，直接将管道数组添加到参数数组中
               if (Array.isArray(pipeline)) {
-                pipeline.forEach(stage => {
+                pipeline.forEach((stage) => {
                   paramsArray.push(stage);
                 });
               } else {
@@ -128,7 +128,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
             }
           }
           break;
-          
+
         case 'count':
           if (mongoQuery) {
             try {
@@ -150,19 +150,19 @@ const StatementForm: React.FC<StatementFormProps> = ({
           return;
         }
       }
-      
+
       if (mongoLimit) {
         paramsArray.push({ limit: parseInt(mongoLimit) });
       }
-      
+
       if (mongoSkip) {
         paramsArray.push({ skip: parseInt(mongoSkip) });
       }
-      
+
       if (mongoMaxTimeMS) {
         paramsArray.push({ maxTimeMS: parseInt(mongoMaxTimeMS) });
       }
-      
+
       if (mongoProjection) {
         try {
           paramsArray.push({ projection: JSON.parse(mongoProjection) });
@@ -171,7 +171,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
           return;
         }
       }
-      
+
       if (mongoOptions) {
         try {
           const otherOptions = JSON.parse(mongoOptions);
@@ -187,7 +187,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
 
       // 将生成的参数数组设置到statementString字段
       form.setFieldsValue({
-        statementString: JSON.stringify(paramsArray, null, 2)
+        statementString: JSON.stringify(paramsArray, null, 2),
       });
 
       message.success('MongoDB操作参数数组已生成');
@@ -207,10 +207,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-    >
+    <Form form={form} layout="vertical">
       {/* 第一行：语句编号和语句描述 */}
       <Row gutter={16}>
         <Col span={12}>
@@ -219,53 +216,36 @@ const StatementForm: React.FC<StatementFormProps> = ({
             label="语句编号"
             rules={[
               { required: true, message: '请输入编号' },
-              { max: 128, message: '语句编号不能超过128个字符' }
+              { max: 128, message: '语句编号不能超过128个字符' },
             ]}
           >
-            <Input 
-              placeholder="请输入编号" 
-              disabled={!!initialValues}
-              maxLength={128}
-              showCount
-            />
+            <Input placeholder="请输入编号" disabled={!!initialValues} maxLength={128} showCount />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-              name="beanId"
-              label="Bean ID"
-              rules={[{ max: 128, message: 'Bean ID不能超过128个字符' }]}
+            name="beanId"
+            label="Bean ID"
+            rules={[{ max: 128, message: 'Bean ID不能超过128个字符' }]}
           >
-            <Input 
-              placeholder="请输入自定义实现类" 
-              maxLength={128}
-              showCount
-            />
+            <Input placeholder="请输入自定义实现类" maxLength={128} showCount />
           </Form.Item>
         </Col>
-
       </Row>
 
       {/* 第二行：Bean ID和数据源编号 */}
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-              name="statementDesc"
-              label="语句描述"
-              rules={[{ max: 256, message: '语句描述不能超过256个字符' }]}
+            name="statementDesc"
+            label="语句描述"
+            rules={[{ max: 256, message: '语句描述不能超过256个字符' }]}
           >
-            <Input 
-              placeholder="请输入语句描述" 
-              maxLength={256}
-              showCount
-            />
+            <Input placeholder="请输入语句描述" maxLength={256} showCount />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            name="dataSourceNo"
-            label="数据源编号"
-          >
+          <Form.Item name="dataSourceNo" label="数据源编号">
             <Select
               allowClear
               showSearch
@@ -292,12 +272,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
             label="MongoDB操作类型"
             rules={[{ required: true, message: '请选择MongoDB操作类型' }]}
           >
-            <Select
-              allowClear
-              placeholder="请选择操作类型"
-              loading={loading}
-              disabled={loading}
-            >
+            <Select allowClear placeholder="请选择操作类型" loading={loading} disabled={loading}>
               {mongoOperateOptions.map((option: any) => (
                 <Select.Option key={option.itemNo} value={option.itemNo}>
                   {option.itemDescribe}
@@ -348,11 +323,11 @@ const StatementForm: React.FC<StatementFormProps> = ({
             )}
           </div>
         }
-       
       >
-        <TextArea 
-          placeholder={selectedDataSource?.dataSourceType === 'MongoDB' 
-            ? `MongoDB的find操作参数数组格式示例：
+        <TextArea
+          placeholder={
+            selectedDataSource?.dataSourceType === 'MongoDB'
+              ? `MongoDB的find操作参数数组格式示例：
 [
   {"query": {"age": {"$gte": 18}}},
   {"sort": {"name": 1, "age": -1}},
@@ -360,25 +335,21 @@ const StatementForm: React.FC<StatementFormProps> = ({
   {"projection": {"name": 1, "age": 1, "_id": 0}}
 ]
 
-注意：operation、database、collection已在其他字段中配置` 
-            : "请输入SQL语句或脚本"
-          } 
+注意：operation、database、collection已在其他字段中配置`
+              : '请输入SQL语句或脚本'
+          }
           rows={8}
           style={{ fontFamily: 'monospace' }}
         />
       </Form.Item>
-
 
       <Form.Item
         name="statementParam"
         label={
           <span>
             参数列表
-            <Tooltip 
-              title="点击查看详细说明"
-              placement="topLeft"
-            >
-              <span 
+            <Tooltip title="点击查看详细说明" placement="topLeft">
+              <span
                 style={{ marginLeft: '4px', color: '#1890ff', cursor: 'help' }}
                 onClick={() => {
                   Modal.info({
@@ -389,23 +360,29 @@ const StatementForm: React.FC<StatementFormProps> = ({
                         <div style={{ marginBottom: '16px', fontSize: '14px', lineHeight: '1.6' }}>
                           <strong>参数列表用于两种场景：</strong>
                         </div>
-                        
+
                         <div style={{ marginBottom: '16px' }}>
-                          <h4 style={{ color: '#1890ff', marginBottom: '8px' }}>1. MySQL语句参数替换</h4>
-                          <div style={{ marginBottom: '8px' }}>当使用MySQL语句时，使用?占位符，参数列表填入对应的参数名：</div>
-                          <pre style={{
-                            background: '#f5f5f5',
-                            padding: '12px',
-                            borderRadius: '6px',
-                            fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-                            fontSize: '12px',
-                            lineHeight: '1.5',
-                            whiteSpace: 'pre-wrap',
-                            wordWrap: 'break-word',
-                            margin: 0,
-                            border: '1px solid #d9d9d9'
-                          }}>
-{`SQL语句示例：
+                          <h4 style={{ color: '#1890ff', marginBottom: '8px' }}>
+                            1. MySQL语句参数替换
+                          </h4>
+                          <div style={{ marginBottom: '8px' }}>
+                            当使用MySQL语句时，使用?占位符，参数列表填入对应的参数名：
+                          </div>
+                          <pre
+                            style={{
+                              background: '#f5f5f5',
+                              padding: '12px',
+                              borderRadius: '6px',
+                              fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+                              fontSize: '12px',
+                              lineHeight: '1.5',
+                              whiteSpace: 'pre-wrap',
+                              wordWrap: 'break-word',
+                              margin: 0,
+                              border: '1px solid #d9d9d9',
+                            }}
+                          >
+                            {`SQL语句示例：
 insert into login_record(cust_uid, login_ip, login_date) values(?,?,?)
 
 参数列表填入：
@@ -414,21 +391,27 @@ custUid,loginIp,loginDate`}
                         </div>
 
                         <div style={{ marginBottom: '16px' }}>
-                          <h4 style={{ color: '#1890ff', marginBottom: '8px' }}>2. MongoDB insertOne操作</h4>
-                          <div style={{ marginBottom: '8px' }}>当使用MongoDB的insertOne操作时，需要构建document对象：</div>
-                          <pre style={{
-                            background: '#f5f5f5',
-                            padding: '12px',
-                            borderRadius: '6px',
-                            fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-                            fontSize: '12px',
-                            lineHeight: '1.5',
-                            whiteSpace: 'pre-wrap',
-                            wordWrap: 'break-word',
-                            margin: 0,
-                            border: '1px solid #d9d9d9'
-                          }}>
-{`参数列表填入：
+                          <h4 style={{ color: '#1890ff', marginBottom: '8px' }}>
+                            2. MongoDB insertOne操作
+                          </h4>
+                          <div style={{ marginBottom: '8px' }}>
+                            当使用MongoDB的insertOne操作时，需要构建document对象：
+                          </div>
+                          <pre
+                            style={{
+                              background: '#f5f5f5',
+                              padding: '12px',
+                              borderRadius: '6px',
+                              fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+                              fontSize: '12px',
+                              lineHeight: '1.5',
+                              whiteSpace: 'pre-wrap',
+                              wordWrap: 'break-word',
+                              margin: 0,
+                              border: '1px solid #d9d9d9',
+                            }}
+                          >
+                            {`参数列表填入：
 custUid:custUidKey,custName:custNameKey,custPhone:custPhoneKey
 
 构建的document对象如下：
@@ -440,28 +423,34 @@ custUid:custUidKey,custName:custNameKey,custPhone:custPhoneKey
                           </pre>
                         </div>
 
-                        <div style={{ 
-                          padding: '12px', 
-                          backgroundColor: '#fff7e6', 
-                          borderRadius: '6px',
-                          border: '1px solid #ffd591'
-                        }}>
-                          <strong>💡 提示：</strong>参数列表中的冒号(:)用于分隔字段名和参数名，逗号(,)用于分隔多个参数。<br/>
+                        <div
+                          style={{
+                            padding: '12px',
+                            backgroundColor: '#fff7e6',
+                            borderRadius: '6px',
+                            border: '1px solid #ffd591',
+                          }}
+                        >
+                          <strong>💡 提示：</strong>
+                          参数列表中的冒号(:)用于分隔字段名和参数名，逗号(,)用于分隔多个参数。
+                          <br />
                           其他的mongodb操作，如find、aggregate、count等，不需要参数列表。
                         </div>
                       </div>
                     ),
-                    okText: '关闭'
+                    okText: '关闭',
                   });
                 }}
-              >?</span>
+              >
+                ?
+              </span>
             </Tooltip>
           </span>
         }
       >
-        <TextArea 
-          placeholder='请输入参数列表，只有两类操作需要参数列表：mysql语句或mongodb的insertOne操作。详情可查看上方的问号帮助提示
-          '
+        <TextArea
+          placeholder="请输入参数列表，只有两类操作需要参数列表：mysql语句或mongodb的insertOne操作。详情可查看上方的问号帮助提示
+          "
           rows={3}
           style={{ fontFamily: 'monospace' }}
         />
@@ -496,7 +485,7 @@ custUid:custUidKey,custName:custNameKey,custPhone:custPhoneKey
           </Button>,
           <Button key="generate" type="primary" onClick={generateMongoJson}>
             生成并应用
-          </Button>
+          </Button>,
         ]}
       >
         <Alert
@@ -508,23 +497,17 @@ custUid:custUidKey,custName:custNameKey,custPhone:custPhoneKey
         />
 
         <Form form={mongoForm} layout="vertical">
-          <Form.Item
-            name="mongoQuery"
-            label="查询条件/过滤条件（find和count操作）"
-          >
-            <TextArea 
-              placeholder="请输入查询条件JSON，如：{'age': {'$gte': 18}}（可选）" 
+          <Form.Item name="mongoQuery" label="查询条件/过滤条件（find和count操作）">
+            <TextArea
+              placeholder="请输入查询条件JSON，如：{'age': {'$gte': 18}}（可选）"
               rows={3}
               style={{ fontFamily: 'monospace' }}
             />
           </Form.Item>
 
-          <Form.Item
-            name="mongoSort"
-            label="排序条件"
-          >
-            <TextArea 
-              placeholder="请输入排序条件JSON，如：{'name': 1, 'age': -1}（可选）" 
+          <Form.Item name="mongoSort" label="排序条件">
+            <TextArea
+              placeholder="请输入排序条件JSON，如：{'name': 1, 'age': -1}（可选）"
               rows={2}
               style={{ fontFamily: 'monospace' }}
             />
@@ -532,59 +515,41 @@ custUid:custUidKey,custName:custNameKey,custPhone:custPhoneKey
 
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item
-                name="mongoLimit"
-                label="限制数量"
-              >
+              <Form.Item name="mongoLimit" label="限制数量">
                 <Input placeholder="如：10（可选）" />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="mongoSkip"
-                label="跳过数量"
-              >
+              <Form.Item name="mongoSkip" label="跳过数量">
                 <Input placeholder="如：0（可选）" />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="mongoMaxTimeMS"
-                label="最大执行时间(ms)"
-              >
+              <Form.Item name="mongoMaxTimeMS" label="最大执行时间(ms)">
                 <Input placeholder="如：5000（可选）" />
               </Form.Item>
             </Col>
           </Row>
 
-          <Form.Item
-            name="mongoProjection"
-            label="投影字段"
-          >
-            <TextArea 
-              placeholder="请输入投影字段JSON，如：{'name': 1, 'age': 1, '_id': 0}（可选）" 
+          <Form.Item name="mongoProjection" label="投影字段">
+            <TextArea
+              placeholder="请输入投影字段JSON，如：{'name': 1, 'age': 1, '_id': 0}（可选）"
               rows={2}
               style={{ fontFamily: 'monospace' }}
             />
           </Form.Item>
 
-          <Form.Item
-            name="mongoPipeline"
-            label="聚合管道（仅aggregate操作）"
-          >
-            <TextArea 
-              placeholder="请输入聚合管道JSON数组，如：[{'$match': {'age': {'$gte': 18}}}, {'$group': {'_id': '$department', 'count': {'$sum': 1}}}]（可选）" 
+          <Form.Item name="mongoPipeline" label="聚合管道（仅aggregate操作）">
+            <TextArea
+              placeholder="请输入聚合管道JSON数组，如：[{'$match': {'age': {'$gte': 18}}}, {'$group': {'_id': '$department', 'count': {'$sum': 1}}}]（可选）"
               rows={4}
               style={{ fontFamily: 'monospace' }}
             />
           </Form.Item>
 
-          <Form.Item
-            name="mongoOptions"
-            label="其他选项"
-          >
-            <TextArea 
-              placeholder="请输入其他选项JSON，如：{'maxTimeMS': 5000, 'hint': {'name': 1}}（可选）" 
+          <Form.Item name="mongoOptions" label="其他选项">
+            <TextArea
+              placeholder="请输入其他选项JSON，如：{'maxTimeMS': 5000, 'hint': {'name': 1}}（可选）"
               rows={3}
               style={{ fontFamily: 'monospace' }}
             />
@@ -596,4 +561,3 @@ custUid:custUidKey,custName:custNameKey,custPhone:custPhoneKey
 };
 
 export default StatementForm;
-

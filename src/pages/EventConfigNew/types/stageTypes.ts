@@ -19,6 +19,12 @@ export interface StageItem {
   lastModifiedBy: string;
 }
 
+export interface StageItemPageResponse {
+  success: boolean;
+  total: number;
+  data: StageItem[];
+}
+
 // 阶段表单值
 export interface StageFormValues {
   stageName: string;

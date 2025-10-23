@@ -19,6 +19,12 @@ export interface DataSourceDO {
   lastModifiedBy: string;
 }
 
+export interface DataSourceItemResponse {
+  data: DataSourceDO;
+  code: string;
+  message: string;
+}
+
 export interface DataSourceQueryVO {
   dataSourceNo?: string;
   dataSourceName?: string;
@@ -30,7 +36,7 @@ export interface DataSourceQueryVO {
 
 export const dataSourceApi = {
   // 根据ID获取数据源
-  getById: async (id: number): Promise<DataSourceDO> => {
+  getById: async (id: number): Promise<DataSourceItemResponse> => {
     const response = await request(`/api/datasource/${id}`, {
       method: 'GET',
     });
@@ -38,7 +44,7 @@ export const dataSourceApi = {
   },
 
   // 根据数据源编号获取数据源
-  getByDataSourceNo: async (dataSourceNo: string): Promise<DataSourceDO> => {
+  getByDataSourceNo: async (dataSourceNo: string): Promise<DataSourceItemResponse> => {
     const response = await request(`/api/datasource/by-data-source-no/${dataSourceNo}`, {
       method: 'GET',
     });
@@ -46,7 +52,9 @@ export const dataSourceApi = {
   },
 
   // 分页查询数据源
-  list: async (params: DataSourceQueryVO): Promise<{
+  list: async (
+    params: DataSourceQueryVO,
+  ): Promise<{
     records: DataSourceDO[];
     total: number;
     current: number;
@@ -102,7 +110,9 @@ export const dataSourceApi = {
   },
 
   // 测试数据源连接
-  testConnection: async (dataSourceNo: string): Promise<{
+  testConnection: async (
+    dataSourceNo: string,
+  ): Promise<{
     success: boolean;
     message: string;
     dataSourceType?: string;
@@ -114,7 +124,9 @@ export const dataSourceApi = {
   },
 
   // 刷新数据源连接
-  refresh: async (dataSourceNo: string): Promise<{
+  refresh: async (
+    dataSourceNo: string,
+  ): Promise<{
     success: boolean;
     message: string;
   }> => {
@@ -125,7 +137,9 @@ export const dataSourceApi = {
   },
 
   // 关闭数据源连接
-  close: async (dataSourceNo: string): Promise<{
+  close: async (
+    dataSourceNo: string,
+  ): Promise<{
     success: boolean;
     message: string;
   }> => {
@@ -136,7 +150,11 @@ export const dataSourceApi = {
   },
 
   // 搜索数据源（支持按编号和名称模糊搜索）
-  search: async (keyword: string = '', current: number = 1, pageSize: number = 20): Promise<{
+  search: async (
+    keyword: string = '',
+    current: number = 1,
+    pageSize: number = 20,
+  ): Promise<{
     records: DataSourceDO[];
     total: number;
     current: number;

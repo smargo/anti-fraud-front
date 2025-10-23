@@ -2,11 +2,11 @@
  * 事件指标编辑Modal组件 - 完全按照原页面逻辑实现
  */
 
+import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Select, Button, Space, message } from 'antd';
-import { indicatorApi, IndicatorDO } from '../../services/indicatorApi';
 import { createEventIndicator, updateEventIndicator } from '../../services/eventIndicatorConfigApi';
-import type { EventIndicatorModalProps, EventIndicatorItem } from '../../types';
+import { indicatorApi, IndicatorDO } from '../../services/indicatorApi';
+import type { EventIndicatorModalProps } from '../../types';
 
 const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
   visible,
@@ -27,7 +27,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
       setIndicatorOptions([]);
       return;
     }
-    
+
     setIndicatorSearchLoading(true);
     try {
       const response = await indicatorApi.search(value, 1, 20);
@@ -61,19 +61,19 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
 
       if (editingEventIndicator) {
         const response = await updateEventIndicator({ ...values, id: editingEventIndicator.id });
-        if (response.code === 'SUCCESS') {
+        if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
         } else {
-          message.error(response.message || '更新失败');
+          throw new Error(response.message || '更新失败');
         }
       } else {
         const response = await createEventIndicator(values);
-        if (response.code === 'SUCCESS') {
+        if (response.code === '0') {
           message.success('创建成功');
           onSubmit(values);
         } else {
-          message.error(response.message || '创建失败');
+          throw new Error(response.message || '创建失败');
         }
       }
     } catch (error: any) {
@@ -91,15 +91,11 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
       footer={null}
       width={600}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleSubmit}
-      >
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item name="eventNo" label="事件编号" rules={[{ required: true }]}>
           <Input placeholder="请输入事件编号" disabled={true} />
         </Form.Item>
-        
+
         <Form.Item name="indicatorNo" label="指标编号" rules={[{ required: true }]}>
           <Select
             showSearch
@@ -118,7 +114,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
             ))}
           </Select>
         </Form.Item>
-        
+
         <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit" loading={loading}>

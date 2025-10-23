@@ -2,10 +2,10 @@
  * 语句依赖编辑弹窗组件
  */
 
+import { Form, message, Modal, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Select, message, Spin } from 'antd';
 import { statementApi, StatementDO } from '../../services/statementApi';
-import type { StatementDependencyItem, StatementDependencyFormValues, StatementDependencyModalProps } from '../../types';
+import type { StatementDependencyModalProps } from '../../types';
 
 const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
   visible,
@@ -26,11 +26,11 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
       setStatementOptions([]);
       return;
     }
-    
+
     try {
       setLoading(true);
       const statements = await statementApi.getByEventNoAndVersionCode(eventNo, versionCode);
-      setStatementOptions(statements || []);
+      setStatementOptions(statements.data || []);
     } catch (error) {
       console.error('获取语句选项失败:', error);
       message.error('获取语句选项失败');
@@ -86,18 +86,14 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
       destroyOnClose
     >
       <Spin spinning={loading}>
-        <Form
-          form={form}
-          layout="vertical"
-          preserve={false}
-        >
+        <Form form={form} layout="vertical" preserve={false}>
           <Form.Item
             name="statementNo"
             label="语句编号"
             rules={[{ required: true, message: '请选择语句编号' }]}
           >
-            <Select 
-              placeholder="请选择语句编号" 
+            <Select
+              placeholder="请选择语句编号"
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -117,8 +113,8 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
             label="依赖语句编号"
             rules={[{ required: true, message: '请选择依赖语句编号' }]}
           >
-            <Select 
-              placeholder="请选择依赖语句编号" 
+            <Select
+              placeholder="请选择依赖语句编号"
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>

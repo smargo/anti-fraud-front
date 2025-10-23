@@ -19,6 +19,12 @@ export interface FieldItem {
   lastModifiedBy: string;
 }
 
+export interface FieldItemPageResponse {
+  success: boolean;
+  total: number;
+  data: FieldItem[];
+}
+
 // 字段表单值
 export interface FieldFormValues {
   fieldName: string;

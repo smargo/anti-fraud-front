@@ -30,7 +30,7 @@ export const dataSourceApi = {
     const response = await request(`/api/datasource/${id}`, {
       method: 'GET',
     });
-    return response;
+    return response.data;
   },
 
   // 根据数据源编号获取数据源
@@ -38,7 +38,7 @@ export const dataSourceApi = {
     const response = await request(`/api/datasource/by-data-source-no/${dataSourceNo}`, {
       method: 'GET',
     });
-    return response;
+    return response.data;
   },
 
   // 分页查询数据源
@@ -62,7 +62,7 @@ export const dataSourceApi = {
     const response = await request('/api/datasource/configs', {
       method: 'GET',
     });
-    return response;
+    return response.data;
   },
 
   // 获取默认数据源编号列表
@@ -70,7 +70,7 @@ export const dataSourceApi = {
     const response = await request('/api/datasource/default-datasources', {
       method: 'GET',
     });
-    return response;
+    return response.data;
   },
 
   // 创建数据源

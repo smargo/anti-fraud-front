@@ -2,94 +2,103 @@
  * 事件指标配置Hook
  */
 
-import { useState, useRef, useCallback } from 'react';
-import { message } from 'antd';
 import type { ActionType } from '@ant-design/pro-components';
-import { 
-  queryEventIndicatorsWithNames, 
-  createEventIndicator, 
-  updateEventIndicator, 
-  deleteEventIndicator 
+import { message } from 'antd';
+import { useCallback, useRef, useState } from 'react';
+import {
+  createEventIndicator,
+  deleteEventIndicator,
+  queryEventIndicatorsWithNames,
+  updateEventIndicator,
 } from '../services/eventIndicatorConfigApi';
-import type { EventIndicatorItem, EventIndicatorFormValues, EventIndicatorConfigState } from '../types';
+import type { EventIndicatorFormValues, EventIndicatorItem } from '../types';
 
 export const useEventIndicatorConfig = (eventNo: string, versionId?: string) => {
   // 事件指标配置状态
   const [eventIndicators, setEventIndicators] = useState<EventIndicatorItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingEventIndicator, setEditingEventIndicator] = useState<EventIndicatorItem | null>(null);
+  const [editingEventIndicator, setEditingEventIndicator] = useState<EventIndicatorItem | null>(
+    null,
+  );
   const [viewModalVisible, setViewModalVisible] = useState(false);
-  const [viewingEventIndicator, setViewingEventIndicator] = useState<EventIndicatorItem | null>(null);
+  const [viewingEventIndicator, setViewingEventIndicator] = useState<EventIndicatorItem | null>(
+    null,
+  );
   const [forceReset, setForceReset] = useState(false);
-  
+
   // 表格引用
   const actionRef = useRef<ActionType>(null);
 
   // 加载事件指标列表
-  const loadEventIndicators = useCallback(async (params: any = {}) => {
-    try {
-      setLoading(true);
-      const searchParams = {
-        eventNo,
-        versionId,
-        ...params,
-      };
-      const response = await queryEventIndicatorsWithNames(searchParams);
-      if (response.code === 'SUCCESS') {
-        setEventIndicators(response.records || []);
-        return {
-          data: response.records || [],
-          total: response.total,
-          success: true,
+  const loadEventIndicators = useCallback(
+    async (params: any = {}) => {
+      try {
+        setLoading(true);
+        const searchParams = {
+          eventNo,
+          versionId,
+          ...params,
         };
-      } else {
-        message.error(response.message || '加载事件指标列表失败');
+        const response = await queryEventIndicatorsWithNames(searchParams);
+        if (response.success === true) {
+          setEventIndicators(response.data || []);
+          return response;
+        } else {
+          message.error(response.message || '加载事件指标列表失败');
+          return { data: [], total: 0, success: false };
+        }
+      } catch (error) {
+        message.error('加载事件指标列表失败');
         return { data: [], total: 0, success: false };
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      message.error('加载事件指标列表失败');
-      return { data: [], total: 0, success: false };
-    } finally {
-      setLoading(false);
-    }
-  }, [eventNo, versionId]);
+    },
+    [eventNo, versionId],
+  );
 
   // 创建事件指标
-  const handleCreateEventIndicator = useCallback(async (values: EventIndicatorFormValues) => {
-    try {
-      const response = await createEventIndicator({ ...values, eventNo, versionId });
-      if (response.code === 'SUCCESS') {
-        message.success('创建事件指标成功');
-        setModalVisible(false);
-        setForceReset(prev => !prev);
-        actionRef.current?.reload();
-      } else {
-        message.error(response.message || '创建事件指标失败');
+  const handleCreateEventIndicator = useCallback(
+    async (values: EventIndicatorFormValues) => {
+      try {
+        const response = await createEventIndicator({ ...values, eventNo, versionId });
+        if (response.code === 'SUCCESS') {
+          message.success('创建事件指标成功');
+          setModalVisible(false);
+          setForceReset((prev) => !prev);
+          actionRef.current?.reload();
+        } else {
+          message.error(response.message || '创建事件指标失败');
+        }
+      } catch (error) {
+        message.error('创建事件指标失败');
       }
-    } catch (error) {
-      message.error('创建事件指标失败');
-    }
-  }, [eventNo, versionId]);
+    },
+    [eventNo, versionId],
+  );
 
   // 更新事件指标
-  const handleUpdateEventIndicator = useCallback(async (values: EventIndicatorFormValues) => {
-    if (!editingEventIndicator) return;
-    
-    try {
-      const response = await updateEventIndicator(editingEventIndicator.id, values);
-      if (response.code === 'SUCCESS') {
-        message.success('更新事件指标成功');
-        setModalVisible(false);
-        setEditingEventIndicator(null);
-        actionRef.current?.reload();
-      } else {
-        message.error(response.message || '更新事件指标失败');
+  const handleUpdateEventIndicator = useCallback(
+    async (values: EventIndicatorFormValues) => {
+      if (!editingEventIndicator) return;
+
+      try {
+        const response = await updateEventIndicator(editingEventIndicator.id, values);
+        if (response.code === 'SUCCESS') {
+          message.success('更新事件指标成功');
+          setModalVisible(false);
+          setEditingEventIndicator(null);
+          actionRef.current?.reload();
+        } else {
+          message.error(response.message || '更新事件指标失败');
+        }
+      } catch (error) {
+        message.error('更新事件指标失败');
       }
-    } catch (error) {
-      message.error('更新事件指标失败');
-    }
-  }, [editingEventIndicator]);
+    },
+    [editingEventIndicator],
+  );
 
   // 删除事件指标
   const handleDeleteEventIndicator = useCallback(async (id: string) => {
@@ -109,7 +118,7 @@ export const useEventIndicatorConfig = (eventNo: string, versionId?: string) => 
   // 显示创建事件指标弹窗
   const showCreateModal = useCallback(() => {
     setEditingEventIndicator(null);
-    setForceReset(prev => !prev);
+    setForceReset((prev) => !prev);
     setModalVisible(true);
   }, []);
 
@@ -146,7 +155,7 @@ export const useEventIndicatorConfig = (eventNo: string, versionId?: string) => 
     viewingEventIndicator,
     forceReset,
     actionRef,
-    
+
     // 方法
     loadEventIndicators,
     handleCreateEventIndicator,

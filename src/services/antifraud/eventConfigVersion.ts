@@ -326,7 +326,7 @@ export const updateVersion = async (
       data,
     },
   );
-  if (response.code === 'SUCCESS') {
+  if (response.code === '0') {
     return response.data;
   } else {
     throw new Error(response.message || '更新版本失败');

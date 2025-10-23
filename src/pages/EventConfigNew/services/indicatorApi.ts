@@ -18,6 +18,12 @@ export interface IndicatorDO {
   lastModifiedBy?: string;
 }
 
+export interface IndicatorItem {
+  code: string;
+  message: string;
+  data: IndicatorDO;
+}
+
 export interface IndicatorQueryVO {
   indicatorNo?: string;
   indicatorName?: string;
@@ -27,7 +33,7 @@ export interface IndicatorQueryVO {
 
 export const indicatorApi = {
   // 根据ID获取指标
-  getById: async (id: number): Promise<IndicatorDO> => {
+  getById: async (id: number): Promise<IndicatorItem> => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'GET',
     });
@@ -35,7 +41,7 @@ export const indicatorApi = {
   },
 
   // 根据指标编号获取指标
-  getByIndicatorNo: async (indicatorNo: string): Promise<IndicatorDO> => {
+  getByIndicatorNo: async (indicatorNo: string): Promise<IndicatorItem> => {
     const response = await request(`/api/indicators/by-indicator-no/${indicatorNo}`, {
       method: 'GET',
     });
@@ -43,7 +49,9 @@ export const indicatorApi = {
   },
 
   // 分页查询指标
-  list: async (params: IndicatorQueryVO): Promise<{
+  list: async (
+    params: IndicatorQueryVO,
+  ): Promise<{
     records: IndicatorDO[];
     total: number;
     current: number;
@@ -83,7 +91,11 @@ export const indicatorApi = {
   },
 
   // 搜索指标（支持按编号和名称模糊搜索）
-  search: async (keyword: string = '', current: number = 1, pageSize: number = 20): Promise<{
+  search: async (
+    keyword: string = '',
+    current: number = 1,
+    pageSize: number = 20,
+  ): Promise<{
     data: IndicatorDO[];
     total: number;
     success: boolean;
