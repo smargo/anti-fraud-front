@@ -60,7 +60,7 @@ export const useStatementDependencyConfig = (
     async (values: StatementDependencyFormValues) => {
       try {
         const response = await createStatementDependency({ ...values, eventNo, versionCode });
-        if (response.code === 'SUCCESS') {
+        if (response.code === '0') {
           message.success('创建语句依赖成功');
           setModalVisible(false);
           setForceReset((prev) => !prev);
@@ -81,8 +81,13 @@ export const useStatementDependencyConfig = (
       if (!editingStatementDependency) return;
 
       try {
-        const response = await updateStatementDependency(editingStatementDependency.id, values);
-        if (response.code === 'SUCCESS') {
+        // 添加eventNo和versionCode参数 - 与原页面一致
+        const statementDependencyValues = { ...values, eventNo, versionCode };
+        const response = await updateStatementDependency(
+          editingStatementDependency.id,
+          statementDependencyValues,
+        );
+        if (response.code === '0') {
           message.success('更新语句依赖成功');
           setModalVisible(false);
           setEditingStatementDependency(null);
@@ -94,14 +99,14 @@ export const useStatementDependencyConfig = (
         message.error('更新语句依赖失败');
       }
     },
-    [editingStatementDependency],
+    [editingStatementDependency, eventNo, versionCode],
   );
 
   // 删除语句依赖
   const handleDeleteStatementDependency = useCallback(async (id: string) => {
     try {
       const response = await deleteStatementDependency(id);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('删除语句依赖成功');
         actionRef.current?.reload();
       } else {
