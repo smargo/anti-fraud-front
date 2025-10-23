@@ -86,11 +86,7 @@ export const copyVersion = async (
       sourceVersionId,
       versionData.versionCode || `v${Date.now()}`,
     );
-    return {
-      code: 'SUCCESS',
-      message: '复制版本成功',
-      data: version,
-    };
+    return version;
   } catch (error) {
     return {
       code: 'ERROR',

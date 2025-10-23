@@ -136,7 +136,10 @@ export const versionApi = {
   },
 
   // 复制版本
-  copyVersion: async (versionId: string, newVersionCode: string): Promise<EventConfigVersion> => {
+  copyVersion: async (
+    versionId: string,
+    newVersionCode: string,
+  ): Promise<ApiResponse<EventConfigVersion>> => {
     const response: ApiResponse<EventConfigVersion> = await request(
       `/api/event-config-version/${versionId}/copy?newVersionCode=${encodeURIComponent(
         newVersionCode,
@@ -144,7 +147,7 @@ export const versionApi = {
       { method: 'POST' },
     );
     if (response.code === '0') {
-      return response.data;
+      return response;
     } else {
       throw new Error(response.message || '复制版本失败');
     }
