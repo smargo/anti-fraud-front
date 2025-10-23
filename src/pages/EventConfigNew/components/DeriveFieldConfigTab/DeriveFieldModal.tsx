@@ -12,6 +12,8 @@ const { TextArea } = Input;
 const DeriveFieldModal: React.FC<DeriveFieldModalProps> = ({
   visible,
   editingDeriveField,
+  eventNo,
+  versionCode,
   fieldTypeOptions,
   deriveFieldProcessTypeOptions,
   forceReset,
@@ -37,8 +39,11 @@ const DeriveFieldModal: React.FC<DeriveFieldModalProps> = ({
       const values = await form.validateFields();
       setLoading(true);
 
+      // 添加eventNo和versionCode参数 - 与原页面一致
+      const deriveFieldValues = { ...values, eventNo, versionCode };
+
       if (editingDeriveField) {
-        const response = await updateDeriveField(editingDeriveField.id, values);
+        const response = await updateDeriveField(editingDeriveField.id, deriveFieldValues);
         if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
@@ -46,7 +51,7 @@ const DeriveFieldModal: React.FC<DeriveFieldModalProps> = ({
           throw new Error(response.message || '更新失败');
         }
       } else {
-        const response = await createDeriveField(values);
+        const response = await createDeriveField(deriveFieldValues);
         if (response.code === '0') {
           message.success('创建成功');
           onSubmit(values);

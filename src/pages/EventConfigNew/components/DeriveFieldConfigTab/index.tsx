@@ -310,6 +310,8 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
       <DeriveFieldModal
         visible={modalVisible}
         editingDeriveField={editingDeriveField}
+        eventNo={eventNo}
+        versionCode={versionCode || ''}
         fieldTypeOptions={fieldTypeOptions}
         deriveFieldProcessTypeOptions={deriveFieldProcessTypeOptions}
         forceReset={!editingDeriveField}
