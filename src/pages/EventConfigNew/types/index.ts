@@ -29,6 +29,7 @@ export interface EventConfigVersion {
   id: string;
   eventNo: string;
   versionCode: string;
+  versionDesc: string;
   eventDesc?: string;
   eventType: string;
   eventGroup: string;

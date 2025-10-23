@@ -165,7 +165,7 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         search={{
           labelWidth: 'auto',
           span: 8,
-          defaultCollapsed: false,
+          defaultCollapsed: true,
         }}
         toolBarRender={() => []}
       />

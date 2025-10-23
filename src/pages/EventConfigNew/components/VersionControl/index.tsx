@@ -85,7 +85,7 @@ const VersionControl: React.FC<VersionControlProps> = ({
                         : '已归档'}
                     </strong>
                   </span>
-                  <span>描述: {currentVersion.eventDesc || '无描述'}</span>
+                  <span>描述: {currentVersion.versionDesc || '无描述'}</span>
                   <span>版本id: {currentVersion.id}</span>
                   {isReadOnly && <span style={{ color: '#ff4d4f' }}>(只读)</span>}
                 </Space>
@@ -128,9 +128,9 @@ const VersionControl: React.FC<VersionControlProps> = ({
             >
               {versionInfo.versionHistory.map((version) => {
                 const shortDesc =
-                  version.eventDesc && version.eventDesc.length > 20
-                    ? version.eventDesc.substring(0, 20) + '...'
-                    : version.eventDesc || '无描述';
+                  version.versionDesc && version.versionDesc.length > 20
+                    ? version.versionDesc.substring(0, 20) + '...'
+                    : version.versionDesc || '无描述';
                 const statusText =
                   version.status === 'DRAFT'
                     ? '草稿'

@@ -3,7 +3,7 @@
  */
 
 import type { ActionType } from '@ant-design/pro-components';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import { useCallback, useRef, useState } from 'react';
 import {
   copyVersion,
@@ -147,15 +147,26 @@ export const useVersionControl = (
   // 删除草稿版本
   const handleDeleteDraftVersion = useCallback(
     async (versionId: string) => {
-      try {
-        // TODO: 实现删除草稿版本逻辑
-        message.success('删除草稿版本成功');
-        refreshVersionHistory();
-      } catch (error) {
-        message.error('删除草稿版本失败');
-      }
+      Modal.confirm({
+        title: '确认删除',
+        content: '确定要删除这个草稿版本吗？删除后无法恢复。',
+        okText: '确认删除',
+        cancelText: '取消',
+        okType: 'danger',
+        onOk: async () => {
+          try {
+            const { discardDraft } = await import('@/services/antifraud/eventConfigVersion');
+            await discardDraft(versionId);
+            message.success('草稿版本已删除');
+            // 重新加载版本信息（会自动刷新表格） - 与原页面一致
+            await loadVersionInfo(eventNo);
+          } catch (error: any) {
+            message.error(error?.message || '删除草稿版本失败');
+          }
+        },
+      });
     },
-    [refreshVersionHistory],
+    [loadVersionInfo, eventNo],
   );
 
   // 检查是否存在草稿版本
