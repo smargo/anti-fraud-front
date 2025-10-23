@@ -1,9 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import {
-  EventConfigVersion,
-  EventConfigVersionInfo,
-  saveDraft,
-} from '@/services/antifraud/eventConfigVersion';
+import { EventConfigVersionInfo } from '@/services/antifraud/eventConfigVersion';
+import { createContext, useContext } from 'react';
 
 interface EventConfigVersionContextType {
   // 状态
@@ -28,51 +24,4 @@ export const useEventConfigVersionContext = () => {
     throw new Error('useEventConfigVersionContext must be used within EventConfigVersionProvider');
   }
   return context;
-};
-
-interface EventConfigVersionProviderProps {
-  children: React.ReactNode;
-  initialVersionInfo: EventConfigVersionInfo;
-}
-
-export const EventConfigVersionProvider: React.FC<EventConfigVersionProviderProps> = ({
-  children,
-  initialVersionInfo,
-}) => {
-  const [versionInfo, setVersionInfo] = useState<EventConfigVersionInfo>(initialVersionInfo);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  const saveDraftConfig = useCallback(
-    async (configData: any) => {
-      if (!versionInfo.workingDraftVersion) {
-        throw new Error('没有可保存的草稿版本');
-      }
-
-      setIsSubmitting(true);
-      try {
-        await saveDraft(versionInfo.workingDraftVersion.id, configData);
-        setHasUnsavedChanges(false);
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    [versionInfo.workingDraftVersion],
-  );
-
-  const value: EventConfigVersionContextType = {
-    versionInfo,
-    hasUnsavedChanges,
-    isSubmitting,
-    setVersionInfo,
-    setHasUnsavedChanges,
-    setIsSubmitting,
-    saveDraftConfig,
-  };
-
-  return (
-    <EventConfigVersionContext.Provider value={value}>
-      {children}
-    </EventConfigVersionContext.Provider>
-  );
 };

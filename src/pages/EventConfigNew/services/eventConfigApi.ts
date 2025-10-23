@@ -36,29 +36,6 @@ export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersio
   }
 };
 
-// 创建草稿版本
-export const createDraft = async (eventNo: string): Promise<ApiResponse<EventConfigVersion>> => {
-  try {
-    const versionCode = `v${Date.now()}`;
-    const versionDesc = '草稿版本';
-    const version = await versionApi.createVersion({
-      eventNo,
-      versionCode,
-      versionDesc,
-    });
-    return {
-      code: 'SUCCESS',
-      message: '创建草稿版本成功',
-      data: version,
-    };
-  } catch (error) {
-    return {
-      code: 'ERROR',
-      message: error instanceof Error ? error.message : '创建草稿版本失败',
-    };
-  }
-};
-
 // 回滚到指定版本
 export const rollbackToVersion = async (
   eventNo: string,
@@ -78,29 +55,6 @@ export const rollbackToVersion = async (
   }
 };
 
-// 保存草稿
-export const saveDraft = async (
-  eventNo: string,
-  versionId: string,
-  data: any,
-): Promise<ApiResponse> => {
-  try {
-    const response: ApiResponse = await request(
-      `/api/event-config-version/${versionId}/save-draft`,
-      {
-        method: 'POST',
-        data: { eventNo, ...data },
-      },
-    );
-    return response;
-  } catch (error) {
-    return {
-      code: 'ERROR',
-      message: error instanceof Error ? error.message : '保存草稿失败',
-    };
-  }
-};
-
 // 创建新版本
 export const createVersion = async (
   eventNo: string,
@@ -109,14 +63,10 @@ export const createVersion = async (
   try {
     const version = await versionApi.createVersion({
       eventNo,
-      versionCode: versionData.versionCode || `v${Date.now()}`,
-      versionDesc: versionData.versionDesc || '新版本',
+      versionCode: versionData.versionCode || '',
+      versionDesc: versionData.versionDesc || '',
     });
-    return {
-      code: 'SUCCESS',
-      message: '创建版本成功',
-      data: version,
-    };
+    return version;
   } catch (error) {
     return {
       code: 'ERROR',

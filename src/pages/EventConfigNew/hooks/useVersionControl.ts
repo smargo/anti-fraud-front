@@ -5,12 +5,7 @@
 import type { ActionType } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import { useCallback, useRef, useState } from 'react';
-import {
-  copyVersion,
-  createDraft,
-  createVersion,
-  rollbackToVersion,
-} from '../services/eventConfigApi';
+import { copyVersion, rollbackToVersion } from '../services/eventConfigApi';
 import type { EventConfigVersion, EventConfigVersionInfo } from '../types';
 
 export const useVersionControl = (
@@ -36,23 +31,6 @@ export const useVersionControl = (
     }
   }, []);
 
-  // 创建草稿版本
-  const handleCreateDraft = useCallback(async () => {
-    try {
-      const response = await createDraft(eventNo);
-      if (response.code === 'SUCCESS') {
-        message.success('创建草稿版本成功');
-        // 重新加载版本信息
-        // 这里需要调用父组件的loadVersionInfo方法
-        refreshVersionHistory();
-      } else {
-        message.error(response.message || '创建草稿版本失败');
-      }
-    } catch (error) {
-      message.error('创建草稿版本失败');
-    }
-  }, [eventNo, refreshVersionHistory]);
-
   // 回滚到指定版本
   const handleRollbackToVersion = useCallback(
     async (versionId: string) => {
@@ -66,25 +44,6 @@ export const useVersionControl = (
         }
       } catch (error) {
         message.error('回滚版本失败');
-      }
-    },
-    [eventNo, refreshVersionHistory],
-  );
-
-  // 创建新版本
-  const handleCreateVersion = useCallback(
-    async (versionData: Partial<EventConfigVersion>) => {
-      try {
-        const response = await createVersion(eventNo, versionData);
-        if (response.code === 'SUCCESS') {
-          message.success('创建版本成功');
-          setCreateVersionModalVisible(false);
-          refreshVersionHistory();
-        } else {
-          message.error(response.message || '创建版本失败');
-        }
-      } catch (error) {
-        message.error('创建版本失败');
       }
     },
     [eventNo, refreshVersionHistory],
@@ -188,12 +147,10 @@ export const useVersionControl = (
     setCopyVersionModalVisible,
     setCopyingVersion,
     refreshVersionHistory,
-    handleCreateDraft,
     handleRollbackToVersion,
     handleActivateVersion,
     handleDeleteDraftVersion,
     hasDraftVersion,
-    handleCreateVersion,
     handleCopyVersion,
     showVersionHistory,
     showCreateVersionModal,

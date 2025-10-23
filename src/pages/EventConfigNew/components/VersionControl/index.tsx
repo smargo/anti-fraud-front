@@ -13,7 +13,6 @@ const VersionControl: React.FC<VersionControlProps> = ({
   isDraftMode,
   isReadOnly,
   versionInfo,
-  onCreateDraft,
   onShowVersionHistory,
   onShowCreateVersionModal,
   onSelectVersion,

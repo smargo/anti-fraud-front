@@ -76,14 +76,10 @@ const EventConfig: React.FC = () => {
     setCreateVersionModalVisible,
     setCopyVersionModalVisible,
     setCopyingVersion,
-    refreshVersionHistory,
-    handleCreateDraft,
     handleRollbackToVersion,
     handleActivateVersion,
     handleDeleteDraftVersion,
     hasDraftVersion,
-    handleCreateVersion,
-    handleCopyVersion,
     showVersionHistory,
     showCreateVersionModal,
     showCopyVersionModal,
@@ -163,7 +159,6 @@ const EventConfig: React.FC = () => {
             isDraftMode={isDraftMode}
             isReadOnly={isReadOnly}
             versionInfo={versionInfo}
-            onCreateDraft={handleCreateDraft}
             onShowVersionHistory={showVersionHistory}
             onShowCreateVersionModal={showCreateVersionModal}
             onSelectVersion={handleSelectVersion}

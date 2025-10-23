@@ -58,13 +58,13 @@ export interface ConfigChangeLog {
 // 版本管理 API
 export const versionApi = {
   // 创建新版本
-  createVersion: async (data: CreateVersionRequest): Promise<EventConfigVersion> => {
+  createVersion: async (data: CreateVersionRequest): Promise<ApiResponse<EventConfigVersion>> => {
     const response: ApiResponse<EventConfigVersion> = await request('/api/event-config-version', {
       method: 'POST',
       data,
     });
     if (response.code === '0') {
-      return response.data;
+      return response;
     } else {
       throw new Error(response.message || '创建版本失败');
     }
@@ -280,18 +280,6 @@ export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersio
   }
 };
 
-export const createDraft = async (
-  eventNo: string,
-  versionCode: string,
-  versionDesc: string,
-): Promise<EventConfigVersion> => {
-  return versionApi.createVersion({
-    eventNo,
-    versionCode,
-    versionDesc,
-  });
-};
-
 export const discardDraft = async (draftId: string): Promise<boolean> => {
   return versionApi.deleteDraftVersion(draftId);
 };
@@ -306,12 +294,6 @@ export const rollbackToVersion = async (
     throw new Error('回滚后无法获取当前版本');
   }
   return version;
-};
-
-export const saveDraft = async (draftId: string, configData: any): Promise<void> => {
-  // 这里需要实现保存草稿配置的逻辑
-  // 暂时只是模拟
-  console.log('保存草稿配置:', draftId, configData);
 };
 
 // 更新版本信息
