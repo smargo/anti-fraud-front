@@ -339,6 +339,7 @@ const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
         visible={modalVisible}
         editingEventIndicator={editingEventIndicator}
         eventNo={eventNo}
+        versionCode={versionCode}
         forceReset={!editingEventIndicator}
         onSubmit={handleEventIndicatorSubmit}
         onCancel={() => setModalVisible(false)}

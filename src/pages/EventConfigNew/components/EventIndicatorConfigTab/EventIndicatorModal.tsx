@@ -12,6 +12,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
   visible,
   editingEventIndicator,
   eventNo,
+  versionCode,
   forceReset,
   onSubmit,
   onCancel,
@@ -32,7 +33,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
     try {
       const response = await indicatorApi.search(value, 1, 20);
       setIndicatorOptions(response.data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('搜索指标失败:', error);
       message.error(error?.message || '搜索指标失败');
       setIndicatorOptions([]);
@@ -59,8 +60,11 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
       const values = await form.validateFields();
       setLoading(true);
 
+      // 添加versionCode参数 - 与原页面一致
+      const eventIndicatorValues = { ...values, eventNo, versionCode };
+
       if (editingEventIndicator) {
-        const response = await updateEventIndicator({ ...values, id: editingEventIndicator.id });
+        const response = await updateEventIndicator(editingEventIndicator.id, eventIndicatorValues);
         if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
@@ -68,7 +72,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
           throw new Error(response.message || '更新失败');
         }
       } else {
-        const response = await createEventIndicator(values);
+        const response = await createEventIndicator(eventIndicatorValues);
         if (response.code === '0') {
           message.success('创建成功');
           onSubmit(values);

@@ -238,6 +238,7 @@ export interface EventIndicatorModalProps {
   visible: boolean;
   editingEventIndicator: EventIndicatorItem | null;
   eventNo: string;
+  versionCode: string;
   forceReset: boolean;
   onSubmit: (values: EventIndicatorFormValues) => void;
   onCancel: () => void;
