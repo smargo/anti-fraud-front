@@ -19,6 +19,7 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
   const [form] = Form.useForm();
   const [statementOptions, setStatementOptions] = useState<StatementDO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedStatementNo, setSelectedStatementNo] = useState<string | undefined>(undefined);
 
   // 加载语句选项 - 完全按照原页面逻辑
   const loadStatementOptions = async () => {
@@ -54,8 +55,12 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
         statementNo: editingStatementDependency.statementNo,
         dependStatementNo: editingStatementDependency.dependStatementNo,
       });
+      // 设置选中的语句编号状态 - 与原页面一致
+      setSelectedStatementNo(editingStatementDependency.statementNo);
     } else if (visible && !editingStatementDependency) {
       form.resetFields();
+      // 重置选中的语句编号状态 - 与原页面一致
+      setSelectedStatementNo(undefined);
     }
   }, [visible, editingStatementDependency, form]);
 
@@ -96,13 +101,24 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
               placeholder="请选择语句编号"
               showSearch
               optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.children as string)?.toLowerCase().includes(input.toLowerCase())
-              }
+              filterOption={(input, option) => {
+                const text = String(option?.children || '');
+                return text.toLowerCase().includes(input.toLowerCase());
+              }}
+              onChange={(value) => {
+                // 更新选中的语句编号状态 - 与原页面一致
+                setSelectedStatementNo(value);
+                // 当第一个下拉框选择改变时，清空第二个下拉框的选择 - 与原页面一致
+                const currentDependValue = form.getFieldValue('dependStatementNo');
+                if (currentDependValue === value) {
+                  form.setFieldValue('dependStatementNo', undefined);
+                }
+              }}
             >
-              {statementOptions.map((option: any) => (
-                <Select.Option key={option.statementNo} value={option.statementNo}>
-                  {option.statementDesc || option.statementNo} ({option.statementNo})
+              {statementOptions.map((statement) => (
+                <Select.Option key={statement.statementNo} value={statement.statementNo}>
+                  {statement.statementNo}{' '}
+                  {statement.statementDesc ? `- ${statement.statementDesc}` : ''}
                 </Select.Option>
               ))}
             </Select>
@@ -117,15 +133,22 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
               placeholder="请选择依赖语句编号"
               showSearch
               optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.children as string)?.toLowerCase().includes(input.toLowerCase())
-              }
+              filterOption={(input, option) => {
+                const text = String(option?.children || '');
+                return text.toLowerCase().includes(input.toLowerCase());
+              }}
             >
-              {statementOptions.map((option: any) => (
-                <Select.Option key={option.statementNo} value={option.statementNo}>
-                  {option.statementDesc || option.statementNo} ({option.statementNo})
-                </Select.Option>
-              ))}
+              {statementOptions
+                .filter((statement) => {
+                  // 过滤掉第一个下拉框已选择的语句编号 - 与原页面一致
+                  return statement.statementNo !== selectedStatementNo;
+                })
+                .map((statement) => (
+                  <Select.Option key={statement.statementNo} value={statement.statementNo}>
+                    {statement.statementNo}{' '}
+                    {statement.statementDesc ? `- ${statement.statementDesc}` : ''}
+                  </Select.Option>
+                ))}
             </Select>
           </Form.Item>
         </Form>
