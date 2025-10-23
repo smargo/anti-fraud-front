@@ -2,8 +2,8 @@
  * 创建版本弹窗组件
  */
 
+import { Button, Form, Input, message, Modal, Select } from 'antd';
 import React from 'react';
-import { Modal, Form, Input, Select, Button, message } from 'antd';
 import { createVersion } from '../../services/eventConfigApi';
 import type { CreateVersionModalProps } from '../../types';
 
@@ -20,18 +20,18 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
     try {
       const values = await form.validateFields();
       setLoading(true);
-      
+
       const response = await createVersion(eventNo, values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('创建版本成功');
         form.resetFields();
         onSuccess();
         onCancel();
       } else {
-        message.error(response.message || '创建版本失败');
+        throw new Error(response.message || '创建版本失败');
       }
     } catch (error) {
-      message.error('创建版本失败');
+      message.error(error.message || '创建版本失败');
     } finally {
       setLoading(false);
     }
@@ -43,24 +43,14 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
   };
 
   return (
-    <Modal
-      title="创建版本"
-      open={visible}
-      onCancel={handleCancel}
-      footer={null}
-      width={600}
-    >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleSubmit}
-      >
+    <Modal title="创建版本" open={visible} onCancel={handleCancel} footer={null} width={600}>
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
           name="versionCode"
           label="版本代码"
           rules={[
             { required: true, message: '请输入版本代码' },
-            { max: 50, message: '版本代码不能超过50个字符' }
+            { max: 50, message: '版本代码不能超过50个字符' },
           ]}
         >
           <Input placeholder="请输入版本代码" />
@@ -71,9 +61,7 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           label="事件类型"
           rules={[{ required: true, message: '请选择事件类型' }]}
         >
-          <Select placeholder="请选择事件类型">
-            {/* 这里需要从props传入事件类型选项 */}
-          </Select>
+          <Select placeholder="请选择事件类型">{/* 这里需要从props传入事件类型选项 */}</Select>
         </Form.Item>
 
         <Form.Item
@@ -81,9 +69,7 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({
           label="事件分组"
           rules={[{ required: true, message: '请选择事件分组' }]}
         >
-          <Select placeholder="请选择事件分组">
-            {/* 这里需要从props传入事件分组选项 */}
-          </Select>
+          <Select placeholder="请选择事件分组">{/* 这里需要从props传入事件分组选项 */}</Select>
         </Form.Item>
 
         <Form.Item>

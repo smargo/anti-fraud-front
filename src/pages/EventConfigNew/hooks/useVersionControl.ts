@@ -18,6 +18,7 @@ export const useVersionControl = (
   versionInfo: EventConfigVersionInfo,
   updateVersionInfo: (info: EventConfigVersionInfo) => void,
   updateCurrentVersion: (version: EventConfigVersion | null) => void,
+  loadVersionInfo: (eventNo: string) => Promise<void>,
 ) => {
   // 版本控制状态
   const [versionHistoryVisible, setVersionHistoryVisible] = useState(false);
@@ -131,14 +132,16 @@ export const useVersionControl = (
   const handleActivateVersion = useCallback(
     async (versionId: string) => {
       try {
-        // TODO: 实现激活版本逻辑
+        const { versionApi } = await import('@/services/antifraud/eventConfigVersion');
+        await versionApi.activateVersion(versionId);
         message.success('版本激活成功');
-        refreshVersionHistory();
+        // 重新加载版本信息（会自动刷新表格） - 与原页面一致
+        await loadVersionInfo(eventNo);
       } catch (error) {
-        message.error('激活版本失败');
+        message.error(error?.message || '激活版本失败');
       }
     },
-    [refreshVersionHistory],
+    [loadVersionInfo, eventNo],
   );
 
   // 删除草稿版本

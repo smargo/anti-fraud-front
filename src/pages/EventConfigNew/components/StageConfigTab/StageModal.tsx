@@ -35,7 +35,7 @@ const StageModal: React.FC<StageModalProps> = ({
       setLoading(true);
 
       if (editingStage) {
-        const response = await updateStage({ ...values, id: editingStage.id });
+        const response = await updateStage(editingStage.id, { ...values, id: editingStage.id });
         if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
@@ -44,8 +44,8 @@ const StageModal: React.FC<StageModalProps> = ({
         }
       } else {
         const response = await createStage(values);
-        if (response.code === 'SUCCESS') {
-          message.success('0');
+        if (response.code === '0') {
+          message.success('创建成功');
           onSubmit(values);
         } else {
           throw new Error(response.message || '创建失败');

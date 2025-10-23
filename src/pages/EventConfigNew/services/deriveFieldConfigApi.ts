@@ -3,25 +3,29 @@
  */
 
 import { request } from '@umijs/max';
-import type { DeriveFieldItem, DeriveFieldFormValues, ApiResponse, PaginationParams } from '../types';
+import type {
+  ApiResponse,
+  DeriveFieldFormValues,
+  DeriveFieldItem,
+  PaginationParams,
+} from '../types';
+import { DeriveFieldItemPageResponse } from '../types';
 
 // 查询衍生字段列表
-export const queryDeriveFields = async (params: PaginationParams): Promise<ApiResponse<DeriveFieldItem[]>> => {
-  const page: { data: DeriveFieldItem[]; total: number; success: boolean } = await request('/api/deriveFields/list', {
+export const queryDeriveFields = async (
+  params: PaginationParams,
+): Promise<DeriveFieldItemPageResponse> => {
+  const page: DeriveFieldItemPageResponse = await request('/api/deriveFields/list', {
     method: 'GET',
     params,
   });
-  return {
-    code: page.success ? 'SUCCESS' : 'FAILED',
-    message: '',
-    records: page.data,
-    total: page.total,
-    success: page.success,
-  } as unknown as ApiResponse<DeriveFieldItem[]>;
+  return response;
 };
 
 // 创建衍生字段
-export const createDeriveField = async (values: DeriveFieldFormValues): Promise<ApiResponse<DeriveFieldItem>> => {
+export const createDeriveField = async (
+  values: DeriveFieldFormValues,
+): Promise<ApiResponse<DeriveFieldItem>> => {
   return await request('/api/deriveFields', {
     method: 'POST',
     data: values,
@@ -29,7 +33,10 @@ export const createDeriveField = async (values: DeriveFieldFormValues): Promise<
 };
 
 // 更新衍生字段
-export const updateDeriveField = async (id: string, values: DeriveFieldFormValues): Promise<ApiResponse<DeriveFieldItem>> => {
+export const updateDeriveField = async (
+  id: string,
+  values: DeriveFieldFormValues,
+): Promise<ApiResponse<DeriveFieldItem>> => {
   return await request(`/api/deriveFields/${id}`, {
     method: 'PUT',
     data: values,

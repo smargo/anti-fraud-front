@@ -155,7 +155,7 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
   const handleStageDelete = async (id: string) => {
     try {
       const response = await deleteStage(id);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('删除成功');
         actionRef?.current?.reload();
       } else {

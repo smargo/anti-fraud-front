@@ -18,11 +18,18 @@ export interface EventDetail {
   createdDate: string;
 }
 
+export interface EventDetailItem {
+  code: string;
+  message: string;
+  data: EventDetail;
+}
+
 // 事件配置版本
 export interface EventConfigVersion {
   id: string;
   eventNo: string;
   versionCode: string;
+  eventDesc?: string;
   eventType: string;
   eventGroup: string;
   status: 'DRAFT' | 'ACTIVE' | 'APPROVED' | 'ARCHIVED';
@@ -76,6 +83,7 @@ export interface VersionControlProps {
   onShowVersionHistory: () => void;
   onShowCreateVersionModal: () => void;
   onSelectVersion: (versionId: string) => void;
+  onActivateVersion: (versionId: string) => void;
 }
 
 // 版本历史弹窗Props

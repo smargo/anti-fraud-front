@@ -87,7 +87,13 @@ const EventConfig: React.FC = () => {
     showVersionHistory,
     showCreateVersionModal,
     showCopyVersionModal,
-  } = useVersionControl(eventNo, versionInfo, updateVersionInfo, updateCurrentVersion);
+  } = useVersionControl(
+    eventNo,
+    versionInfo,
+    updateVersionInfo,
+    updateCurrentVersion,
+    loadVersionInfo,
+  );
 
   // 刷新所有表格数据 - 与原页面一致
   const refreshAllTables = () => {
@@ -161,6 +167,7 @@ const EventConfig: React.FC = () => {
             onShowVersionHistory={showVersionHistory}
             onShowCreateVersionModal={showCreateVersionModal}
             onSelectVersion={handleSelectVersion}
+            onActivateVersion={handleActivateVersion}
           />
 
           {/* Tab页面 */}

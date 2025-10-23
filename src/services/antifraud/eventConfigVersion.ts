@@ -120,7 +120,7 @@ export const versionApi = {
     if (response.success) {
       return response;
     } else {
-      throw new Error(response.message || '获取版本历史失败');
+      throw new Error('获取版本历史失败');
     }
   },
 

@@ -2,22 +2,22 @@
  * EventConfig 主Hook
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { useLocation } from 'umi';
 import { message } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'umi';
 import { getEventByEventNo, getVersionInfo } from '../services/eventConfigApi';
-import { selectBestVersion, getPageTitle } from '../utils';
-import type { 
-  EventDetail, 
-  EventConfigVersion, 
-  EventConfigVersionInfo, 
+import type {
+  EventConfigTabKey,
+  EventConfigVersion,
+  EventConfigVersionInfo,
+  EventDetail,
   EventLoadProp,
-  EventConfigTabKey 
 } from '../types';
+import { getPageTitle, selectBestVersion } from '../utils';
 
 export const useEventConfig = () => {
   const location = useLocation();
-  
+
   // 基础状态
   const [eventNo, setEventNo] = useState<string>('');
   const [eventDetail, setEventDetail] = useState<EventDetail | null>(null);
@@ -25,16 +25,16 @@ export const useEventConfig = () => {
   const [isDraftMode, setIsDraftMode] = useState<boolean>(false);
   const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
   const [configEventLoadProp, setConfigEventLoadProp] = useState<EventLoadProp | null>(null);
-  
+
   // 版本相关状态
   const [versionInfo, setVersionInfo] = useState<EventConfigVersionInfo>({
     versionHistory: [],
     hasUnsavedChanges: false,
   });
-  
+
   // Tab状态
   const [activeTab, setActiveTab] = useState<EventConfigTabKey>('basic');
-  
+
   // 加载状态
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -54,11 +54,15 @@ export const useEventConfig = () => {
     try {
       setLoading(true);
       const event = await getEventByEventNo(eventNo);
-      if (event) {
-        setEventDetail(event);
+      if (event.code === '0') {
+        setEventDetail(event.data);
+      } else {
+        message.error('加载事件详情失败');
+        throw new Error(event.message || '加载事件详情失败');
       }
     } catch (error) {
-      message.error('加载事件详情失败');
+      console.error('加载事件详情失败');
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -70,22 +74,26 @@ export const useEventConfig = () => {
       setLoading(true);
       const info = await getVersionInfo(eventNo);
       setVersionInfo(info);
-      
+
       // 自动选择最佳版本
       const bestVersion = selectBestVersion(info.versionHistory);
       if (bestVersion) {
         setCurrentVersion(bestVersion);
         setIsDraftMode(bestVersion.status === 'DRAFT');
-        setIsReadOnly(bestVersion.status === 'ACTIVE' || bestVersion.status === 'APPROVED' || bestVersion.status === 'ARCHIVED');
+        setIsReadOnly(
+          bestVersion.status === 'ACTIVE' ||
+            bestVersion.status === 'APPROVED' ||
+            bestVersion.status === 'ARCHIVED',
+        );
       } else {
         setCurrentVersion(null);
         setIsDraftMode(false);
         setIsReadOnly(false);
       }
-      
+
       setConfigEventLoadProp({
         eventNo: eventNo,
-        specifyVersion: bestVersion
+        specifyVersion: bestVersion,
       });
     } catch (error) {
       message.error('加载版本信息失败');
@@ -104,16 +112,24 @@ export const useEventConfig = () => {
     setCurrentVersion(version);
     if (version) {
       setIsDraftMode(version.status === 'DRAFT');
-      setIsReadOnly(version.status === 'ACTIVE' || version.status === 'APPROVED' || version.status === 'ARCHIVED');
+      setIsReadOnly(
+        version.status === 'ACTIVE' ||
+          version.status === 'APPROVED' ||
+          version.status === 'ARCHIVED',
+      );
     } else {
       setIsDraftMode(false);
       setIsReadOnly(false);
     }
-    
-    setConfigEventLoadProp(prev => prev ? {
-      ...prev,
-      specifyVersion: version
-    } : null);
+
+    setConfigEventLoadProp((prev) =>
+      prev
+        ? {
+            ...prev,
+            specifyVersion: version,
+          }
+        : null,
+    );
   }, []);
 
   // 生成页面标题
@@ -130,7 +146,7 @@ export const useEventConfig = () => {
     versionInfo,
     activeTab,
     loading,
-    
+
     // 方法
     setActiveTab,
     loadEventDetail,

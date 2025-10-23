@@ -2,16 +2,16 @@
  * 衍生字段配置Hook
  */
 
-import { useState, useRef, useCallback } from 'react';
-import { message } from 'antd';
 import type { ActionType } from '@ant-design/pro-components';
-import { 
-  queryDeriveFields, 
-  createDeriveField, 
-  updateDeriveField, 
-  deleteDeriveField 
+import { message } from 'antd';
+import { useCallback, useRef, useState } from 'react';
+import {
+  createDeriveField,
+  deleteDeriveField,
+  queryDeriveFields,
+  updateDeriveField,
 } from '../services/deriveFieldConfigApi';
-import type { DeriveFieldItem, DeriveFieldFormValues, DeriveFieldConfigState } from '../types';
+import type { DeriveFieldFormValues, DeriveFieldItem } from '../types';
 
 export const useDeriveFieldConfig = (eventNo: string, versionId?: string) => {
   // 衍生字段配置状态
@@ -22,80 +22,85 @@ export const useDeriveFieldConfig = (eventNo: string, versionId?: string) => {
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [viewingDeriveField, setViewingDeriveField] = useState<DeriveFieldItem | null>(null);
   const [forceReset, setForceReset] = useState(false);
-  
+
   // 表格引用
   const actionRef = useRef<ActionType>(null);
 
   // 加载衍生字段列表
-  const loadDeriveFields = useCallback(async (params: any = {}) => {
-    try {
-      setLoading(true);
-      const searchParams = {
-        eventNo,
-        versionId,
-        ...params,
-      };
-      const response = await queryDeriveFields(searchParams);
-      if (response.code === 'SUCCESS') {
-        setDeriveFields(response.records || []);
-        return {
-          data: response.records || [],
-          total: response.total,
-          success: true,
+  const loadDeriveFields = useCallback(
+    async (params: any = {}) => {
+      try {
+        setLoading(true);
+        const searchParams = {
+          eventNo,
+          versionId,
+          ...params,
         };
-      } else {
-        message.error(response.message || '加载衍生字段列表失败');
+        const response = await queryDeriveFields(searchParams);
+        if (response.success) {
+          setDeriveFields(response.data || []);
+          return response;
+        } else {
+          message.error('加载衍生字段列表失败');
+          return { data: [], total: 0, success: false };
+        }
+      } catch (error) {
+        message.error('加载衍生字段列表失败');
         return { data: [], total: 0, success: false };
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      message.error('加载衍生字段列表失败');
-      return { data: [], total: 0, success: false };
-    } finally {
-      setLoading(false);
-    }
-  }, [eventNo, versionId]);
+    },
+    [eventNo, versionId],
+  );
 
   // 创建衍生字段
-  const handleCreateDeriveField = useCallback(async (values: DeriveFieldFormValues) => {
-    try {
-      const response = await createDeriveField({ ...values, eventNo, versionId });
-      if (response.code === 'SUCCESS') {
-        message.success('创建衍生字段成功');
-        setModalVisible(false);
-        setForceReset(prev => !prev);
-        actionRef.current?.reload();
-      } else {
-        message.error(response.message || '创建衍生字段失败');
+  const handleCreateDeriveField = useCallback(
+    async (values: DeriveFieldFormValues) => {
+      try {
+        const response = await createDeriveField({ ...values, eventNo, versionId });
+        if (response.code === '0') {
+          message.success('创建衍生字段成功');
+          setModalVisible(false);
+          setForceReset((prev) => !prev);
+          actionRef.current?.reload();
+        } else {
+          message.error(response.message || '创建衍生字段失败');
+        }
+      } catch (error) {
+        message.error('创建衍生字段失败');
       }
-    } catch (error) {
-      message.error('创建衍生字段失败');
-    }
-  }, [eventNo, versionId]);
+    },
+    [eventNo, versionId],
+  );
 
   // 更新衍生字段
-  const handleUpdateDeriveField = useCallback(async (values: DeriveFieldFormValues) => {
-    if (!editingDeriveField) return;
-    
-    try {
-      const response = await updateDeriveField(editingDeriveField.id, values);
-      if (response.code === 'SUCCESS') {
-        message.success('更新衍生字段成功');
-        setModalVisible(false);
-        setEditingDeriveField(null);
-        actionRef.current?.reload();
-      } else {
-        message.error(response.message || '更新衍生字段失败');
+  const handleUpdateDeriveField = useCallback(
+    async (values: DeriveFieldFormValues) => {
+      if (!editingDeriveField) return;
+
+      try {
+        const response = await updateDeriveField(editingDeriveField.id, values);
+        if (response.code === '0') {
+          message.success('更新衍生字段成功');
+          setModalVisible(false);
+          setEditingDeriveField(null);
+          actionRef.current?.reload();
+        } else {
+          message.error(response.message || '更新衍生字段失败');
+        }
+      } catch (error) {
+        message.error('更新衍生字段失败');
       }
-    } catch (error) {
-      message.error('更新衍生字段失败');
-    }
-  }, [editingDeriveField]);
+    },
+    [editingDeriveField],
+  );
 
   // 删除衍生字段
   const handleDeleteDeriveField = useCallback(async (id: string) => {
     try {
       const response = await deleteDeriveField(id);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('删除衍生字段成功');
         actionRef.current?.reload();
       } else {
@@ -109,7 +114,7 @@ export const useDeriveFieldConfig = (eventNo: string, versionId?: string) => {
   // 显示创建衍生字段弹窗
   const showCreateModal = useCallback(() => {
     setEditingDeriveField(null);
-    setForceReset(prev => !prev);
+    setForceReset((prev) => !prev);
     setModalVisible(true);
   }, []);
 
@@ -146,7 +151,7 @@ export const useDeriveFieldConfig = (eventNo: string, versionId?: string) => {
     viewingDeriveField,
     forceReset,
     actionRef,
-    
+
     // 方法
     loadDeriveFields,
     handleCreateDeriveField,

@@ -19,6 +19,12 @@ export interface DeriveFieldItem {
   lastModifiedBy: string;
 }
 
+export interface DeriveFieldItemPageResponse {
+  data: DeriveFieldItem[];
+  success: boolean;
+  total: number;
+}
+
 // 衍生字段表单值
 export interface DeriveFieldFormValues {
   fieldName: string;

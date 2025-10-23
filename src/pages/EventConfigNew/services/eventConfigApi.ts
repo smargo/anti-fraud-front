@@ -12,20 +12,15 @@ import type {
   BasicInfoFormValues,
   EventConfigVersion,
   EventConfigVersionInfo,
-  EventDetail,
 } from '../types';
+import { EventDetailItem } from '../types';
 
 // 获取事件详情 - 完全按照原页面逻辑
-export const getEventByEventNo = async (eventNo: string): Promise<EventDetail | null> => {
-  try {
-    const response = await request(`/api/events/eventNo/${eventNo}`, {
-      method: 'GET',
-    });
-    return response.data; // 直接返回响应，与原页面一致
-  } catch (error) {
-    console.error('获取事件详情失败:', error);
-    return null;
-  }
+export const getEventByEventNo = async (eventNo: string): Promise<EventDetailItem> => {
+  const response = await request(`/api/events/eventNo/${eventNo}`, {
+    method: 'GET',
+  });
+  return response;
 };
 
 // 获取版本信息
