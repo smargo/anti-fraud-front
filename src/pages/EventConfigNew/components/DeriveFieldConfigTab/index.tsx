@@ -278,11 +278,7 @@ const DeriveFieldConfigTab: React.FC<DeriveFieldConfigTabProps> = ({
                 eventNo: eventNo,
                 versionCode: versionCode,
               });
-              return {
-                data: response.records || response.data || [],
-                total: response.total || 0,
-                success: true,
-              };
+              return response;
             }}
             rowKey="id"
             pagination={{
