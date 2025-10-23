@@ -42,11 +42,8 @@ export const rollbackToVersion = async (
   versionId: string,
 ): Promise<ApiResponse> => {
   try {
-    await versionApi.rollbackToVersion(versionId);
-    return {
-      code: 'SUCCESS',
-      message: '回滚版本成功',
-    };
+    const response = await versionApi.rollbackToVersion(versionId);
+    return response;
   } catch (error) {
     return {
       code: 'ERROR',

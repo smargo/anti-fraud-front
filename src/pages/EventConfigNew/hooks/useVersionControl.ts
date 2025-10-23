@@ -46,7 +46,7 @@ export const useVersionControl = (
         onOk: async () => {
           try {
             const response = await rollbackToVersion(eventNo, versionId);
-            if (response.code === 'SUCCESS') {
+            if (response.code === '0') {
               message.success('版本回滚成功');
               // 重新加载版本信息（会自动刷新表格） - 与原页面一致
               await loadVersionInfo(eventNo);
