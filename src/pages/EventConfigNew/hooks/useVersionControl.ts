@@ -34,19 +34,32 @@ export const useVersionControl = (
   // 回滚到指定版本
   const handleRollbackToVersion = useCallback(
     async (versionId: string) => {
-      try {
-        const response = await rollbackToVersion(eventNo, versionId);
-        if (response.code === 'SUCCESS') {
-          message.success('回滚版本成功');
-          refreshVersionHistory();
-        } else {
-          message.error(response.message || '回滚版本失败');
-        }
-      } catch (error) {
-        message.error('回滚版本失败');
-      }
+      const versionToRollback = versionInfo.versionHistory.find((v) => v.id === versionId);
+      if (!versionToRollback) return;
+
+      Modal.confirm({
+        title: '确认回滚',
+        content: `确定要回滚到版本 ${versionToRollback.versionCode} 吗？这将激活该版本并停用当前生效版本。`,
+        okText: '确认回滚',
+        cancelText: '取消',
+        okType: 'danger',
+        onOk: async () => {
+          try {
+            const response = await rollbackToVersion(eventNo, versionId);
+            if (response.code === 'SUCCESS') {
+              message.success('版本回滚成功');
+              // 重新加载版本信息（会自动刷新表格） - 与原页面一致
+              await loadVersionInfo(eventNo);
+            } else {
+              message.error(response.message || '回滚版本失败');
+            }
+          } catch (error: any) {
+            message.error(error?.message || '回滚失败');
+          }
+        },
+      });
     },
-    [eventNo, refreshVersionHistory],
+    [eventNo, versionInfo.versionHistory, loadVersionInfo],
   );
 
   // 显示版本历史
