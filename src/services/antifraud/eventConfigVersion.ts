@@ -287,18 +287,6 @@ export const discardDraft = async (draftId: string): Promise<boolean> => {
   return versionApi.deleteDraftVersion(draftId);
 };
 
-export const rollbackToVersion = async (
-  versionId: string,
-  eventNo: string,
-): Promise<EventConfigVersion> => {
-  await versionApi.rollbackToVersion(versionId);
-  const version = await versionApi.getCurrentVersion(eventNo);
-  if (!version) {
-    throw new Error('回滚后无法获取当前版本');
-  }
-  return version;
-};
-
 // 更新版本信息
 export const updateVersion = async (
   versionId: string,
