@@ -289,6 +289,8 @@ const FieldConfigTab: React.FC<FieldConfigTabProps> = ({
       <FieldModal
         visible={modalVisible}
         editingField={editingField}
+        eventNo={eventNo}
+        versionCode={versionCode || ''}
         fieldTypeOptions={fieldTypeOptions}
         forceReset={!editingField}
         onSubmit={handleFieldSubmit}

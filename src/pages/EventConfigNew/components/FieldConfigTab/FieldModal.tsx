@@ -12,6 +12,8 @@ const { TextArea } = Input;
 const FieldModal: React.FC<FieldModalProps> = ({
   visible,
   editingField,
+  eventNo,
+  versionCode,
   fieldTypeOptions,
   forceReset,
   onSubmit,
@@ -36,8 +38,11 @@ const FieldModal: React.FC<FieldModalProps> = ({
       const values = await form.validateFields();
       setLoading(true);
 
+      // 添加eventNo和versionCode参数 - 与原页面一致
+      const fieldValues = { ...values, eventNo, versionCode };
+
       if (editingField) {
-        const response = await updateEventField(editingField.id, values);
+        const response = await updateEventField(editingField.id, fieldValues);
         if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
@@ -45,7 +50,7 @@ const FieldModal: React.FC<FieldModalProps> = ({
           throw new Error(response.message || '更新失败');
         }
       } else {
-        const response = await createEventField(values);
+        const response = await createEventField(fieldValues);
         if (response.code === '0') {
           message.success('创建成功');
           onSubmit(values);
