@@ -10,6 +10,8 @@ import type { StageModalProps } from '../../types';
 const StageModal: React.FC<StageModalProps> = ({
   visible,
   editingStage,
+  eventNo,
+  versionCode,
   eventStageOptions,
   stageBeanOptions,
   forceReset,
@@ -34,8 +36,11 @@ const StageModal: React.FC<StageModalProps> = ({
       const values = await form.validateFields();
       setLoading(true);
 
+      // 添加eventNo和versionCode参数 - 与原页面一致
+      const stageValues = { ...values, eventNo, versionCode };
+
       if (editingStage) {
-        const response = await updateStage(editingStage.id, { ...values, id: editingStage.id });
+        const response = await updateStage(editingStage.id, stageValues);
         if (response.code === '0') {
           message.success('更新成功');
           onSubmit(values);
@@ -43,7 +48,7 @@ const StageModal: React.FC<StageModalProps> = ({
           throw new Error(response.message || '更新失败');
         }
       } else {
-        const response = await createStage(values);
+        const response = await createStage(stageValues);
         if (response.code === '0') {
           message.success('创建成功');
           onSubmit(values);

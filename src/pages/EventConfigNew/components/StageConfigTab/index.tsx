@@ -276,6 +276,8 @@ const StageConfigTab: React.FC<StageConfigTabProps> = ({
       <StageModal
         visible={modalVisible}
         editingStage={editingStage}
+        eventNo={eventNo}
+        versionCode={versionCode}
         eventStageOptions={eventStageOptions}
         stageBeanOptions={stageBeanOptions}
         forceReset={!editingStage}

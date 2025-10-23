@@ -179,6 +179,8 @@ export interface StatementDependencyConfigTabProps {
 export interface FieldModalProps {
   visible: boolean;
   editingField: FieldItem | null;
+  eventNo: string;
+  versionCode: string;
   fieldTypeOptions: any[];
   forceReset: boolean;
   onSubmit: (values: FieldFormValues) => void;
@@ -197,6 +199,8 @@ export interface FieldViewModalProps {
 export interface DeriveFieldModalProps {
   visible: boolean;
   editingDeriveField: DeriveFieldItem | null;
+  eventNo: string;
+  versionCode: string;
   fieldTypeOptions: any[];
   deriveFieldProcessTypeOptions: any[];
   forceReset: boolean;
@@ -217,6 +221,8 @@ export interface DeriveFieldViewModalProps {
 export interface StageModalProps {
   visible: boolean;
   editingStage: StageItem | null;
+  eventNo: string;
+  versionCode: string;
   eventStageOptions: any[];
   stageBeanOptions: any[];
   forceReset: boolean;
@@ -256,7 +262,7 @@ export interface StatementDependencyModalProps {
   visible: boolean;
   editingStatementDependency: StatementDependencyItem | null;
   eventNo: string;
-  versionCode?: string;
+  versionCode: string;
   forceReset: boolean;
   onSubmit: (values: StatementDependencyFormValues) => void;
   onCancel: () => void;
