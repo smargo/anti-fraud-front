@@ -5,7 +5,7 @@
 import type { ActionType } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import { useCallback, useRef, useState } from 'react';
-import { copyVersion, rollbackToVersion } from '../services/eventConfigApi';
+import { rollbackToVersion } from '../services/eventConfigApi';
 import type { EventConfigVersion, EventConfigVersionInfo } from '../types';
 
 export const useVersionControl = (
@@ -47,28 +47,6 @@ export const useVersionControl = (
       }
     },
     [eventNo, refreshVersionHistory],
-  );
-
-  // 复制版本
-  const handleCopyVersion = useCallback(
-    async (versionData: Partial<EventConfigVersion>) => {
-      if (!copyingVersion) return;
-
-      try {
-        const response = await copyVersion(eventNo, copyingVersion.id, versionData);
-        if (response.code === 'SUCCESS') {
-          message.success('复制版本成功');
-          setCopyVersionModalVisible(false);
-          setCopyingVersion(null);
-          refreshVersionHistory();
-        } else {
-          message.error(response.message || '复制版本失败');
-        }
-      } catch (error) {
-        message.error('复制版本失败');
-      }
-    },
-    [eventNo, copyingVersion, refreshVersionHistory],
   );
 
   // 显示版本历史
@@ -151,7 +129,6 @@ export const useVersionControl = (
     handleActivateVersion,
     handleDeleteDraftVersion,
     hasDraftVersion,
-    handleCopyVersion,
     showVersionHistory,
     showCreateVersionModal,
     showCopyVersionModal,
