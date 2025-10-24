@@ -19,9 +19,7 @@ export * from './useMicroApp';
 // 现有 Hooks
 export * from './useDictData';
 export * from './useMessage';
-export * from './usePagination';
 
 // 兼容性导出 - 保持与现有代码的兼容性
 export { useDictData } from './useDictData';
 export { useMessage } from './useMessage';
-export { usePagination } from './usePagination';

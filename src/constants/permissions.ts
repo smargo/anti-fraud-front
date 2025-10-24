@@ -13,7 +13,6 @@ export const LOCAL_DEV_PERMISSIONS = [
   'antifraud:indicator:readonly',
   'antifraud:datasource:readonly',
   'antifraud:dict:readonly',
-  'antifraud:ruleManagement:readonly',
   '/dashboard',
   '/event',
   '/field',
@@ -22,9 +21,6 @@ export const LOCAL_DEV_PERMISSIONS = [
   '/indicator',
   '/datasource',
   '/dict',
-  '/rule-management',
-  '/micro-app-demo',
-  '/utils-demo',
 ] as const;
 
 // 权限代码类型
