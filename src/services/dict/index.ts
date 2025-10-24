@@ -48,42 +48,6 @@ export class DictService {
     }
   }
 
-  // 获取多个字典数据
-  static async getMultipleDictData(codes: string[]): Promise<Record<string, DictData>> {
-    try {
-      const response = await request('/api/dict/batch', {
-        method: 'POST',
-        data: { codes },
-      });
-
-      const result: Record<string, DictData> = {};
-
-      if (response && typeof response === 'object') {
-        Object.keys(response).forEach((code) => {
-          const dictResponse = response[code];
-          if (dictResponse && dictResponse.items) {
-            const dictData: DictData = {};
-            dictResponse.items.forEach((item: DictItem) => {
-              dictData[String(item.value)] = {
-                text: item.label,
-                status: item.status,
-                ...item,
-              };
-            });
-            result[code] = dictData;
-          } else {
-            result[code] = {};
-          }
-        });
-      }
-
-      return result;
-    } catch (error) {
-      console.error('批量获取字典数据失败', error);
-      return {};
-    }
-  }
-
   // 获取字典选项（用于下拉框）
   static async getDictOptions(
     code: string,
@@ -282,7 +246,6 @@ export class DictService {
 
 // 兼容性导出
 export const getDictData = DictService.getDictData;
-export const getMultipleDictData = DictService.getMultipleDictData;
 export const getDictOptions = DictService.getDictOptions;
 export const getDictText = DictService.getDictText;
 export const getDictStatus = DictService.getDictStatus;
@@ -296,4 +259,3 @@ export const createDict = DictService.createDict;
 export const updateDict = DictService.updateDict;
 export const deleteDict = DictService.deleteDict;
 export const getDictList = DictService.getDictList;
-
