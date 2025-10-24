@@ -7,6 +7,9 @@ export interface EventIndicatorItem {
   indicatorNo: string;
   indicatorName: string;
   createdDate: string;
+  createdBy: string;
+  lastModifiedDate: string;
+  lastModifiedBy: string;
 }
 
 // 事件指标接口（包含事件名称和指标名称）
@@ -23,17 +26,16 @@ export interface EventIndicatorWithNamesItem {
   lastModifiedBy: string;
 }
 
-// 查询事件指标
-export async function queryEventIndicators(params: any) {
-  return request<EventIndicatorItem[]>('/api/event-indicator/list', {
-    method: 'GET',
-    params,
-  });
+export interface EventIndicatorPage {
+  success: boolean;
+  data: EventIndicatorItem[];
+  total: number;
 }
 
 // 查询事件指标（包含事件名称和指标名称）
 export async function queryEventIndicatorsWithNames(params: any) {
-  return request<EventIndicatorWithNamesItem[]>('/api/event-indicator/list-with-names', {
+  console.log('queryEventIndicatorsWithNames test');
+  return request<EventIndicatorPage>('/api/event-indicator/list-with-names', {
     method: 'GET',
     params,
   });

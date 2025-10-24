@@ -2,11 +2,11 @@
  * EventIndicatorTable 组件
  */
 
-import React from 'react';
+import { queryEventIndicatorsWithNames } from '@/services/antifraud/eventIndicator';
+import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
 import { Button, Card, Tooltip } from 'antd';
-import type { ActionType } from '@ant-design/pro-components';
-import { queryEventIndicatorsWithNames } from '@/services/antifraud/eventIndicator';
+import React from 'react';
 import type { EventIndicatorItem } from '../types';
 
 interface EventIndicatorTableProps {
@@ -14,10 +14,7 @@ interface EventIndicatorTableProps {
   onView: (record: EventIndicatorItem) => void;
 }
 
-const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
-  actionRef,
-  onView,
-}) => {
+const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({ actionRef, onView }) => {
   // 表格列定义
   const columns: any[] = [
     {
@@ -48,11 +45,13 @@ const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
       ellipsis: true,
       render: (text: any) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -67,11 +66,13 @@ const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
       ellipsis: true,
       render: (text: any) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -89,11 +90,13 @@ const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
       ellipsis: true,
       render: (text: any) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -107,10 +110,7 @@ const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
       width: 80,
       fixed: 'right',
       render: (_: any, record: EventIndicatorItem) => (
-        <Button 
-          type="link" 
-          onClick={() => onView(record)}
-        >
+        <Button type="link" onClick={() => onView(record)}>
           查看
         </Button>
       ),
@@ -128,14 +128,10 @@ const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
           const searchParams = {
             ...params,
           };
-          
+
           const response = await queryEventIndicatorsWithNames(searchParams);
           // 如果返回的是分页对象，直接返回
-          return {
-            data: response.records || response.data || [],
-            total: response.total,
-            success: true,
-          };
+          return response;
         }}
         pagination={{
           showSizeChanger: true,
@@ -150,4 +146,3 @@ const EventIndicatorTable: React.FC<EventIndicatorTableProps> = ({
 };
 
 export default EventIndicatorTable;
-

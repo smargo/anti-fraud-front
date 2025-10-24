@@ -99,20 +99,6 @@ export const dataSourceApi = {
     return response;
   },
 
-  // 测试数据源连接
-  testConnection: async (
-    dataSourceNo: string,
-  ): Promise<{
-    success: boolean;
-    message: string;
-    dataSourceType?: string;
-  }> => {
-    const response = await request(`/api/datasource/test/${dataSourceNo}`, {
-      method: 'POST',
-    });
-    return response;
-  },
-
   // 刷新数据源连接
   refresh: async (
     dataSourceNo: string,

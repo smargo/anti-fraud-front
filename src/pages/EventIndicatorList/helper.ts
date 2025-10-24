@@ -2,11 +2,14 @@
  * EventIndicatorList 页面辅助函数
  */
 
+import {
+  createEventIndicator,
+  deleteEventIndicator,
+  updateEventIndicator,
+} from '@/services/antifraud/eventIndicator';
 import { message } from 'antd';
 import moment from 'moment';
-import { getDictText } from '@/utils/dictUtils';
-import { createEventIndicator, updateEventIndicator, deleteEventIndicator, queryEventIndicators } from '@/services/antifraud/eventIndicator';
-import type { EventIndicatorItem, EventIndicatorFormValues } from './types';
+import type { EventIndicatorFormValues, EventIndicatorItem } from './types';
 
 /**
  * 格式化日期时间
@@ -72,11 +75,3 @@ export const handleEventIndicatorFormSubmit = async (
     }
   }
 };
-
-/**
- * 获取事件指标列表数据
- */
-export const fetchEventIndicatorList = async (params: any) => {
-  return queryEventIndicators(params);
-};
-
