@@ -2,11 +2,15 @@
  * EventDetailList 页面辅助函数
  */
 
+import {
+  createEventDetail,
+  deleteEventDetail,
+  queryEventDetails,
+  updateEventDetail,
+} from '@/services/antifraud/eventDetail';
 import { message } from 'antd';
 import moment from 'moment';
-import { getDictText } from '@/utils/dictUtils';
-import { queryEventDetails, createEventDetail, updateEventDetail, deleteEventDetail } from '@/services/antifraud/eventDetail';
-import type { EventDetailItem, EventDetailFormValues } from './types';
+import type { EventDetailFormValues, EventDetailItem } from './types';
 
 /**
  * 格式化日期时间
@@ -48,7 +52,7 @@ export const handleEventDetailFormSubmit = async (
   try {
     if (editingEventDetail) {
       const response = await updateEventDetail({ ...values, id: editingEventDetail.id });
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('更新成功');
       } else {
         message.error(response.message || '更新失败');
@@ -56,7 +60,7 @@ export const handleEventDetailFormSubmit = async (
       }
     } else {
       const response = await createEventDetail(values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('创建成功');
       } else {
         message.error(response.message || '创建失败');

@@ -2,9 +2,9 @@
  * DeriveFieldList 页面自定义 Hooks
  */
 
-import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
-import type { DeriveFieldItem } from './types';
+import { useRef, useState } from 'react';
+import type { DeriveFieldItem } from '../types';
 
 export const useDeriveFieldList = () => {
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
@@ -28,4 +28,3 @@ export const useDeriveFieldList = () => {
     closeViewModal,
   };
 };
-
