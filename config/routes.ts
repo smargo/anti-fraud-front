@@ -29,13 +29,6 @@ export default [
         access: 'antifraud:event:readonly',
       },
       {
-        path: '/event/detail/:eventNo',
-        name: '事件详情',
-        component: './EventDetail',
-        hideInMenu: true,
-        access: 'antifraud:event:readonly',
-      },
-      {
         path: '/event/detail-list',
         name: '事件明细',
         component: './EventDetailList',
