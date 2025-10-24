@@ -55,14 +55,14 @@ const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
       // 如果有查询编号，获取关联的语句信息
       if (indicatorDetail.data.queryNo) {
         try {
-          const statementDetail = await statementApi.getByStatementNo(indicatorDetail.queryNo);
+          const statementDetail = await statementApi.getByStatementNo(indicatorDetail.data.queryNo);
           setSelectedStatement(statementDetail.data);
 
           // 如果有数据源编号，获取数据源信息
           if (statementDetail.data.dataSourceNo) {
             try {
               const dataSourceDetail = await dataSourceApi.getByDataSourceNo(
-                statementDetail.dataSourceNo,
+                statementDetail.data.dataSourceNo,
               );
               setSelectedDataSource(dataSourceDetail.data);
             } catch (error) {

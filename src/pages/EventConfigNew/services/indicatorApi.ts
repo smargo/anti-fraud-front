@@ -4,7 +4,7 @@
 
 import { request } from '@umijs/max';
 
-export interface IndicatorDO {
+export interface IndicatorVO {
   id: number;
   indicatorNo: string;
   indicatorName: string;
@@ -21,7 +21,7 @@ export interface IndicatorDO {
 export interface IndicatorItem {
   code: string;
   message: string;
-  data: IndicatorDO;
+  data: IndicatorVO;
 }
 
 export interface IndicatorQueryVO {
@@ -52,7 +52,7 @@ export const indicatorApi = {
   list: async (
     params: IndicatorQueryVO,
   ): Promise<{
-    records: IndicatorDO[];
+    records: IndicatorVO[];
     total: number;
     current: number;
     pageSize: number;
@@ -65,7 +65,7 @@ export const indicatorApi = {
   },
 
   // 创建指标
-  create: async (indicator: Partial<IndicatorDO>) => {
+  create: async (indicator: Partial<IndicatorVO>) => {
     const response = await request('/api/indicators', {
       method: 'POST',
       data: indicator,
@@ -74,7 +74,7 @@ export const indicatorApi = {
   },
 
   // 更新指标
-  update: async (id: number, indicator: Partial<IndicatorDO>) => {
+  update: async (id: number, indicator: Partial<IndicatorVO>) => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'PUT',
       data: indicator,
@@ -96,7 +96,7 @@ export const indicatorApi = {
     current: number = 1,
     pageSize: number = 20,
   ): Promise<{
-    data: IndicatorDO[];
+    data: IndicatorVO[];
     total: number;
     success: boolean;
   }> => {
