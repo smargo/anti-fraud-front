@@ -140,28 +140,6 @@ export class DictService {
     }
   }
 
-  // 过滤字典数据
-  static async filterDictData(
-    code: string,
-    predicate: (item: DictItem, value: string) => boolean,
-  ): Promise<DictData> {
-    try {
-      const dictData = await this.getDictData(code);
-      const filtered: DictData = {};
-
-      Object.entries(dictData).forEach(([value, item]) => {
-        if (predicate(item, value)) {
-          filtered[value] = item;
-        }
-      });
-
-      return filtered;
-    } catch (error) {
-      console.error(`过滤字典数据失败: ${code}`, error);
-      return {};
-    }
-  }
-
   // 刷新字典缓存
   static async refreshDictCache(code?: string): Promise<void> {
     try {
@@ -253,7 +231,6 @@ export const hasDictValue = DictService.hasDictValue;
 export const getDictValues = DictService.getDictValues;
 export const getDictLabels = DictService.getDictLabels;
 export const getDictValueByLabel = DictService.getDictValueByLabel;
-export const filterDictData = DictService.filterDictData;
 export const refreshDictCache = DictService.refreshDictCache;
 export const createDict = DictService.createDict;
 export const updateDict = DictService.updateDict;
