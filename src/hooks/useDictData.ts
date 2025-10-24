@@ -110,18 +110,3 @@ export const useDictData = (initialCodeList: string[] = []): UseDictDataReturn =
     refreshDictData,
   };
 };
-
-/**
- * 将字典选项转换为 ProTable valueEnum 格式的独立工具函数
- * @param options 字典选项数组
- * @returns ProTable valueEnum 格式的对象
- */
-export const convertDictToValueEnum = (options: DictItem[]): ValueEnum => {
-  return options.reduce((acc, option) => {
-    acc[option.itemNo] = {
-      text: option.itemDescribe,
-      value: option.itemNo,
-    };
-    return acc;
-  }, {} as ValueEnum);
-};
