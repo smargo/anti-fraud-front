@@ -1,3 +1,4 @@
+import { ResultPage } from '@/pages/EventConfigNew/types';
 import { request } from '@umijs/max';
 
 // API响应格式
@@ -67,18 +68,6 @@ export const versionApi = {
     }
   },
 
-  // 获取当前生效版本
-  getCurrentVersion: async (eventNo: string): Promise<EventConfigVersion | null> => {
-    const response: ApiResponse<EventConfigVersion> = await request(
-      `/api/event-config-version/current/${eventNo}`,
-    );
-    if (response.code === '0') {
-      return response.data;
-    } else {
-      throw new Error(response.message || '获取当前版本失败');
-    }
-  },
-
   // 获取版本历史
   getVersionHistory: async (eventNo: string): Promise<EventConfigVersion[]> => {
     const response: ApiResponse<EventConfigVersion[]> = await request(
@@ -101,19 +90,14 @@ export const versionApi = {
       current?: number;
       pageSize?: number;
     },
-  ): Promise<{
-    data: EventConfigVersion[];
-    total: number;
-    success: boolean;
-  }> => {
-    const response: {
-      data: EventConfigVersion[];
-      total: number;
-      success: boolean;
-    } = await request(`/api/event-config-version/history/${eventNo}/page`, {
-      method: 'GET',
-      params,
-    });
+  ): Promise<ResultPage<EventConfigVersion>> => {
+    const response: ResultPage<EventConfigVersion> = await request(
+      `/api/event-config-version/history/${eventNo}/page`,
+      {
+        method: 'GET',
+        params,
+      },
+    );
     if (response.success) {
       return response;
     } else {
