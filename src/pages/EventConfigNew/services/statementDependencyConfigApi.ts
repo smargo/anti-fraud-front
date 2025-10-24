@@ -48,7 +48,7 @@ export const queryStatementDependenciesWithNames = async (
 // 创建语句依赖
 export const createStatementDependency = async (
   values: StatementDependencyFormValues,
-): Promise<ApiResponse<StatementDependencyItem>> => {
+): Promise<ApiResponse<boolean>> => {
   return await request('/api/statement-dependency', {
     method: 'POST',
     data: values,
@@ -59,7 +59,7 @@ export const createStatementDependency = async (
 export const updateStatementDependency = async (
   id: string,
   values: StatementDependencyFormValues,
-): Promise<ApiResponse<StatementDependencyItem>> => {
+): Promise<ApiResponse<boolean>> => {
   return await request(`/api/statement-dependency/${id}`, {
     method: 'PUT',
     data: values,
