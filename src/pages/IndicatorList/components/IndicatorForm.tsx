@@ -2,7 +2,8 @@
  * IndicatorForm 组件
  */
 
-import { statementApi, StatementDO } from '@/services/antifraud/statement';
+import { StatementVO } from '@/pages/EventConfigNew/services/statementApi';
+import { statementApi } from '@/services/antifraud/statement';
 import { Button, Form, Input, message, Select, Space } from 'antd';
 import React, { useState } from 'react';
 import type { IndicatorFormProps } from '../types';
@@ -16,7 +17,7 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
   forceReset,
 }) => {
   const [form] = Form.useForm();
-  const [statementOptions, setStatementOptions] = useState<StatementDO[]>([]);
+  const [statementOptions, setStatementOptions] = useState<StatementVO[]>([]);
   const [statementSearchLoading, setStatementSearchLoading] = useState<boolean>(false);
 
   React.useEffect(() => {

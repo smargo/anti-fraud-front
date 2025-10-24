@@ -4,7 +4,7 @@
 
 import { Form, message, Modal, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { statementApi } from '../../services/statementApi';
+import { statementApi, StatementVO } from '../../services/statementApi';
 import type { StatementDependencyModalProps } from '../../types';
 
 const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
@@ -17,7 +17,7 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
   onCancel,
 }) => {
   const [form] = Form.useForm();
-  const [statementOptions, setStatementOptions] = useState<StatementDO[]>([]);
+  const [statementOptions, setStatementOptions] = useState<StatementVO[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedStatementNo, setSelectedStatementNo] = useState<string | undefined>(undefined);
 
