@@ -5,7 +5,7 @@
 import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { createEventIndicator, updateEventIndicator } from '../../services/eventIndicatorConfigApi';
-import { indicatorApi, IndicatorDO } from '../../services/indicatorApi';
+import { indicatorApi, IndicatorVO } from '../../services/indicatorApi';
 import type { EventIndicatorModalProps } from '../../types';
 
 const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
@@ -18,7 +18,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
   onCancel,
 }) => {
   const [form] = Form.useForm();
-  const [indicatorOptions, setIndicatorOptions] = useState<IndicatorDO[]>([]);
+  const [indicatorOptions, setIndicatorOptions] = useState<IndicatorVO[]>([]);
   const [indicatorSearchLoading, setIndicatorSearchLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 

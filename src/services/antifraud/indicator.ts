@@ -1,6 +1,6 @@
 import { request } from '@umijs/max';
 
-export interface IndicatorDO {
+export interface IndicatorItem {
   id: number;
   indicatorNo: string;
   indicatorName: string;
@@ -23,7 +23,7 @@ export interface IndicatorQueryVO {
 
 export const indicatorApi = {
   // 根据ID获取指标
-  getById: async (id: number): Promise<IndicatorDO> => {
+  getById: async (id: number): Promise<IndicatorItem> => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'GET',
     });
@@ -31,7 +31,7 @@ export const indicatorApi = {
   },
 
   // 根据指标编号获取指标
-  getByIndicatorNo: async (indicatorNo: string): Promise<IndicatorDO> => {
+  getByIndicatorNo: async (indicatorNo: string): Promise<IndicatorItem> => {
     const response = await request(`/api/indicators/by-indicator-no/${indicatorNo}`, {
       method: 'GET',
     });
@@ -42,7 +42,7 @@ export const indicatorApi = {
   list: async (
     params: IndicatorQueryVO,
   ): Promise<{
-    records: IndicatorDO[];
+    records: IndicatorItem[];
     total: number;
     current: number;
     pageSize: number;
@@ -55,7 +55,7 @@ export const indicatorApi = {
   },
 
   // 创建指标
-  create: async (indicator: Partial<IndicatorDO>) => {
+  create: async (indicator: Partial<IndicatorItem>) => {
     const response = await request('/api/indicators', {
       method: 'POST',
       data: indicator,
@@ -64,7 +64,7 @@ export const indicatorApi = {
   },
 
   // 更新指标
-  update: async (id: number, indicator: Partial<IndicatorDO>) => {
+  update: async (id: number, indicator: Partial<IndicatorItem>) => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'PUT',
       data: indicator,
@@ -86,7 +86,7 @@ export const indicatorApi = {
     current: number = 1,
     pageSize: number = 20,
   ): Promise<{
-    records: IndicatorDO[];
+    records: IndicatorItem[];
     total: number;
     current: number;
     pageSize: number;
