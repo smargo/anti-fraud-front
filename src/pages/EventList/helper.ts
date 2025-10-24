@@ -63,7 +63,7 @@ export const handleEventFormSubmit = async (
         eventName: values.eventName,
         eventDesc: values.eventDesc,
       });
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('更新成功');
       } else {
         message.error(response.message || '更新失败');
@@ -71,7 +71,7 @@ export const handleEventFormSubmit = async (
       }
     } else {
       const response = await createEvent(values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('创建成功');
       } else {
         message.error(response.message || '创建失败');
@@ -80,10 +80,10 @@ export const handleEventFormSubmit = async (
     }
     onSuccess?.();
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error?.message) {
+      message.error(error.message);
     } else {
-      message.error('操作失败：' + (error.message || '未知错误'));
+      message.error('操作失败：未知错误');
     }
   }
 };
