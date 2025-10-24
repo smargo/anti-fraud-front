@@ -19,12 +19,12 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { dataSourceApi, DataSourceDO } from '../../services/dataSourceApi';
+import { dataSourceApi, DataSourceVO } from '../../services/dataSourceApi';
 import {
   deleteEventIndicator,
   queryEventIndicatorsWithNames,
 } from '../../services/eventIndicatorConfigApi';
-import { indicatorApi, IndicatorDO } from '../../services/indicatorApi';
+import { indicatorApi, IndicatorVO } from '../../services/indicatorApi';
 import { statementApi, StatementVO } from '../../services/statementApi';
 import type { EventIndicatorConfigTabProps, EventIndicatorItem } from '../../types';
 import EventIndicatorModal from './EventIndicatorModal';
@@ -41,9 +41,9 @@ const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
 
   // 指标详情弹窗状态
   const [indicatorDetailVisible, setIndicatorDetailVisible] = React.useState(false);
-  const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorDO | null>(null);
+  const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorVO | null>(null);
   const [selectedStatement, setSelectedStatement] = React.useState<StatementVO | null>(null);
-  const [selectedDataSource, setSelectedDataSource] = React.useState<DataSourceDO | null>(null);
+  const [selectedDataSource, setSelectedDataSource] = React.useState<DataSourceVO | null>(null);
 
   // 显示指标详情
   const showIndicatorDetail = async (record: any) => {

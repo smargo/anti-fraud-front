@@ -4,7 +4,7 @@
 
 import { request } from '@umijs/max';
 
-export interface DataSourceDO {
+export interface DataSourceVO {
   id: number;
   dataSourceNo: string;
   dataSourceName: string;
@@ -20,7 +20,7 @@ export interface DataSourceDO {
 }
 
 export interface DataSourceItemResponse {
-  data: DataSourceDO;
+  data: DataSourceVO;
   code: string;
   message: string;
 }
@@ -55,7 +55,7 @@ export const dataSourceApi = {
   list: async (
     params: DataSourceQueryVO,
   ): Promise<{
-    records: DataSourceDO[];
+    records: DataSourceVO[];
     total: number;
     current: number;
     pageSize: number;
@@ -68,7 +68,7 @@ export const dataSourceApi = {
   },
 
   // 获取所有数据源配置
-  getAllConfigs: async (): Promise<DataSourceDO[]> => {
+  getAllConfigs: async (): Promise<DataSourceVO[]> => {
     const response = await request('/api/datasource/configs', {
       method: 'GET',
     });
@@ -84,7 +84,7 @@ export const dataSourceApi = {
   },
 
   // 创建数据源
-  create: async (dataSource: Partial<DataSourceDO>) => {
+  create: async (dataSource: Partial<DataSourceVO>) => {
     const response = await request('/api/datasource/config', {
       method: 'POST',
       data: dataSource,
@@ -93,7 +93,7 @@ export const dataSourceApi = {
   },
 
   // 更新数据源
-  update: async (dataSourceNo: string, dataSource: Partial<DataSourceDO>) => {
+  update: async (dataSourceNo: string, dataSource: Partial<DataSourceVO>) => {
     const response = await request(`/api/datasource/config/${dataSourceNo}`, {
       method: 'PUT',
       data: dataSource,
@@ -155,7 +155,7 @@ export const dataSourceApi = {
     current: number = 1,
     pageSize: number = 20,
   ): Promise<{
-    records: DataSourceDO[];
+    records: DataSourceVO[];
     total: number;
     current: number;
     pageSize: number;
