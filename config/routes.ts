@@ -163,12 +163,6 @@ export default [
         component: './AntiFraudDashboard',
         access: 'antifraud:dashboard:readonly',
       },
-      {
-        path: '/anti-fraud/rules',
-        name: '规则管理',
-        component: './AntiFraudRuleManagement',
-        access: 'antifraud:rule:readonly',
-      },
     ],
   },
 ];
