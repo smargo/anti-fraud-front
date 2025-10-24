@@ -2,9 +2,9 @@
  * FieldList 页面自定义 Hooks
  */
 
-import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
-import type { FieldItem } from './types';
+import { useRef, useState } from 'react';
+import type { FieldItem } from '../types';
 
 export const useFieldList = () => {
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
@@ -28,4 +28,3 @@ export const useFieldList = () => {
     closeViewModal,
   };
 };
-
