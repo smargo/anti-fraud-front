@@ -145,7 +145,7 @@ const EventConfig: React.FC = () => {
     <PageContainer
       title={pageTitle}
       extra={[
-        <Button key="back" icon={<ArrowLeftOutlined />} onClick={() => navigate('/event-list')}>
+        <Button key="back" icon={<ArrowLeftOutlined />} onClick={() => navigate('/event/list')}>
           返回事件列表
         </Button>,
       ]}

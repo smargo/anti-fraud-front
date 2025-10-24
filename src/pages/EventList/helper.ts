@@ -2,15 +2,15 @@
  * EventList 页面辅助函数
  */
 
-import { message, Modal } from 'antd';
-import { formatDateTime } from '@/utils/helpers';
 import {
-  queryEvents,
   createEvent,
-  updateEventBasicInfo,
   deleteEvent,
+  queryEvents,
+  updateEventBasicInfo,
 } from '@/services/antifraud/event';
-import type { EventItem, EventFormValues } from './types';
+import { formatDateTime } from '@/utils/helpers';
+import { message, Modal } from 'antd';
+import type { EventFormValues, EventItem } from './types';
 
 /**
  * 格式化事件数据
@@ -31,7 +31,7 @@ export const handleEventDelete = async (id: string, onSuccess?: () => void) => {
     onOk: async () => {
       try {
         const response = await deleteEvent(id);
-        if (response.code === 'SUCCESS') {
+        if (response.code === '0') {
           message.success(response.message || '删除成功');
           onSuccess?.();
         } else {
@@ -94,4 +94,3 @@ export const handleEventFormSubmit = async (
 export const fetchEventList = async (params: any) => {
   return queryEvents(params);
 };
-
