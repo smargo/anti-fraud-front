@@ -31,13 +31,6 @@ export async function deleteDict(params: { dictId: number }) {
   });
 }
 
-// 获取系统字典详情
-export async function getDictDetail(id: string) {
-  return await request(`/api/dict/${id}`, {
-    method: 'GET',
-  });
-}
-
 // 根据代码编号查询字典列表
 export async function getDictsByCodeNo(codeNo: string) {
   return await request(`/api/dict/code/${codeNo}`, {
