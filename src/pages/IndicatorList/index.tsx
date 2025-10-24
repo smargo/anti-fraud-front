@@ -2,13 +2,13 @@
  * IndicatorList 主页面组件
  */
 
-import React from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import type { ActionType } from '@ant-design/pro-components';
 import ErrorBoundary from '@/components/Common/ErrorBoundary';
-import { IndicatorTable, IndicatorModal, IndicatorViewModal } from './components';
+import type { ActionType } from '@ant-design/pro-components';
+import { PageContainer } from '@ant-design/pro-components';
+import React from 'react';
+import { IndicatorModal, IndicatorTable, IndicatorViewModal } from './components';
+import { handleIndicatorDelete, handleIndicatorFormSubmit } from './helper';
 import { useIndicatorList } from './hooks/useIndicatorList';
-import { handleIndicatorFormSubmit, handleIndicatorDelete } from './helper';
 import './index.less';
 
 const IndicatorList: React.FC = () => {
@@ -34,8 +34,8 @@ const IndicatorList: React.FC = () => {
     });
   };
 
-  const handleDelete = (indicatorNo: string) => {
-    handleIndicatorDelete(indicatorNo, () => {
+  const handleDelete = (indicatorId: number) => {
+    handleIndicatorDelete(indicatorId, () => {
       reloadTable();
     });
   };

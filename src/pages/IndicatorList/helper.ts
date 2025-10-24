@@ -18,20 +18,20 @@ export const formatDateTime = (date: string, separator: string = '-') => {
 /**
  * 处理指标删除
  */
-export const handleIndicatorDelete = async (indicatorNo: string, onSuccess?: () => void) => {
+export const handleIndicatorDelete = async (indicatorId: number, onSuccess?: () => void) => {
   try {
-    const response = await indicatorApi.delete(indicatorNo);
-    if (response.code === 'SUCCESS') {
+    const response = await indicatorApi.delete(indicatorId);
+    if (response.code === '0') {
       message.success('删除成功');
       onSuccess?.();
     } else {
       message.error(response.message || '删除失败');
     }
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error?.message) {
+      message.error(error.message);
     } else {
-      message.error('删除失败：' + (error.message || '未知错误'));
+      message.error('删除失败：未知错误');
     }
   }
 };
@@ -46,8 +46,8 @@ export const handleIndicatorFormSubmit = async (
 ) => {
   try {
     if (editingIndicator) {
-      const response = await indicatorApi.update(editingIndicator.indicatorNo, values);
-      if (response.code === 'SUCCESS') {
+      const response = await indicatorApi.update(editingIndicator.id, values);
+      if (response.code === '0') {
         message.success('更新成功');
       } else {
         message.error(response.message || '更新失败');
@@ -55,7 +55,7 @@ export const handleIndicatorFormSubmit = async (
       }
     } else {
       const response = await indicatorApi.create(values);
-      if (response.code === 'SUCCESS') {
+      if (response.code === '0') {
         message.success('创建成功');
       } else {
         message.error(response.message || '创建失败');
@@ -64,17 +64,10 @@ export const handleIndicatorFormSubmit = async (
     }
     onSuccess?.();
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error?.message) {
+      message.error(error.message);
     } else {
-      message.error('操作失败：' + (error.message || '未知错误'));
+      message.error('操作失败：未知错误');
     }
   }
-};
-
-/**
- * 获取指标列表数据
- */
-export const fetchIndicatorList = async (params: any) => {
-  return indicatorApi.query(params);
 };
