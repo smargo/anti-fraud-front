@@ -2,10 +2,10 @@
  * IndicatorList 页面辅助函数
  */
 
+import { indicatorApi } from '@/services/antifraud/indicator';
 import { message } from 'antd';
 import moment from 'moment';
-import { indicatorApi } from '@/services/antifraud/indicator';
-import type { IndicatorItem, IndicatorFormValues } from './types';
+import type { IndicatorFormValues, IndicatorItem } from './types';
 
 /**
  * 格式化日期时间
@@ -77,75 +77,4 @@ export const handleIndicatorFormSubmit = async (
  */
 export const fetchIndicatorList = async (params: any) => {
   return indicatorApi.query(params);
-};
-
-/**
- * 生成表格列配置
- */
-export const generateColumns = (
-  onView: (record: IndicatorItem) => void,
-  onEdit: (record: IndicatorItem) => void,
-  onDelete: (indicatorNo: string) => void,
-) => {
-  return [
-    {
-      title: '指标编号',
-      dataIndex: 'indicatorNo',
-      key: 'indicatorNo',
-      width: 150,
-      search: true,
-    },
-    {
-      title: '指标名称',
-      dataIndex: 'indicatorName',
-      key: 'indicatorName',
-      width: 200,
-      search: true,
-    },
-    {
-      title: '指标描述',
-      dataIndex: 'indicatorDesc',
-      key: 'indicatorDesc',
-      width: 300,
-      hideInSearch: true,
-      ellipsis: true,
-      render: (text: string) => text || '-',
-    },
-    {
-      title: '查询编号',
-      dataIndex: 'queryNo',
-      key: 'queryNo',
-      width: 150,
-      hideInSearch: true,
-      render: (text: string) => text || '-',
-    },
-    {
-      title: '查询字段',
-      dataIndex: 'queryField',
-      key: 'queryField',
-      width: 200,
-      hideInSearch: true,
-      ellipsis: true,
-      render: (text: string) => text || '-',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdDate',
-      key: 'createdDate',
-      width: 150,
-      hideInSearch: true,
-      render: (_: any, record: IndicatorItem) => formatDateTime(record.createdDate),
-    },
-    {
-      title: '操作',
-      key: 'option',
-      valueType: 'option',
-      width: 150,
-      render: (_: any, record: IndicatorItem) => [
-        { text: '查看', onClick: () => onView(record) },
-        { text: '编辑', onClick: () => onEdit(record) },
-        { text: '删除', onClick: () => onDelete(record.indicatorNo) },
-      ],
-    },
-  ];
 };

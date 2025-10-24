@@ -3,7 +3,6 @@
  */
 
 import { dataSourceApi } from '@/services/antifraud/datasource';
-import { getDictText, type DictItem } from '@/utils/dictUtils';
 import { message } from 'antd';
 import moment from 'moment';
 import type { DataSourceFormValues, DataSourceItem } from './types';
@@ -91,78 +90,4 @@ export const fetchDataSourceList = async (params: any) => {
       total: 0,
     };
   }
-};
-
-/**
- * 生成表格列配置
- */
-export const generateColumns = (
-  dataSourceTypeOptions: DictItem[],
-  onView: (record: DataSourceItem) => void,
-  onEdit: (record: DataSourceItem) => void,
-  onDelete: (dataSourceNo: string) => void,
-) => {
-  return [
-    {
-      title: '数据源编号',
-      dataIndex: 'dataSourceNo',
-      key: 'dataSourceNo',
-      width: 150,
-      search: {
-        allowClear: true,
-        placeholder: '请输入数据源编号',
-      },
-    },
-    {
-      title: '数据源名称',
-      dataIndex: 'dataSourceName',
-      key: 'dataSourceName',
-      width: 200,
-      search: {
-        allowClear: true,
-        placeholder: '请输入数据源名称',
-      },
-    },
-    {
-      title: '数据源类型',
-      dataIndex: 'dataSourceType',
-      key: 'dataSourceType',
-      width: 120,
-      search: true,
-      render: (_: any, record: DataSourceItem) => {
-        return getDictText(dataSourceTypeOptions, record.dataSourceType);
-      },
-    },
-    {
-      title: '用户名',
-      dataIndex: 'dataSourceUserName',
-      key: 'dataSourceUserName',
-      width: 120,
-      hideInSearch: true,
-      render: (text: string) => text || '-',
-    },
-    {
-      title: '连接字符串',
-      dataIndex: 'dataSourceConnectString',
-      key: 'dataSourceConnectString',
-      width: 300,
-      hideInSearch: true,
-      ellipsis: true,
-      render: (text: string) => {
-        const connectString = text || '-';
-        return connectString;
-      },
-    },
-    {
-      title: '操作',
-      key: 'option',
-      valueType: 'option',
-      width: 150,
-      render: (_: any, record: DataSourceItem) => [
-        { text: '查看', onClick: () => onView(record) },
-        { text: '编辑', onClick: () => onEdit(record) },
-        { text: '删除', onClick: () => onDelete(record.dataSourceNo) },
-      ],
-    },
-  ];
 };
