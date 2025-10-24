@@ -196,42 +196,6 @@ export const versionApi = {
     }
   },
 
-  // 获取变更日志
-  getChangeLogs: async (versionId: string): Promise<ConfigChangeLog[]> => {
-    const response: ApiResponse<ConfigChangeLog[]> = await request(
-      `/api/event-config-version/${versionId}/change-logs`,
-    );
-    if (response.code === '0') {
-      return response.data;
-    } else {
-      throw new Error(response.message || '获取变更日志失败');
-    }
-  },
-
-  // 获取变更统计
-  getChangeStatistics: async (versionId: string): Promise<any[]> => {
-    const response: ApiResponse<any[]> = await request(
-      `/api/event-config-version/${versionId}/change-statistics`,
-    );
-    if (response.code === '0') {
-      return response.data;
-    } else {
-      throw new Error(response.message || '获取变更统计失败');
-    }
-  },
-
-  // 版本对比
-  compareVersions: async (versionId1: string, versionId2: string): Promise<any> => {
-    const response: ApiResponse<any> = await request(
-      `/api/event-config-version/compare?versionId1=${versionId1}&versionId2=${versionId2}`,
-    );
-    if (response.code === '0') {
-      return response.data;
-    } else {
-      throw new Error(response.message || '版本对比失败');
-    }
-  },
-
   // 删除草稿版本
   deleteDraftVersion: async (versionId: string): Promise<boolean> => {
     const response: ApiResponse<boolean> = await request(`/api/event-config-version/${versionId}`, {
