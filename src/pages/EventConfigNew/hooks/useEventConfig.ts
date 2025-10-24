@@ -29,7 +29,6 @@ export const useEventConfig = () => {
   // 版本相关状态
   const [versionInfo, setVersionInfo] = useState<EventConfigVersionInfo>({
     versionHistory: [],
-    hasUnsavedChanges: false,
   });
 
   // Tab状态

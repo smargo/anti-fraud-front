@@ -43,7 +43,6 @@ export interface EventConfigVersion {
 // 版本信息
 export interface EventConfigVersionInfo {
   versionHistory: EventConfigVersion[];
-  hasUnsavedChanges: boolean;
 }
 
 // 事件加载属性

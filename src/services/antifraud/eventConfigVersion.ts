@@ -9,19 +9,19 @@ export interface ApiResponse<T> {
 
 // 版本控制相关接口
 export interface EventConfigVersion {
-  id: number;
+  id: string;
   eventNo: string;
   versionCode: string;
   versionDesc: string;
-  status: string;
+  status: 'DRAFT' | 'ACTIVE' | 'APPROVED' | 'ARCHIVED';
 
   eventType: string;
   eventGroup: string;
 
   createdDate: string;
   createdBy: string;
-  lastModifiedDate?: string;
-  lastModifiedBy?: string;
+  lastModifiedDate: string;
+  lastModifiedBy: string;
   approvedDate?: string;
   approvedBy?: string;
   activatedDate?: string;
@@ -35,10 +35,7 @@ export interface CreateVersionRequest {
 }
 
 export interface EventConfigVersionInfo {
-  currentPublishedVersion?: EventConfigVersion;
-  workingDraftVersion?: EventConfigVersion;
   versionHistory: EventConfigVersion[];
-  hasUnsavedChanges: boolean;
 }
 
 export interface ConfigChangeLog {
@@ -154,14 +151,16 @@ export const versionApi = {
   },
 
   // 版本回滚
-  rollbackToVersion: async (versionId: string): Promise<void> => {
+  rollbackToVersion: async (versionId: string): Promise<ApiResponse<void>> => {
     const response: ApiResponse<void> = await request(
       `/api/event-config-version/${versionId}/rollback`,
       { method: 'POST' },
     );
+
     if (response.code !== '0') {
       throw new Error(response.message || '版本回滚失败');
     }
+    return response;
   },
 
   // 提交审批
@@ -264,10 +263,7 @@ export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersio
       currentVersion?.status === 'ACTIVE' || currentVersion?.status === 'APPROVED';
 
     const result = {
-      currentPublishedVersion: isPublished ? currentVersion : undefined,
-      workingDraftVersion: isDraft ? currentVersion : undefined,
       versionHistory: versionHistory || [],
-      hasUnsavedChanges: false,
     };
 
     console.log('getVersionInfo 返回结果:', result);
@@ -275,10 +271,7 @@ export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersio
   } catch (error) {
     console.error('获取版本信息失败:', error);
     return {
-      currentPublishedVersion: undefined,
-      workingDraftVersion: undefined,
       versionHistory: [],
-      hasUnsavedChanges: false,
     };
   }
 };

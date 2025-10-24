@@ -31,7 +31,6 @@ export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersio
     console.error('获取版本信息失败:', error);
     return {
       versionHistory: [],
-      hasUnsavedChanges: false,
     };
   }
 };
