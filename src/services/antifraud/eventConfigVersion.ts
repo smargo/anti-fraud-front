@@ -211,33 +211,14 @@ export const versionApi = {
 
 // 版本信息相关函数
 export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersionInfo> => {
-  try {
-    console.log('getVersionInfo 开始，eventNo:', eventNo);
+  console.log('getVersionInfo 开始，eventNo:', eventNo);
+  const versionHistory = await versionApi.getVersionHistory(eventNo);
+  const result = {
+    versionHistory: versionHistory || [],
+  };
 
-    const [currentVersion, versionHistory] = await Promise.all([
-      versionApi.getCurrentVersion(eventNo).catch(() => null), // 如果获取当前版本失败，返回null
-      versionApi.getVersionHistory(eventNo).catch(() => []), // 如果获取版本历史失败，返回空数组
-    ]);
-
-    console.log('getVersionInfo 获取到数据:', { currentVersion, versionHistory });
-
-    // 根据状态判断版本类型
-    const isDraft = currentVersion?.status === 'DRAFT';
-    const isPublished =
-      currentVersion?.status === 'ACTIVE' || currentVersion?.status === 'APPROVED';
-
-    const result = {
-      versionHistory: versionHistory || [],
-    };
-
-    console.log('getVersionInfo 返回结果:', result);
-    return result;
-  } catch (error) {
-    console.error('获取版本信息失败:', error);
-    return {
-      versionHistory: [],
-    };
-  }
+  console.log('getVersionInfo 返回结果:', result);
+  return result;
 };
 
 export const discardDraft = async (draftId: string): Promise<boolean> => {
