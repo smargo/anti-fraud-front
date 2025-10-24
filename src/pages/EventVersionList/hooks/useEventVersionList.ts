@@ -2,9 +2,9 @@
  * EventVersionList 页面自定义 Hooks
  */
 
-import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
-import type { EventVersionItem } from './types';
+import { useRef, useState } from 'react';
+import type { EventVersionItem } from '../types';
 
 export const useEventVersionList = () => {
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
@@ -33,4 +33,3 @@ export const useEventVersionList = () => {
     reloadTable,
   };
 };
-
