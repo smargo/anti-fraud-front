@@ -2,9 +2,9 @@
  * EventDetailForm 组件
  */
 
-import React from 'react';
-import { Form, Input, Button, Space, Row, Col, Select } from 'antd';
 import { convertDictToSelectOptions } from '@/utils/dictUtils';
+import { Button, Col, Form, Input, Row, Select, Space } from 'antd';
+import React from 'react';
 import type { EventDetailFormProps } from '../types';
 
 const { TextArea } = Input;
@@ -46,15 +46,7 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
   const isEdit = !!initialValues;
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      initialValues={initialValues || {
-        eventStatus: 'SUCCESS',
-        retryCount: 0,
-        processTime: 0
-      }}
-    >
+    <Form form={form} layout="vertical" initialValues={initialValues}>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
@@ -83,11 +75,8 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
             label="事件类型"
             rules={isEdit ? [] : [{ required: true, message: '请选择事件类型' }]}
           >
-            <Select 
-              placeholder="请选择事件类型"
-              disabled={isEdit}
-            >
-              {convertDictToSelectOptions(eventTypeOptions).map(option => (
+            <Select placeholder="请选择事件类型" disabled={isEdit}>
+              {convertDictToSelectOptions(eventTypeOptions).map((option) => (
                 <Select.Option key={option.key} value={option.value}>
                   {option.label}
                 </Select.Option>
@@ -111,11 +100,7 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
         label="事件内容"
         rules={isEdit ? [] : [{ required: true, message: '请输入事件内容' }]}
       >
-        <TextArea 
-          disabled={isEdit} 
-          rows={3} 
-          placeholder={isEdit ? '' : '请输入事件内容'}
-        />
+        <TextArea disabled={isEdit} rows={3} placeholder={isEdit ? '' : '请输入事件内容'} />
       </Form.Item>
 
       <Row gutter={16}>
@@ -134,12 +119,8 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
             label="处理状态"
             rules={[{ required: true, message: '请选择处理状态' }]}
           >
-            <Select 
-              placeholder="请选择处理状态"
-              showSearch
-              optionFilterProp="children"
-            >
-              {convertDictToSelectOptions(statusOptions).map(option => (
+            <Select placeholder="请选择处理状态" showSearch optionFilterProp="children">
+              {convertDictToSelectOptions(statusOptions).map((option) => (
                 <Select.Option key={option.key} value={option.value}>
                   {option.label}
                 </Select.Option>
@@ -156,11 +137,8 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
             label="处理结果"
             rules={isEdit ? [] : [{ required: true, message: '请选择处理结果' }]}
           >
-            <Select 
-              placeholder="请选择处理结果"
-              disabled={isEdit}
-            >
-              {convertDictToSelectOptions(resultOptions).map(option => (
+            <Select placeholder="请选择处理结果" disabled={isEdit}>
+              {convertDictToSelectOptions(resultOptions).map((option) => (
                 <Select.Option key={option.key} value={option.value}>
                   {option.label}
                 </Select.Option>
@@ -169,24 +147,14 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            name="rejectCode"
-            label="拒绝代码"
-          >
+          <Form.Item name="rejectCode" label="拒绝代码">
             <Input disabled={isEdit} placeholder={isEdit ? '' : '请输入拒绝代码（可选）'} />
           </Form.Item>
         </Col>
       </Row>
 
-      <Form.Item
-        name="resultContent"
-        label="结果内容"
-      >
-        <TextArea 
-          disabled={isEdit} 
-          rows={3} 
-          placeholder={isEdit ? '' : '请输入结果内容（可选）'}
-        />
+      <Form.Item name="resultContent" label="结果内容">
+        <TextArea disabled={isEdit} rows={3} placeholder={isEdit ? '' : '请输入结果内容（可选）'} />
       </Form.Item>
 
       <Row gutter={16}>
@@ -196,11 +164,7 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
             label="处理时间(ms)"
             rules={isEdit ? [] : [{ required: true, message: '请输入处理时间' }]}
           >
-            <Input 
-              disabled={isEdit} 
-              type="number" 
-              placeholder={isEdit ? '' : '请输入处理时间'}
-            />
+            <Input disabled={isEdit} type="number" placeholder={isEdit ? '' : '请输入处理时间'} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -209,24 +173,13 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
             label="重试次数"
             rules={isEdit ? [] : [{ required: true, message: '请输入重试次数' }]}
           >
-            <Input 
-              disabled={isEdit} 
-              type="number" 
-              placeholder={isEdit ? '' : '请输入重试次数'}
-            />
+            <Input disabled={isEdit} type="number" placeholder={isEdit ? '' : '请输入重试次数'} />
           </Form.Item>
         </Col>
       </Row>
 
-      <Form.Item
-        name="errorMessage"
-        label="错误信息"
-      >
-        <TextArea 
-          disabled={isEdit} 
-          rows={2} 
-          placeholder={isEdit ? '' : '请输入错误信息（可选）'}
-        />
+      <Form.Item name="errorMessage" label="错误信息">
+        <TextArea disabled={isEdit} rows={2} placeholder={isEdit ? '' : '请输入错误信息（可选）'} />
       </Form.Item>
 
       <Form.Item>
@@ -242,4 +195,3 @@ const EventDetailForm: React.FC<EventDetailFormProps> = ({
 };
 
 export default EventDetailForm;
-
