@@ -25,7 +25,7 @@ import {
   queryEventIndicatorsWithNames,
 } from '../../services/eventIndicatorConfigApi';
 import { indicatorApi, IndicatorDO } from '../../services/indicatorApi';
-import { statementApi, StatementDO } from '../../services/statementApi';
+import { statementApi, StatementVO } from '../../services/statementApi';
 import type { EventIndicatorConfigTabProps, EventIndicatorItem } from '../../types';
 import EventIndicatorModal from './EventIndicatorModal';
 
@@ -42,7 +42,7 @@ const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
   // 指标详情弹窗状态
   const [indicatorDetailVisible, setIndicatorDetailVisible] = React.useState(false);
   const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorDO | null>(null);
-  const [selectedStatement, setSelectedStatement] = React.useState<StatementDO | null>(null);
+  const [selectedStatement, setSelectedStatement] = React.useState<StatementVO | null>(null);
   const [selectedDataSource, setSelectedDataSource] = React.useState<DataSourceDO | null>(null);
 
   // 显示指标详情

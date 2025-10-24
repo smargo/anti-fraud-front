@@ -2,9 +2,9 @@
  * IndicatorForm 组件
  */
 
-import React, { useState } from 'react';
-import { Form, Input, Button, Space, Select, message } from 'antd';
 import { statementApi, StatementDO } from '@/services/antifraud/statement';
+import { Button, Form, Input, message, Select, Space } from 'antd';
+import React, { useState } from 'react';
 import type { IndicatorFormProps } from '../types';
 
 const { TextArea } = Input;
@@ -33,10 +33,10 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
       setStatementOptions([]);
       return;
     }
-    
+
     setStatementSearchLoading(true);
     try {
-      const response = await statementApi.search(value, 1, 20);
+      const response = await statementApi.statementSearch(value, 1, 20);
       setStatementOptions(response.data || []);
     } catch (error) {
       console.error('搜索语句失败:', error);
@@ -57,24 +57,16 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-    >
+    <Form form={form} layout="vertical">
       <Form.Item
         name="indicatorNo"
         label="指标编号"
         rules={[
           { required: true, message: '请输入指标编号' },
-          { max: 128, message: '指标编号不能超过128个字符' }
+          { max: 128, message: '指标编号不能超过128个字符' },
         ]}
       >
-        <Input 
-          placeholder="请输入指标编号" 
-          disabled={!!initialValues}
-          maxLength={128}
-          showCount
-        />
+        <Input placeholder="请输入指标编号" disabled={!!initialValues} maxLength={128} showCount />
       </Form.Item>
 
       <Form.Item
@@ -82,14 +74,10 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
         label="指标名称"
         rules={[
           { required: true, message: '请输入指标名称' },
-          { max: 256, message: '指标名称不能超过256个字符' }
+          { max: 256, message: '指标名称不能超过256个字符' },
         ]}
       >
-        <Input 
-          placeholder="请输入指标名称" 
-          maxLength={256}
-          showCount
-        />
+        <Input placeholder="请输入指标名称" maxLength={256} showCount />
       </Form.Item>
 
       <Form.Item
@@ -97,11 +85,7 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
         label="指标描述"
         rules={[{ max: 512, message: '指标描述不能超过512个字符' }]}
       >
-        <Input 
-          placeholder="请输入指标描述" 
-          maxLength={512}
-          showCount
-        />
+        <Input placeholder="请输入指标描述" maxLength={512} showCount />
       </Form.Item>
 
       <Form.Item
@@ -109,14 +93,10 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
         label="指标字段"
         rules={[
           { required: true, message: '请输入指标字段' },
-          { max: 128, message: '指标字段不能超过128个字符' }
+          { max: 128, message: '指标字段不能超过128个字符' },
         ]}
       >
-        <Input 
-          placeholder="请输入指标字段" 
-          maxLength={128}
-          showCount
-        />
+        <Input placeholder="请输入指标字段" maxLength={128} showCount />
       </Form.Item>
 
       <Form.Item
@@ -124,14 +104,10 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
         label="查询字段"
         rules={[
           { required: true, message: '请输入查询字段' },
-          { max: 128, message: '查询字段不能超过128个字符' }
+          { max: 128, message: '查询字段不能超过128个字符' },
         ]}
       >
-        <Input 
-          placeholder="请输入查询字段" 
-          maxLength={128}
-          showCount
-        />
+        <Input placeholder="请输入查询字段" maxLength={128} showCount />
       </Form.Item>
 
       <Form.Item
@@ -139,7 +115,7 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
         label="查询编号"
         rules={[
           { required: true, message: '请选择查询编号' },
-          { max: 128, message: '查询编号不能超过128个字符' }
+          { max: 128, message: '查询编号不能超过128个字符' },
         ]}
       >
         <Select
@@ -173,4 +149,3 @@ const IndicatorForm: React.FC<IndicatorFormProps> = ({
 };
 
 export default IndicatorForm;
-

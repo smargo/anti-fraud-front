@@ -4,7 +4,7 @@
 
 import { Form, message, Modal, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { statementApi, StatementDO } from '../../services/statementApi';
+import { statementApi } from '../../services/statementApi';
 import type { StatementDependencyModalProps } from '../../types';
 
 const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({

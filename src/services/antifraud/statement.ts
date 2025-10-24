@@ -1,3 +1,5 @@
+import { StatementVO } from '@/pages/EventConfigNew/services/statementApi';
+import { ApiResponse, ResultPage } from '@/pages/EventConfigNew/types';
 import { request } from '@umijs/max';
 
 export interface StatementDO {
@@ -30,7 +32,7 @@ export interface StatementQueryVO {
 
 export const statementApi = {
   // 根据ID获取语句
-  getById: async (id: number): Promise<StatementDO> => {
+  getById: async (id: number): Promise<ApiResponse<StatementDO>> => {
     const response = await request(`/api/statements/${id}`, {
       method: 'GET',
     });
@@ -38,7 +40,7 @@ export const statementApi = {
   },
 
   // 根据语句编号获取语句
-  getByStatementNo: async (statementNo: string): Promise<StatementDO> => {
+  getByStatementNo: async (statementNo: string): Promise<ApiResponse<StatementDO>> => {
     const response = await request(`/api/statements/by-statement-no/${statementNo}`, {
       method: 'GET',
     });
@@ -46,14 +48,7 @@ export const statementApi = {
   },
 
   // 分页查询语句
-  list: async (
-    params: StatementQueryVO,
-  ): Promise<{
-    records: StatementDO[];
-    total: number;
-    current: number;
-    pageSize: number;
-  }> => {
+  statementPage: async (params: StatementQueryVO): Promise<ResultPage<StatementVO>> => {
     const response = await request('/api/statements/list', {
       method: 'GET',
       params,
@@ -62,7 +57,7 @@ export const statementApi = {
   },
 
   // 创建语句
-  create: async (statement: Partial<StatementDO>) => {
+  createStatement: async (statement: Partial<StatementDO>) => {
     const response = await request('/api/statements', {
       method: 'POST',
       data: statement,
@@ -71,7 +66,7 @@ export const statementApi = {
   },
 
   // 更新语句
-  update: async (id: number, statement: Partial<StatementDO>) => {
+  updateStatement: async (id: number, statement: Partial<StatementDO>) => {
     const response = await request(`/api/statements/${id}`, {
       method: 'PUT',
       data: statement,
@@ -80,7 +75,7 @@ export const statementApi = {
   },
 
   // 删除语句
-  delete: async (id: number) => {
+  deleteStatement: async (id: number): Promise<ApiResponse<boolean>> => {
     const response = await request(`/api/statements/${id}`, {
       method: 'DELETE',
     });
@@ -100,16 +95,11 @@ export const statementApi = {
   },
 
   // 搜索语句（支持按编号和描述模糊搜索）
-  search: async (
+  statementSearch: async (
     keyword: string = '',
     current: number = 1,
     pageSize: number = 20,
-  ): Promise<{
-    data: StatementDO[];
-    total: number;
-    current: number;
-    pageSize: number;
-  }> => {
+  ): Promise<ResultPage<StatementDO>> => {
     const response = await request('/api/statements/search', {
       method: 'GET',
       params: { keyword, current, pageSize },

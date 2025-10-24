@@ -297,9 +297,13 @@ export interface ApiResponse<T = any> {
   code: string;
   message: string;
   data?: T;
-  records?: T[];
-  total?: number;
-  success?: boolean;
+}
+
+// 通用API响应
+export interface ResultPage<T = any> {
+  success: boolean;
+  total: number;
+  data?: T[];
 }
 
 // 分页参数

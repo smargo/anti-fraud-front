@@ -2,12 +2,12 @@
  * StatementTable 组件
  */
 
-import React from 'react';
-import { ProTable } from '@ant-design/pro-table';
-import { Button, Card, Space, Tooltip, Popconfirm } from 'antd';
+import { statementApi } from '@/services/antifraud/statement';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-components';
-import { statementApi } from '@/services/antifraud/statement';
+import { ProTable } from '@ant-design/pro-table';
+import { Button, Card, Popconfirm, Space, Tooltip } from 'antd';
+import React from 'react';
 import type { StatementItem } from '../types';
 
 interface StatementTableProps {
@@ -48,12 +48,14 @@ const StatementTable: React.FC<StatementTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '180px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '180px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text || '无'}
             </div>
           </Tooltip>
@@ -81,7 +83,7 @@ const StatementTable: React.FC<StatementTableProps> = ({
       width: 120,
       search: false,
     },
-    
+
     {
       title: '参数定义',
       dataIndex: 'statementParam',
@@ -91,12 +93,14 @@ const StatementTable: React.FC<StatementTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '180px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '180px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text || '无'}
             </div>
           </Tooltip>
@@ -113,12 +117,14 @@ const StatementTable: React.FC<StatementTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '100px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '100px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text || '无'}
             </div>
           </Tooltip>
@@ -133,9 +139,7 @@ const StatementTable: React.FC<StatementTableProps> = ({
       width: 200,
       render: (_: any, record: StatementItem) => (
         <Space size="middle">
-          <a onClick={() => onView(record)}>
-            查看
-          </a>
+          <a onClick={() => onView(record)}>查看</a>
           <a onClick={() => onEdit(record)}>编辑</a>
           <Popconfirm
             title="确定要删除这个处理语句吗？"
@@ -156,12 +160,7 @@ const StatementTable: React.FC<StatementTableProps> = ({
         cardBordered
         actionRef={actionRef}
         toolBarRender={() => [
-          <Button
-            key="add"
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={onAdd}
-          >
+          <Button key="add" type="primary" icon={<PlusOutlined />} onClick={onAdd}>
             新增处理语句
           </Button>,
         ]}
@@ -170,8 +169,8 @@ const StatementTable: React.FC<StatementTableProps> = ({
           const searchParams = {
             ...params,
           };
-          
-          const response = await statementApi.list(searchParams);
+
+          const response = await statementApi.statementPage(searchParams);
           // 如果返回的是分页对象，直接返回
           return response;
         }}
@@ -188,4 +187,3 @@ const StatementTable: React.FC<StatementTableProps> = ({
 };
 
 export default StatementTable;
-
