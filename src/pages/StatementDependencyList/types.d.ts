@@ -3,36 +3,15 @@
  */
 
 export interface StatementDependencyItem {
-  id?: number;
+  id: string;
   eventNo: string;
-  versionCode: string;
-  dependencyNo: string;
-  dependencyName: string;
-  dependencyDesc?: string;
-  dependencyType: string;
-  dependencyContent?: string;
+  statementNo: string;
+  dependStatementNo: string;
+  statementDesc?: string;
+  dependStatementDesc?: string;
+  versionCode?: string;
   createdDate: string;
-  createdBy?: string;
-  lastModifiedDate?: string;
-  lastModifiedBy?: string;
+  lastModifiedDate: string;
+  createdBy: string;
+  lastModifiedBy: string;
 }
-
-export interface StatementDependencyFormValues {
-  eventNo: string;
-  versionCode: string;
-  dependencyNo: string;
-  dependencyName: string;
-  dependencyDesc?: string;
-  dependencyType: string;
-  dependencyContent?: string;
-}
-
-export interface StatementDependencyFormProps {
-  initialValues?: StatementDependencyItem | null;
-  onSubmit: (values: StatementDependencyFormValues) => Promise<void>;
-  onCancel: () => void;
-  dependencyTypeOptions: any[];
-  isEdit?: boolean;
-  forceReset?: boolean;
-}
-
