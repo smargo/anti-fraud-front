@@ -20,7 +20,7 @@ export const formatDateTime = (date: string, separator: string = '-') => {
  */
 export const handleIndicatorDelete = async (indicatorId: number, onSuccess?: () => void) => {
   try {
-    const response = await indicatorApi.delete(indicatorId);
+    const response = await indicatorApi.deleteIndicator(indicatorId);
     if (response.code === '0') {
       message.success('删除成功');
       onSuccess?.();
@@ -46,7 +46,7 @@ export const handleIndicatorFormSubmit = async (
 ) => {
   try {
     if (editingIndicator) {
-      const response = await indicatorApi.update(editingIndicator.id, values);
+      const response = await indicatorApi.updateIndicator(editingIndicator.id, values);
       if (response.code === '0') {
         message.success('更新成功');
       } else {
@@ -54,7 +54,7 @@ export const handleIndicatorFormSubmit = async (
         return;
       }
     } else {
-      const response = await indicatorApi.create(values);
+      const response = await indicatorApi.createIndicator(values);
       if (response.code === '0') {
         message.success('创建成功');
       } else {

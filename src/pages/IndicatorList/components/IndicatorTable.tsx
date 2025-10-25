@@ -2,12 +2,12 @@
  * IndicatorTable 组件
  */
 
-import React from 'react';
-import { ProTable } from '@ant-design/pro-table';
-import { Button, Space, Card, Tooltip, Popconfirm } from 'antd';
+import { indicatorApi } from '@/services/antifraud/indicator';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-components';
-import { indicatorApi } from '@/services/antifraud/indicator';
+import { ProTable } from '@ant-design/pro-table';
+import { Button, Card, Popconfirm, Space, Tooltip } from 'antd';
+import React from 'react';
 import type { IndicatorItem } from '../types';
 
 interface IndicatorTableProps {
@@ -46,12 +46,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '180px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '180px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text}
             </div>
           </Tooltip>
@@ -71,12 +73,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '140px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '140px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text || '无'}
             </div>
           </Tooltip>
@@ -93,12 +97,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '100px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '100px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text}
             </div>
           </Tooltip>
@@ -115,12 +121,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
       render: (text: string) => {
         return (
           <Tooltip placement="topLeft">
-            <div style={{ 
-              maxWidth: '100px', 
-              overflow: 'hidden', 
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
+            <div
+              style={{
+                maxWidth: '100px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {text}
             </div>
           </Tooltip>
@@ -142,9 +150,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
       width: 200,
       render: (_: any, record: IndicatorItem) => (
         <Space size="middle">
-          <a onClick={() => onView(record)}>
-            查看
-          </a>
+          <a onClick={() => onView(record)}>查看</a>
           <a onClick={() => onEdit(record)}>编辑</a>
           <Popconfirm
             title="确定要删除这个指标吗？"
@@ -165,12 +171,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
         cardBordered
         actionRef={actionRef}
         toolBarRender={() => [
-          <Button
-            key="add"
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={onAdd}
-          >
+          <Button key="add" type="primary" icon={<PlusOutlined />} onClick={onAdd}>
             新增指标
           </Button>,
         ]}
@@ -179,8 +180,8 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
           const searchParams = {
             ...params,
           };
-          
-          const response = await indicatorApi.list(searchParams);
+
+          const response = await indicatorApi.indicatorPage(searchParams);
 
           // 如果返回的是分页对象，直接返回
           return response;
@@ -198,4 +199,3 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({
 };
 
 export default IndicatorTable;
-

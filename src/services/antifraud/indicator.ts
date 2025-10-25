@@ -1,29 +1,10 @@
+import { IndicatorItem, IndicatorQueryVO } from '@/pages/IndicatorList/types';
+import { ApiResponse } from '@/types';
 import { request } from '@umijs/max';
-
-export interface IndicatorItem {
-  id: number;
-  indicatorNo: string;
-  indicatorName: string;
-  indicatorDesc?: string;
-  indicatorField?: string;
-  queryField?: string;
-  queryNo?: string;
-  createdDate: string;
-  createdBy?: string;
-  lastModifiedDate?: string;
-  lastModifiedBy?: string;
-}
-
-export interface IndicatorQueryVO {
-  indicatorNo?: string;
-  indicatorName?: string;
-  current?: number;
-  pageSize?: number;
-}
 
 export const indicatorApi = {
   // 根据ID获取指标
-  getById: async (id: number): Promise<IndicatorItem> => {
+  getById: async (id: number): Promise<ApiResponse<IndicatorItem>> => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'GET',
     });
@@ -31,7 +12,7 @@ export const indicatorApi = {
   },
 
   // 根据指标编号获取指标
-  getByIndicatorNo: async (indicatorNo: string): Promise<IndicatorItem> => {
+  getByIndicatorNo: async (indicatorNo: string): Promise<ApiResponse<IndicatorItem>> => {
     const response = await request(`/api/indicators/by-indicator-no/${indicatorNo}`, {
       method: 'GET',
     });
@@ -39,7 +20,7 @@ export const indicatorApi = {
   },
 
   // 分页查询指标
-  list: async (
+  indicatorPage: async (
     params: IndicatorQueryVO,
   ): Promise<{
     records: IndicatorItem[];
@@ -55,7 +36,7 @@ export const indicatorApi = {
   },
 
   // 创建指标
-  create: async (indicator: Partial<IndicatorItem>) => {
+  createIndicator: async (indicator: Partial<IndicatorItem>) => {
     const response = await request('/api/indicators', {
       method: 'POST',
       data: indicator,
@@ -64,7 +45,7 @@ export const indicatorApi = {
   },
 
   // 更新指标
-  update: async (id: number, indicator: Partial<IndicatorItem>) => {
+  updateIndicator: async (id: number, indicator: Partial<IndicatorItem>) => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'PUT',
       data: indicator,
@@ -73,27 +54,9 @@ export const indicatorApi = {
   },
 
   // 删除指标
-  delete: async (id: number) => {
+  deleteIndicator: async (id: number) => {
     const response = await request(`/api/indicators/${id}`, {
       method: 'DELETE',
-    });
-    return response;
-  },
-
-  // 搜索指标（支持按编号和名称模糊搜索）
-  search: async (
-    keyword: string = '',
-    current: number = 1,
-    pageSize: number = 20,
-  ): Promise<{
-    records: IndicatorItem[];
-    total: number;
-    current: number;
-    pageSize: number;
-  }> => {
-    const response = await request('/api/indicators/search', {
-      method: 'GET',
-      params: { keyword, current, pageSize },
     });
     return response;
   },

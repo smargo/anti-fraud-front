@@ -4,6 +4,7 @@
 
 import { DataSourceItem } from '@/pages/DataSourceList/types';
 import { EventIndicatorItem } from '@/pages/EventIndicatorList/types';
+import { IndicatorItem } from '@/pages/IndicatorList/types';
 import { dataSourceApi } from '@/services/antifraud/datasource';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
@@ -26,7 +27,7 @@ import {
   deleteEventIndicator,
   queryEventIndicatorsWithNames,
 } from '../../services/eventIndicatorConfigApi';
-import { indicatorApi, IndicatorVO } from '../../services/indicatorApi';
+import { indicatorApi } from '../../services/indicatorApi';
 import { statementApi, StatementVO } from '../../services/statementApi';
 import type { EventIndicatorConfigTabProps } from '../../types';
 import EventIndicatorModal from './EventIndicatorModal';
@@ -43,7 +44,7 @@ const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
 
   // 指标详情弹窗状态
   const [indicatorDetailVisible, setIndicatorDetailVisible] = React.useState(false);
-  const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorVO | null>(null);
+  const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorItem | null>(null);
   const [selectedStatement, setSelectedStatement] = React.useState<StatementVO | null>(null);
   const [selectedDataSource, setSelectedDataSource] = React.useState<DataSourceItem | null>(null);
 

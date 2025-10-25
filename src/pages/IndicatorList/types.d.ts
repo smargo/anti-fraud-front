@@ -16,6 +16,13 @@ export interface IndicatorItem {
   lastModifiedBy: string;
 }
 
+export interface IndicatorQueryVO {
+  indicatorNo?: string;
+  indicatorName?: string;
+  current?: number;
+  pageSize?: number;
+}
+
 export interface IndicatorFormValues {
   indicatorNo: string;
   indicatorName: string;
@@ -31,4 +38,3 @@ export interface IndicatorFormProps {
   onCancel: () => void;
   forceReset?: boolean;
 }
-

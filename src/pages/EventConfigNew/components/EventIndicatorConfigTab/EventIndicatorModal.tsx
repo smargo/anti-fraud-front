@@ -2,10 +2,11 @@
  * 事件指标编辑Modal组件 - 完全按照原页面逻辑实现
  */
 
+import { IndicatorItem } from '@/pages/IndicatorList/types';
 import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { createEventIndicator, updateEventIndicator } from '../../services/eventIndicatorConfigApi';
-import { indicatorApi, IndicatorVO } from '../../services/indicatorApi';
+import { indicatorApi } from '../../services/indicatorApi';
 import type { EventIndicatorModalProps } from '../../types';
 
 const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
@@ -18,7 +19,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
   onCancel,
 }) => {
   const [form] = Form.useForm();
-  const [indicatorOptions, setIndicatorOptions] = useState<IndicatorVO[]>([]);
+  const [indicatorOptions, setIndicatorOptions] = useState<IndicatorItem[]>([]);
   const [indicatorSearchLoading, setIndicatorSearchLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +32,7 @@ const EventIndicatorModal: React.FC<EventIndicatorModalProps> = ({
 
     setIndicatorSearchLoading(true);
     try {
-      const response = await indicatorApi.search(value, 1, 20);
+      const response = await indicatorApi.searchIndicator(value, 1, 20);
       setIndicatorOptions(response.data || []);
     } catch (error: any) {
       console.error('搜索指标失败:', error);
