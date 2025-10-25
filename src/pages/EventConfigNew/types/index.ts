@@ -7,6 +7,7 @@ import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
 import { DeriveFieldFormValues } from '@/pages/EventConfigNew/types/deriveFieldTypes';
 import { EventIndicatorItem } from '@/pages/EventIndicatorList/types';
 import { EventItem } from '@/pages/EventList/types';
+import { FieldItem } from '@/pages/FieldList/types';
 
 export * from './deriveFieldTypes';
 export * from './eventIndicatorTypes';

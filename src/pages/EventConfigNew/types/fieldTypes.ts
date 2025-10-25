@@ -1,39 +1,7 @@
 /**
  * 字段配置相关类型定义
  */
-
-// 字段项
-export interface FieldItem {
-  id: string;
-  eventNo: string;
-  versionCode: string;
-  fieldName: string;
-  fieldType: string;
-  fieldDesc: string;
-  validateRegex: string;
-  validateScript: string;
-  required: boolean;
-  createdDate: string;
-  createdBy: string;
-  lastModifiedDate: string;
-  lastModifiedBy: string;
-}
-
-export interface FieldItemPageResponse {
-  success: boolean;
-  total: number;
-  data: FieldItem[];
-}
-
-// 字段表单值
-export interface FieldFormValues {
-  fieldName: string;
-  fieldType: string;
-  fieldDesc: string;
-  validateRegex: string;
-  validateScript: string;
-  required: boolean;
-}
+import { FieldItem } from '@/pages/FieldList/types';
 
 // 字段配置状态
 export interface FieldConfigState {

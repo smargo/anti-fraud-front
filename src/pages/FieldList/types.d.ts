@@ -3,7 +3,7 @@
  */
 
 export interface FieldItem {
-  id?: number;
+  id?: string;
   eventNo: string;
   versionCode: string;
   fieldName: string;
@@ -15,22 +15,3 @@ export interface FieldItem {
   lastModifiedDate?: string;
   lastModifiedBy?: string;
 }
-
-export interface FieldFormValues {
-  eventNo: string;
-  versionCode: string;
-  fieldName: string;
-  fieldType: string;
-  fieldDesc?: string;
-  validateScript?: string;
-}
-
-export interface FieldFormProps {
-  initialValues?: FieldItem | null;
-  onSubmit: (values: FieldFormValues) => Promise<void>;
-  onCancel: () => void;
-  fieldTypeOptions: any[];
-  isEdit?: boolean;
-  forceReset?: boolean;
-}
-

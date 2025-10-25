@@ -2,16 +2,16 @@
  * 字段配置API服务
  */
 
-import { ApiResponse } from '@/types/index';
+import { FieldItem } from '@/pages/FieldList/types';
+import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
-import type { FieldFormValues, FieldItem, PaginationParams } from '../types';
-import { FieldItemPageResponse } from '../types';
+import type { PaginationParams } from '../types';
 
 // 查询字段列表
 export const queryEventFields = async (
   params: PaginationParams,
-): Promise<FieldItemPageResponse> => {
-  const page: FieldItemPageResponse = await request('/api/eventFields/list', {
+): Promise<ResultPage<FieldItem>> => {
+  const page: ResultPage<FieldItem> = await request('/api/eventFields/list', {
     method: 'GET',
     params,
   });
@@ -19,9 +19,7 @@ export const queryEventFields = async (
 };
 
 // 创建字段
-export const createEventField = async (
-  values: FieldFormValues,
-): Promise<ApiResponse<FieldItem>> => {
+export const createEventField = async (values: FieldItem): Promise<ApiResponse<boolean>> => {
   return await request('/api/eventFields', {
     method: 'POST',
     data: values,
@@ -31,8 +29,8 @@ export const createEventField = async (
 // 更新字段
 export const updateEventField = async (
   id: string,
-  values: FieldFormValues,
-): Promise<ApiResponse<FieldItem>> => {
+  values: FieldItem,
+): Promise<ApiResponse<boolean>> => {
   return await request(`/api/eventFields/${id}`, {
     method: 'PUT',
     data: values,
@@ -40,7 +38,7 @@ export const updateEventField = async (
 };
 
 // 删除字段
-export const deleteEventField = async (id: string): Promise<ApiResponse> => {
+export const deleteEventField = async (id: string): Promise<ApiResponse<boolean>> => {
   return await request(`/api/eventFields/${id}`, {
     method: 'DELETE',
   });

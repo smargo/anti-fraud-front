@@ -2,6 +2,7 @@
  * 字段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
+import { FieldItem } from '@/pages/FieldList/types';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
@@ -9,7 +10,7 @@ import { Button, message, Popconfirm, Space, Tooltip } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { deleteEventField, queryEventFields } from '../../services/fieldConfigApi';
-import type { FieldConfigTabProps, FieldItem } from '../../types';
+import type { FieldConfigTabProps } from '../../types';
 import FieldModal from './FieldModal';
 import FieldViewModal from './FieldViewModal';
 
