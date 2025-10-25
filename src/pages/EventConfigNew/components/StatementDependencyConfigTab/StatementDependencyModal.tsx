@@ -2,9 +2,10 @@
  * 语句依赖编辑弹窗组件
  */
 
+import { StatementItem } from '@/pages/StatementList/types';
 import { Form, message, Modal, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { statementApi, StatementVO } from '../../services/statementApi';
+import { statementApi } from '../../services/statementApi';
 import type { StatementDependencyModalProps } from '../../types';
 
 const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
@@ -17,7 +18,7 @@ const StatementDependencyModal: React.FC<StatementDependencyModalProps> = ({
   onCancel,
 }) => {
   const [form] = Form.useForm();
-  const [statementOptions, setStatementOptions] = useState<StatementVO[]>([]);
+  const [statementOptions, setStatementOptions] = useState<StatementItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedStatementNo, setSelectedStatementNo] = useState<string | undefined>(undefined);
 

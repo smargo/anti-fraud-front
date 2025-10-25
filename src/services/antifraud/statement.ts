@@ -1,18 +1,10 @@
-import { StatementVO } from '@/pages/EventConfigNew/services/statementApi';
+import { StatementItem, StatementQueryVO } from '@/pages/StatementList/types';
 import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
 
-export interface StatementQueryVO {
-  statementNo?: string;
-  dataSourceNo?: string;
-  keyword?: string;
-  current?: number;
-  pageSize?: number;
-}
-
 export const statementApi = {
   // 根据ID获取语句
-  getById: async (id: number): Promise<ApiResponse<StatementVO>> => {
+  getById: async (id: number): Promise<ApiResponse<StatementItem>> => {
     const response = await request(`/api/statements/${id}`, {
       method: 'GET',
     });
@@ -20,7 +12,7 @@ export const statementApi = {
   },
 
   // 根据语句编号获取语句
-  getByStatementNo: async (statementNo: string): Promise<ApiResponse<StatementVO>> => {
+  getByStatementNo: async (statementNo: string): Promise<ApiResponse<StatementItem>> => {
     const response = await request(`/api/statements/by-statement-no/${statementNo}`, {
       method: 'GET',
     });
@@ -28,7 +20,7 @@ export const statementApi = {
   },
 
   // 分页查询语句
-  statementPage: async (params: StatementQueryVO): Promise<ResultPage<StatementVO>> => {
+  statementPage: async (params: StatementQueryVO): Promise<ResultPage<StatementItem>> => {
     const response = await request('/api/statements/list', {
       method: 'GET',
       params,
@@ -37,7 +29,7 @@ export const statementApi = {
   },
 
   // 创建语句
-  createStatement: async (statement: Partial<StatementVO>) => {
+  createStatement: async (statement: Partial<StatementItem>) => {
     const response = await request('/api/statements', {
       method: 'POST',
       data: statement,
@@ -46,7 +38,7 @@ export const statementApi = {
   },
 
   // 更新语句
-  updateStatement: async (id: number, statement: Partial<StatementVO>) => {
+  updateStatement: async (id: number, statement: Partial<StatementItem>) => {
     const response = await request(`/api/statements/${id}`, {
       method: 'PUT',
       data: statement,
@@ -67,7 +59,7 @@ export const statementApi = {
     keyword: string = '',
     current: number = 1,
     pageSize: number = 20,
-  ): Promise<ResultPage<StatementVO>> => {
+  ): Promise<ResultPage<StatementItem>> => {
     const response = await request('/api/statements/search', {
       method: 'GET',
       params: { keyword, current, pageSize },

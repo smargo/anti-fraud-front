@@ -3,7 +3,7 @@
  */
 
 export interface StatementItem {
-  id?: number;
+  id?: string;
   statementNo: string;
   statementDesc?: string;
   dataSourceNo?: string;
@@ -15,11 +15,19 @@ export interface StatementItem {
   mongoOperationType?: string;
   mongoDatabase?: string;
   mongoCollection?: string;
-  
+
   createdDate: string;
   createdBy?: string;
   lastModifiedDate?: string;
   lastModifiedBy?: string;
+}
+
+export interface StatementQueryVO {
+  statementNo?: string;
+  dataSourceNo?: string;
+  keyword?: string;
+  current?: number;
+  pageSize?: number;
 }
 
 export interface StatementFormValues {
@@ -43,4 +51,3 @@ export interface StatementFormProps {
   loading?: boolean;
   forceReset?: boolean;
 }
-
