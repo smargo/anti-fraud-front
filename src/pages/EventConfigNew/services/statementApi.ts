@@ -1,4 +1,4 @@
-import { ApiResponse } from '@/pages/EventConfigNew/types';
+import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
 
 export interface StatementVO {

@@ -2,13 +2,9 @@
  * 事件指标API服务
  */
 
+import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
-import type {
-  ApiResponse,
-  EventIndicatorFormValues,
-  EventIndicatorItem,
-  PaginationParams,
-} from '../types';
+import type { EventIndicatorFormValues, EventIndicatorItem, PaginationParams } from '../types';
 
 // 查询事件指标列表
 export const queryEventIndicators = async (

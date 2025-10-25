@@ -1,5 +1,5 @@
 import { StatementVO } from '@/pages/EventConfigNew/services/statementApi';
-import { ApiResponse, ResultPage } from '@/pages/EventConfigNew/types';
+import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
 
 export interface StatementQueryVO {
@@ -58,18 +58,6 @@ export const statementApi = {
   deleteStatement: async (id: number): Promise<ApiResponse<boolean>> => {
     const response = await request(`/api/statements/${id}`, {
       method: 'DELETE',
-    });
-    return response;
-  },
-
-  // 根据事件编号和版本代码获取语句列表
-  getByEventNoAndVersionCode: async (
-    eventNo: string,
-    versionCode: string,
-  ): Promise<StatementVO[]> => {
-    const response = await request('/api/statements/by-event-no-and-version-code', {
-      method: 'GET',
-      params: { eventNo, versionCode },
     });
     return response;
   },

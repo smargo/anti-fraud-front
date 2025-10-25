@@ -1,12 +1,5 @@
-import { ResultPage } from '@/pages/EventConfigNew/types';
+import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
-
-// API响应格式
-export interface ApiResponse<T> {
-  code: string;
-  message: string;
-  data: T;
-}
 
 // 版本控制相关接口
 export interface EventConfigVersion {

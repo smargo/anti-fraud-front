@@ -1,4 +1,4 @@
-import { ResultPage } from '@/pages/EventConfigNew/types';
+import { ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
 
 // 语句依赖接口

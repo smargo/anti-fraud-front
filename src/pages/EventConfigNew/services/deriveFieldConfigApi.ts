@@ -2,13 +2,9 @@
  * 衍生字段API服务
  */
 
+import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
-import type {
-  ApiResponse,
-  DeriveFieldFormValues,
-  DeriveFieldItem,
-  PaginationParams,
-} from '../types';
+import type { DeriveFieldFormValues, DeriveFieldItem, PaginationParams } from '../types';
 import { DeriveFieldItemPageResponse } from '../types';
 
 // 查询衍生字段列表

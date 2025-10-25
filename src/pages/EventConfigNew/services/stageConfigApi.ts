@@ -2,8 +2,9 @@
  * 阶段配置API服务
  */
 
+import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
-import type { ApiResponse, PaginationParams, StageFormValues, StageItem } from '../types';
+import type { PaginationParams, StageFormValues, StageItem } from '../types';
 import { StageItemPageResponse } from '../types';
 
 // 查询阶段列表

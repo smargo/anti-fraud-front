@@ -291,20 +291,6 @@ export interface BasicInfoFormValues {
   eventGroup: string;
 }
 
-// 通用API响应
-export interface ApiResponse<T = any> {
-  code: string;
-  message: string;
-  data?: T;
-}
-
-// 通用API响应
-export interface ResultPage<T = any> {
-  success: boolean;
-  total: number;
-  data?: T[];
-}
-
 // 分页参数
 export interface PaginationParams {
   current?: number;

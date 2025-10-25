@@ -2,8 +2,9 @@
  * 字段配置API服务
  */
 
+import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
-import type { ApiResponse, FieldFormValues, FieldItem, PaginationParams } from '../types';
+import type { FieldFormValues, FieldItem, PaginationParams } from '../types';
 import { FieldItemPageResponse } from '../types';
 
 // 查询字段列表

@@ -2,9 +2,9 @@
  * 语句依赖API服务
  */
 
+import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
 import type {
-  ApiResponse,
   PaginationParams,
   StatementDependencyFormValues,
   StatementDependencyItem,

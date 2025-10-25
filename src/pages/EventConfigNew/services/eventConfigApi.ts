@@ -6,13 +6,9 @@ import {
   getVersionInfo as getVersionInfoFromApi,
   versionApi,
 } from '@/services/antifraud/eventConfigVersion';
+import { ApiResponse } from '@/types/index';
 import { request } from 'umi';
-import type {
-  ApiResponse,
-  BasicInfoFormValues,
-  EventConfigVersion,
-  EventConfigVersionInfo,
-} from '../types';
+import type { BasicInfoFormValues, EventConfigVersion, EventConfigVersionInfo } from '../types';
 import { EventDetailItem } from '../types';
 
 // 获取事件详情 - 完全按照原页面逻辑
