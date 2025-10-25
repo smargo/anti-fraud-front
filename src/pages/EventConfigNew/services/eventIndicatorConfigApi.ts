@@ -2,51 +2,29 @@
  * 事件指标API服务
  */
 
-import { ApiResponse } from '@/types/index';
+import { EventIndicatorItem } from '@/pages/EventIndicatorList/types';
+import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
-import type { EventIndicatorFormValues, EventIndicatorItem, PaginationParams } from '../types';
+import type { EventIndicatorFormValues, PaginationParams } from '../types';
 
-// 查询事件指标列表
-export const queryEventIndicators = async (
+// 查询事件指标列表（带名称）
+export const queryEventIndicatorsWithNames = async (
   params: PaginationParams,
-): Promise<ApiResponse<EventIndicatorItem[]>> => {
-  const page: { data: EventIndicatorItem[]; total: number; success: boolean } = await request(
-    '/api/event-indicator/list',
+): Promise<ResultPage<EventIndicatorItem>> => {
+  const page: ResultPage<EventIndicatorItem> = await request(
+    '/api/event-indicator/list-with-names',
     {
       method: 'GET',
       params,
     },
   );
-  return {
-    code: page.success ? 'SUCCESS' : 'FAILED',
-    message: '',
-    records: page.data,
-    total: page.total,
-    success: page.success,
-  } as unknown as ApiResponse<EventIndicatorItem[]>;
-};
-
-export interface EventIndicatorPageResponse {
-  data: EventIndicatorItem[];
-  total: number;
-  success: boolean;
-}
-
-// 查询事件指标列表（带名称）
-export const queryEventIndicatorsWithNames = async (
-  params: PaginationParams,
-): Promise<EventIndicatorPageResponse> => {
-  const page: EventIndicatorPageResponse = await request('/api/event-indicator/list-with-names', {
-    method: 'GET',
-    params,
-  });
   return page;
 };
 
 // 创建事件指标
 export const createEventIndicator = async (
   values: EventIndicatorFormValues,
-): Promise<ApiResponse<EventIndicatorItem>> => {
+): Promise<ApiResponse<boolean>> => {
   return await request('/api/event-indicator', {
     method: 'POST',
     data: values,
@@ -57,7 +35,7 @@ export const createEventIndicator = async (
 export const updateEventIndicator = async (
   id: string,
   values: EventIndicatorFormValues,
-): Promise<ApiResponse<EventIndicatorItem>> => {
+): Promise<ApiResponse<boolean>> => {
   return await request(`/api/event-indicator/${id}`, {
     method: 'PUT',
     data: values,
@@ -65,7 +43,7 @@ export const updateEventIndicator = async (
 };
 
 // 删除事件指标
-export const deleteEventIndicator = async (id: string): Promise<ApiResponse> => {
+export const deleteEventIndicator = async (id: string): Promise<ApiResponse<void>> => {
   return await request(`/api/event-indicator/${id}`, {
     method: 'DELETE',
   });

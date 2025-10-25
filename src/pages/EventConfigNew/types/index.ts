@@ -5,6 +5,7 @@
 // 导入其他类型定义
 import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
 import { DeriveFieldFormValues } from '@/pages/EventConfigNew/types/deriveFieldTypes';
+import { EventIndicatorItem } from '@/pages/EventIndicatorList/types';
 import { EventItem } from '@/pages/EventList/types';
 
 export * from './deriveFieldTypes';

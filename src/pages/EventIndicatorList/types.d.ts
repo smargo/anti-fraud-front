@@ -3,34 +3,14 @@
  */
 
 export interface EventIndicatorItem {
-  id?: number;
+  id?: string;
   eventNo: string;
   versionCode: string;
+  eventName?: string;
+  indicatorNo: string;
   indicatorName: string;
-  indicatorType: string;
-  indicatorDesc?: string;
-  indicatorFormula?: string;
   createdDate: string;
   createdBy?: string;
   lastModifiedDate?: string;
   lastModifiedBy?: string;
 }
-
-export interface EventIndicatorFormValues {
-  eventNo: string;
-  versionCode: string;
-  indicatorName: string;
-  indicatorType: string;
-  indicatorDesc?: string;
-  indicatorFormula?: string;
-}
-
-export interface EventIndicatorFormProps {
-  initialValues?: EventIndicatorItem | null;
-  onSubmit: (values: EventIndicatorFormValues) => Promise<void>;
-  onCancel: () => void;
-  indicatorTypeOptions: any[];
-  isEdit?: boolean;
-  forceReset?: boolean;
-}
-

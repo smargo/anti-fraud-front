@@ -3,6 +3,7 @@
  */
 
 import { DataSourceItem } from '@/pages/DataSourceList/types';
+import { EventIndicatorItem } from '@/pages/EventIndicatorList/types';
 import { dataSourceApi } from '@/services/antifraud/datasource';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
@@ -27,7 +28,7 @@ import {
 } from '../../services/eventIndicatorConfigApi';
 import { indicatorApi, IndicatorVO } from '../../services/indicatorApi';
 import { statementApi, StatementVO } from '../../services/statementApi';
-import type { EventIndicatorConfigTabProps, EventIndicatorItem } from '../../types';
+import type { EventIndicatorConfigTabProps } from '../../types';
 import EventIndicatorModal from './EventIndicatorModal';
 
 const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
