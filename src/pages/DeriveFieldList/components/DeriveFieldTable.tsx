@@ -2,13 +2,13 @@
  * DeriveFieldTable 组件
  */
 
-import React from 'react';
+import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
+import { queryDeriveFields } from '@/services/antifraud/deriveField';
+import { convertDictToValueEnum, getDictText, type DictItem } from '@/utils/dictUtils';
+import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
 import { Button, Card, Tooltip } from 'antd';
-import type { ActionType } from '@ant-design/pro-components';
-import { getDictText, convertDictToValueEnum, type DictItem } from '@/utils/dictUtils';
-import { queryDeriveFields } from '@/services/antifraud/deriveField';
-import type { DeriveFieldItem } from '../types';
+import React from 'react';
 
 interface DeriveFieldTableProps {
   actionRef: React.RefObject<ActionType>;
@@ -83,17 +83,17 @@ const DeriveFieldTable: React.FC<DeriveFieldTableProps> = ({
       width: 150,
       ellipsis: true,
       render: (script: any) => (
-        <Tooltip 
-          placement="topLeft"
-        >
-          <div style={{ 
-            maxWidth: '150px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap',
-            fontFamily: 'monospace',
-            fontSize: '12px'
-          }}>
+        <Tooltip placement="topLeft">
+          <div
+            style={{
+              maxWidth: '150px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              fontFamily: 'monospace',
+              fontSize: '12px',
+            }}
+          >
             {script || '无衍生脚本'}
           </div>
         </Tooltip>
@@ -115,10 +115,7 @@ const DeriveFieldTable: React.FC<DeriveFieldTableProps> = ({
       width: 80,
       fixed: 'right' as const,
       render: (_: any, record: DeriveFieldItem) => (
-        <Button 
-          type="link" 
-          onClick={() => onView(record)}
-        >
+        <Button type="link" onClick={() => onView(record)}>
           查看
         </Button>
       ),
@@ -136,7 +133,7 @@ const DeriveFieldTable: React.FC<DeriveFieldTableProps> = ({
           const searchParams = {
             ...params,
           };
-          
+
           const response = await queryDeriveFields(searchParams);
           // 如果返回的是分页对象，直接返回
           return response;
@@ -154,4 +151,3 @@ const DeriveFieldTable: React.FC<DeriveFieldTableProps> = ({
 };
 
 export default DeriveFieldTable;
-

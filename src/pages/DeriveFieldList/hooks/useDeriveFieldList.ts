@@ -2,9 +2,9 @@
  * DeriveFieldList 页面自定义 Hooks
  */
 
+import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
 import type { ActionType } from '@ant-design/pro-components';
 import { useRef, useState } from 'react';
-import type { DeriveFieldItem } from '../types';
 
 export const useDeriveFieldList = () => {
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);

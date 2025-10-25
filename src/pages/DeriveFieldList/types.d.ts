@@ -3,7 +3,7 @@
  */
 
 export interface DeriveFieldItem {
-  id?: number;
+  id?: string;
   eventNo: string;
   versionCode: string;
   fieldName: string;
@@ -17,25 +17,3 @@ export interface DeriveFieldItem {
   lastModifiedDate?: string;
   lastModifiedBy?: string;
 }
-
-export interface DeriveFieldFormValues {
-  eventNo: string;
-  versionCode: string;
-  fieldName: string;
-  fieldType: string;
-  fieldDesc?: string;
-  processType: string;
-  processBean?: string;
-  processScript?: string;
-}
-
-export interface DeriveFieldFormProps {
-  initialValues?: DeriveFieldItem | null;
-  onSubmit: (values: DeriveFieldFormValues) => Promise<void>;
-  onCancel: () => void;
-  fieldTypeOptions: any[];
-  processTypeOptions: any[];
-  isEdit?: boolean;
-  forceReset?: boolean;
-}
-

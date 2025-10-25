@@ -2,16 +2,16 @@
  * 衍生字段API服务
  */
 
-import { ApiResponse } from '@/types/index';
+import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
+import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
-import type { DeriveFieldFormValues, DeriveFieldItem, PaginationParams } from '../types';
-import { DeriveFieldItemPageResponse } from '../types';
+import type { DeriveFieldFormValues, PaginationParams } from '../types';
 
 // 查询衍生字段列表
 export const queryDeriveFields = async (
   params: PaginationParams,
-): Promise<DeriveFieldItemPageResponse> => {
-  const page: DeriveFieldItemPageResponse = await request('/api/deriveFields/list', {
+): Promise<ResultPage<DeriveFieldItem>> => {
+  const page: ResultPage<DeriveFieldItem> = await request('/api/deriveFields/list', {
     method: 'GET',
     params,
   });
@@ -40,7 +40,7 @@ export const updateDeriveField = async (
 };
 
 // 删除衍生字段
-export const deleteDeriveField = async (id: string): Promise<ApiResponse> => {
+export const deleteDeriveField = async (id: string): Promise<ApiResponse<boolean>> => {
   return await request(`/api/deriveFields/${id}`, {
     method: 'DELETE',
   });
