@@ -1,50 +1,10 @@
+import {
+  CreateVersionRequest,
+  EventConfigVersion,
+  EventConfigVersionListInfo,
+} from '@/pages/EventConfigNew/types';
 import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
-
-// 版本控制相关接口
-export interface EventConfigVersion {
-  id: string;
-  eventNo: string;
-  versionCode: string;
-  versionDesc: string;
-  status: 'DRAFT' | 'ACTIVE' | 'APPROVED' | 'ARCHIVED';
-
-  eventType: string;
-  eventGroup: string;
-
-  createdDate: string;
-  createdBy: string;
-  lastModifiedDate: string;
-  lastModifiedBy: string;
-  approvedDate?: string;
-  approvedBy?: string;
-  activatedDate?: string;
-  activatedBy?: string;
-}
-
-export interface CreateVersionRequest {
-  eventNo: string;
-  versionCode: string;
-  versionDesc: string;
-}
-
-export interface EventConfigVersionInfo {
-  versionHistory: EventConfigVersion[];
-}
-
-export interface ConfigChangeLog {
-  id: string;
-  versionId: string;
-  changeType: 'ADD' | 'UPDATE' | 'DELETE' | 'CREATE' | 'ACTIVATE' | 'SUBMIT' | 'APPROVE' | 'REJECT';
-  configType: 'VERSION' | 'FIELD' | 'DERIVE_FIELD' | 'STAGE' | 'INDICATOR';
-  configId?: string;
-  fieldName?: string;
-  oldValue?: string;
-  newValue?: string;
-  changeReason?: string;
-  createdDate: string;
-  createdBy: string;
-}
 
 // 版本管理 API
 export const versionApi = {
@@ -187,7 +147,7 @@ export const versionApi = {
 };
 
 // 版本信息相关函数
-export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersionInfo> => {
+export const getVersionInfo = async (eventNo: string): Promise<EventConfigVersionListInfo> => {
   console.log('getVersionInfo 开始，eventNo:', eventNo);
   const versionHistory = await versionApi.getVersionHistory(eventNo);
   const result = {

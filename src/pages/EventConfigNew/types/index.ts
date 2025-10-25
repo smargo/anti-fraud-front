@@ -5,6 +5,7 @@
 // 导入其他类型定义
 import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
 import { DeriveFieldFormValues } from '@/pages/EventConfigNew/types/deriveFieldTypes';
+import { EventIndicatorFormValues } from '@/pages/EventConfigNew/types/eventIndicatorTypes';
 import { EventIndicatorItem } from '@/pages/EventIndicatorList/types';
 import { EventItem } from '@/pages/EventList/types';
 import { FieldItem } from '@/pages/FieldList/types';
@@ -21,18 +22,25 @@ export interface EventConfigVersion {
   eventNo: string;
   versionCode: string;
   versionDesc: string;
-  eventDesc?: string;
+
   eventType: string;
   eventGroup: string;
+
   status: 'DRAFT' | 'ACTIVE' | 'APPROVED' | 'ARCHIVED';
+
   createdDate: string;
   createdBy: string;
   lastModifiedDate: string;
   lastModifiedBy: string;
 }
 
-// 版本信息
-export interface EventConfigVersionInfo {
+export interface CreateVersionRequest {
+  eventNo: string;
+  versionCode: string;
+  versionDesc: string;
+}
+
+export interface EventConfigVersionListInfo {
   versionHistory: EventConfigVersion[];
 }
 
@@ -57,7 +65,7 @@ export interface VersionControlProps {
   currentVersion: EventConfigVersion | null;
   isDraftMode: boolean;
   isReadOnly: boolean;
-  versionInfo: EventConfigVersionInfo;
+  versionInfo: EventConfigVersionListInfo;
   onCreateDraft: () => void;
   onShowVersionHistory: () => void;
   onShowCreateVersionModal: () => void;
@@ -252,14 +260,6 @@ export interface StatementDependencyViewModalProps {
   visible: boolean;
   viewingStatementDependency: StatementDependencyItem | null;
   onCancel: () => void;
-}
-
-// 表单相关
-export interface BasicInfoFormValues {
-  eventNo: string;
-  eventName: string;
-  eventType: string;
-  eventGroup: string;
 }
 
 // 分页参数
