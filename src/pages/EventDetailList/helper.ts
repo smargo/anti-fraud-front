@@ -26,15 +26,15 @@ export const formatDateTime = (date: string, separator: string = '-') => {
 export const handleEventDetailDelete = async (id: string, onSuccess?: () => void) => {
   try {
     const response = await deleteEventDetail(id);
-    if (response.code === 'SUCCESS') {
+    if (response.code === '0') {
       message.success('删除成功');
       onSuccess?.();
     } else {
       message.error(response.message || '删除失败');
     }
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error?.message) {
+      message.error(error.message);
     } else {
       message.error('删除失败：' + (error.message || '未知错误'));
     }
@@ -69,8 +69,8 @@ export const handleEventDetailFormSubmit = async (
     }
     onSuccess?.();
   } catch (error: any) {
-    if (error.response?.data?.message) {
-      message.error(error.response.data.message);
+    if (error.response?.message) {
+      message.error(error.message);
     } else {
       message.error('操作失败：' + (error.message || '未知错误'));
     }
