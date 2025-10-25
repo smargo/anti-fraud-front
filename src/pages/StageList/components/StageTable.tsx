@@ -2,12 +2,12 @@
  * StageTable 组件
  */
 
-import React from 'react';
+import { queryStages } from '@/services/antifraud/stage';
+import { convertDictToValueEnum, getDictText, type DictItem } from '@/utils/dictUtils';
+import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
 import { Button, Card, Tooltip } from 'antd';
-import type { ActionType } from '@ant-design/pro-components';
-import { getDictText, convertDictToValueEnum, type DictItem } from '@/utils/dictUtils';
-import { queryStages } from '@/services/antifraud/stage';
+import React from 'react';
 import type { StageItem } from '../types';
 
 interface StageTableProps {
@@ -16,11 +16,7 @@ interface StageTableProps {
   onView: (record: StageItem) => void;
 }
 
-const StageTable: React.FC<StageTableProps> = ({
-  actionRef,
-  stageOptions,
-  onView,
-}) => {
+const StageTable: React.FC<StageTableProps> = ({ actionRef, stageOptions, onView }) => {
   // 表格列定义
   const columns: any[] = [
     {
@@ -66,12 +62,14 @@ const StageTable: React.FC<StageTableProps> = ({
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '120px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -86,12 +84,14 @@ const StageTable: React.FC<StageTableProps> = ({
       ellipsis: true,
       render: (bean: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '120px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {bean || '无'}
           </div>
         </Tooltip>
@@ -106,12 +106,14 @@ const StageTable: React.FC<StageTableProps> = ({
       ellipsis: true,
       render: (statementNo: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '100px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '100px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {statementNo || '无'}
           </div>
         </Tooltip>
@@ -125,10 +127,7 @@ const StageTable: React.FC<StageTableProps> = ({
       width: 80,
       fixed: 'right',
       render: (_: any, record: StageItem) => (
-        <Button 
-          type="link" 
-          onClick={() => onView(record)}
-        >
+        <Button type="link" onClick={() => onView(record)}>
           查看
         </Button>
       ),
@@ -146,14 +145,10 @@ const StageTable: React.FC<StageTableProps> = ({
           const searchParams = {
             ...params,
           };
-          
+
           const response = await queryStages(searchParams);
           // 如果返回的是分页对象，直接返回
-          return {
-            data: response.records || response.data || [],
-            total: response.total,
-            success: true,
-          };
+          return response;
         }}
         pagination={{
           showSizeChanger: true,
@@ -168,4 +163,3 @@ const StageTable: React.FC<StageTableProps> = ({
 };
 
 export default StageTable;
-

@@ -4,7 +4,7 @@
 
 import { ApiResponse } from '@/types/index';
 import { request } from '@umijs/max';
-import type { PaginationParams, StageFormValues, StageItem } from '../types';
+import type { PaginationParams, StageFormValues } from '../types';
 import { StageItemPageResponse } from '../types';
 
 // 查询阶段列表
@@ -17,7 +17,7 @@ export const queryStages = async (params: PaginationParams): Promise<StageItemPa
 };
 
 // 创建阶段
-export const createStage = async (values: StageFormValues): Promise<ApiResponse<StageItem>> => {
+export const createStage = async (values: StageFormValues): Promise<ApiResponse<boolean>> => {
   return await request('/api/stage', {
     method: 'POST',
     data: values,
@@ -28,7 +28,7 @@ export const createStage = async (values: StageFormValues): Promise<ApiResponse<
 export const updateStage = async (
   id: string,
   values: StageFormValues,
-): Promise<ApiResponse<StageItem>> => {
+): Promise<ApiResponse<boolean>> => {
   return await request(`/api/stage/${id}`, {
     method: 'PUT',
     data: values,
@@ -36,7 +36,7 @@ export const updateStage = async (
 };
 
 // 删除阶段
-export const deleteStage = async (id: string): Promise<ApiResponse> => {
+export const deleteStage = async (id: string): Promise<ApiResponse<boolean>> => {
   return await request(`/api/stage/${id}`, {
     method: 'DELETE',
   });

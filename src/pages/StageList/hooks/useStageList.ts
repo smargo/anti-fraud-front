@@ -2,9 +2,9 @@
  * StageList 页面自定义 Hooks
  */
 
-import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
-import type { StageItem } from './types';
+import { useRef, useState } from 'react';
+import type { StageItem } from '../types';
 
 export const useStageList = () => {
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
@@ -28,4 +28,3 @@ export const useStageList = () => {
     closeViewModal,
   };
 };
-
