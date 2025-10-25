@@ -3,6 +3,9 @@
  */
 
 // 导入其他类型定义
+import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
+import { DeriveFieldFormValues } from '@/pages/EventConfigNew/types/deriveFieldTypes';
+
 export * from './deriveFieldTypes';
 export * from './eventIndicatorTypes';
 export * from './fieldTypes';
@@ -59,18 +62,6 @@ export type EventConfigTabKey =
   | 'stages'
   | 'indicators'
   | 'dependencies';
-
-// 版本控制相关
-export interface VersionControlState {
-  currentVersion: EventConfigVersion | null;
-  isDraftMode: boolean;
-  isReadOnly: boolean;
-  versionInfo: EventConfigVersionInfo;
-  versionHistoryVisible: boolean;
-  createVersionModalVisible: boolean;
-  copyVersionModalVisible: boolean;
-  copyingVersion: EventConfigVersion | null;
-}
 
 // 版本控制组件Props
 export interface VersionControlProps {
@@ -273,14 +264,6 @@ export interface StatementDependencyViewModalProps {
   visible: boolean;
   viewingStatementDependency: StatementDependencyItem | null;
   onCancel: () => void;
-}
-
-// 指标详情相关
-export interface IndicatorDetailState {
-  indicatorDetailVisible: boolean;
-  selectedIndicator: any | null;
-  selectedStatement: any | null;
-  selectedDataSource: any | null;
 }
 
 // 表单相关

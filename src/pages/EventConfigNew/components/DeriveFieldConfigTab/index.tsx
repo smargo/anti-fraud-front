@@ -2,6 +2,7 @@
  * 衍生字段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
+import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
@@ -9,7 +10,7 @@ import { Button, message, Popconfirm, Space, Tooltip } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { deleteDeriveField, queryDeriveFields } from '../../services/deriveFieldConfigApi';
-import type { DeriveFieldConfigTabProps, DeriveFieldItem } from '../../types';
+import type { DeriveFieldConfigTabProps } from '../../types';
 import DeriveFieldModal from './DeriveFieldModal';
 import DeriveFieldViewModal from './DeriveFieldViewModal';
 
