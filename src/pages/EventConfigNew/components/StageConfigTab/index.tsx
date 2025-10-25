@@ -2,6 +2,7 @@
  * 阶段配置Tab组件 - 完全按照原页面逻辑实现
  */
 
+import { StageItem } from '@/pages/StageList/types';
 import { convertDictToValueEnum, getDictText } from '@/utils/dictUtils';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
@@ -9,7 +10,7 @@ import { Button, message, Popconfirm, Space, Tooltip } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { deleteStage, queryStages } from '../../services/stageConfigApi';
-import type { StageConfigTabProps, StageItem } from '../../types';
+import type { StageConfigTabProps } from '../../types';
 import StageModal from './StageModal';
 import StageViewModal from './StageViewModal';
 

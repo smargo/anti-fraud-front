@@ -2,14 +2,14 @@
  * 阶段配置API服务
  */
 
-import { ApiResponse } from '@/types/index';
+import { StageItem } from '@/pages/StageList/types';
+import { ApiResponse, ResultPage } from '@/types/index';
 import { request } from '@umijs/max';
-import type { PaginationParams, StageFormValues } from '../types';
-import { StageItemPageResponse } from '../types';
+import type { PaginationParams } from '../types';
 
 // 查询阶段列表
-export const queryStages = async (params: PaginationParams): Promise<StageItemPageResponse> => {
-  const page: StageItemPageResponse = await request('/api/stage/page', {
+export const queryStages = async (params: PaginationParams): Promise<ResultPage<StageItem>> => {
+  const page: ResultPage<StageItem> = await request('/api/stage/page', {
     method: 'GET',
     params,
   });
@@ -17,7 +17,7 @@ export const queryStages = async (params: PaginationParams): Promise<StageItemPa
 };
 
 // 创建阶段
-export const createStage = async (values: StageFormValues): Promise<ApiResponse<boolean>> => {
+export const createStage = async (values: StageItem): Promise<ApiResponse<boolean>> => {
   return await request('/api/stage', {
     method: 'POST',
     data: values,
@@ -25,10 +25,7 @@ export const createStage = async (values: StageFormValues): Promise<ApiResponse<
 };
 
 // 更新阶段
-export const updateStage = async (
-  id: string,
-  values: StageFormValues,
-): Promise<ApiResponse<boolean>> => {
+export const updateStage = async (id: string, values: StageItem): Promise<ApiResponse<boolean>> => {
   return await request(`/api/stage/${id}`, {
     method: 'PUT',
     data: values,
