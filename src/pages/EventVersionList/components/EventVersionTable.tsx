@@ -2,13 +2,14 @@
  * EventVersionTable 组件
  */
 
-import React from 'react';
+import { EventVersionItem } from '@/pages/EventVersionList/types';
+import { queryEventVersions } from '@/services/antifraud/eventVersion';
+import { convertDictToValueEnum, getDictText, type DictItem } from '@/utils/dictUtils';
+import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
 import { Button, Space, Tooltip } from 'antd';
-import type { ActionType } from '@ant-design/pro-components';
-import { getDictText, convertDictToValueEnum, type DictItem } from '@/utils/dictUtils';
 import moment from 'moment';
-import { queryEventVersions, type EventVersionItem } from '@/services/antifraud/eventVersion';
+import React from 'react';
 
 interface EventVersionTableProps {
   actionRef: React.RefObject<ActionType>;
@@ -119,7 +120,7 @@ const EventVersionTable: React.FC<EventVersionTableProps> = ({
       key: 'lastModifiedDate',
       width: 150,
       hideInSearch: true,
-      render: (date: any) => date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : '-',
+      render: (date: any) => (date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : '-'),
     },
     {
       title: '操作',
@@ -129,11 +130,7 @@ const EventVersionTable: React.FC<EventVersionTableProps> = ({
       fixed: 'right' as const,
       render: (_: any, record: EventVersionItem) => (
         <Space size="middle">
-          <Button
-            type="link"
-            size="small"
-            onClick={() => onView(record)}
-          >
+          <Button type="link" size="small" onClick={() => onView(record)}>
             查看
           </Button>
         </Space>
