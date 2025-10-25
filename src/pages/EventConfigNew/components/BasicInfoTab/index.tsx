@@ -2,13 +2,12 @@
  * 基础信息Tab组件 - 完全按照原页面逻辑实现
  */
 
+import { Button, Col, Form, Input, message, Row, Select } from 'antd';
 import React from 'react';
-import { Form, Input, Select, Button, Row, Col, message } from 'antd';
-import { updateEventBasicInfo } from '../../services/eventConfigApi';
 import type { BasicInfoTabProps } from '../../types';
 
 const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
-  eventDetail,
+  eventItem,
   currentVersion,
   isReadOnly,
   configEventLoadProp,
@@ -21,14 +20,14 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
 
   // 当版本信息更新时，更新表单初始值
   React.useEffect(() => {
-    if (eventDetail || currentVersion) {
+    if (eventItem || currentVersion) {
       form.setFieldsValue({
-        eventNo: eventDetail?.eventNo,
-        eventName: eventDetail?.eventName,
-        ...currentVersion
+        eventNo: eventItem?.eventNo,
+        eventName: eventItem?.eventName,
+        ...currentVersion,
       });
     }
-  }, [eventDetail, currentVersion, form]);
+  }, [eventItem, currentVersion, form]);
 
   // 提交基础信息
   const handleSubmit = async (values: any) => {
@@ -55,20 +54,20 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
 
   // 无版本显示
   const NoVersionDisplay = () => (
-    <div style={{ 
-      marginBottom: 16, 
-      padding: 24, 
-      background: '#fafafa', 
-      borderRadius: 4, 
-      textAlign: 'center',
-      border: '1px dashed #d9d9d9'
-    }}>
+    <div
+      style={{
+        marginBottom: 16,
+        padding: 24,
+        background: '#fafafa',
+        borderRadius: 4,
+        textAlign: 'center',
+        border: '1px dashed #d9d9d9',
+      }}
+    >
       <div style={{ marginBottom: 16 }}>
         <span style={{ fontSize: 16, color: '#666' }}>该事件暂无配置版本</span>
       </div>
-      <div style={{ color: '#999' }}>
-        请先创建版本，然后开始配置事件信息
-      </div>
+      <div style={{ color: '#999' }}>请先创建版本，然后开始配置事件信息</div>
     </div>
   );
 
@@ -78,7 +77,10 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
   return (
     <div>
       {/* 根据状态显示不同的界面 - 完全按照原页面逻辑 */}
-      {!configEventLoadProp || !configEventLoadProp.specifyVersion || !configEventLoadProp.specifyVersion.id || !configEventLoadProp.specifyVersion.versionCode ? (
+      {!configEventLoadProp ||
+      !configEventLoadProp.specifyVersion ||
+      !configEventLoadProp.specifyVersion.id ||
+      !configEventLoadProp.specifyVersion.versionCode ? (
         <NoVersionDisplay />
       ) : (
         <>
@@ -90,16 +92,16 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
             wrapperCol={{ span: 18 }}
             onFinish={handleSubmit}
             initialValues={{
-              eventNo: eventDetail?.eventNo,
-              eventName: eventDetail?.eventName,
-              ...currentVersion
+              eventNo: eventItem?.eventNo,
+              eventName: eventItem?.eventName,
+              ...currentVersion,
             }}
           >
             <Row gutter={24}>
               <Col span={8}>
-                <Form.Item 
-                  name="eventNo" 
-                  label="事件编号" 
+                <Form.Item
+                  name="eventNo"
+                  label="事件编号"
                   rules={[{ required: true }]}
                   labelCol={{ span: 8 }}
                   wrapperCol={{ span: 16 }}
@@ -108,9 +110,9 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item 
-                  name="eventName" 
-                  label="事件名称" 
+                <Form.Item
+                  name="eventName"
+                  label="事件名称"
                   rules={[{ required: true }]}
                   labelCol={{ span: 8 }}
                   wrapperCol={{ span: 16 }}
@@ -121,9 +123,9 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
             </Row>
             <Row gutter={24}>
               <Col span={8}>
-                <Form.Item 
-                  name="eventType" 
-                  label="事件类型" 
+                <Form.Item
+                  name="eventType"
+                  label="事件类型"
                   rules={[{ required: true }]}
                   labelCol={{ span: 8 }}
                   wrapperCol={{ span: 16 }}
@@ -138,9 +140,9 @@ const BasicInfoTab: React.FC<BasicInfoTabProps> = ({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item 
-                  name="eventGroup" 
-                  label="事件分组" 
+                <Form.Item
+                  name="eventGroup"
+                  label="事件分组"
                   rules={[{ required: true }]}
                   labelCol={{ span: 8 }}
                   wrapperCol={{ span: 16 }}

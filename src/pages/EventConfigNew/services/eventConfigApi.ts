@@ -2,6 +2,7 @@
  * 事件配置API服务
  */
 
+import { EventItem } from '@/pages/EventList/types';
 import {
   getVersionInfo as getVersionInfoFromApi,
   versionApi,
@@ -9,10 +10,9 @@ import {
 import { ApiResponse } from '@/types/index';
 import { request } from 'umi';
 import type { EventConfigVersion, EventConfigVersionInfo } from '../types';
-import { EventDetailItem } from '../types';
 
 // 获取事件详情 - 完全按照原页面逻辑
-export const getEventByEventNo = async (eventNo: string): Promise<EventDetailItem> => {
+export const getEventByEventNo = async (eventNo: string): Promise<ApiResponse<EventItem>> => {
   const response = await request(`/api/events/eventNo/${eventNo}`, {
     method: 'GET',
   });

@@ -49,7 +49,7 @@ const EventConfig: React.FC = () => {
   // 主配置Hook
   const {
     eventNo,
-    eventDetail,
+    eventItem,
     currentVersion,
     isDraftMode,
     isReadOnly,
@@ -173,7 +173,7 @@ const EventConfig: React.FC = () => {
             {/* 基础信息 Tab */}
             <Tabs.TabPane tab={TAB_CONFIG.basic.label} key={TAB_CONFIG.basic.key}>
               <BasicInfoTab
-                eventDetail={eventDetail}
+                eventItem={eventItem}
                 currentVersion={currentVersion}
                 isReadOnly={isReadOnly}
                 configEventLoadProp={configEventLoadProp}

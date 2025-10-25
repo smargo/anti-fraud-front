@@ -5,27 +5,13 @@
 // 导入其他类型定义
 import { DeriveFieldItem } from '@/pages/DeriveFieldList/types';
 import { DeriveFieldFormValues } from '@/pages/EventConfigNew/types/deriveFieldTypes';
+import { EventItem } from '@/pages/EventList/types';
 
 export * from './deriveFieldTypes';
 export * from './eventIndicatorTypes';
 export * from './fieldTypes';
 export * from './stageTypes';
 export * from './statementDependencyTypes';
-
-// 事件基本信息
-export interface EventDetail {
-  id: string;
-  eventNo: string;
-  eventName: string;
-  eventDesc?: string;
-  createdDate: string;
-}
-
-export interface EventDetailItem {
-  code: string;
-  message: string;
-  data: EventDetail;
-}
 
 // 事件配置版本
 export interface EventConfigVersion {
@@ -112,7 +98,7 @@ export interface CopyVersionModalProps {
 
 // 基础信息Tab Props
 export interface BasicInfoTabProps {
-  eventDetail: EventDetail | null;
+  eventItem: EventItem | null;
   currentVersion: EventConfigVersion | null;
   isReadOnly: boolean;
   configEventLoadProp: EventLoadProp | null;

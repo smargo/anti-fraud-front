@@ -2,6 +2,7 @@
  * EventConfig 主Hook
  */
 
+import { EventItem } from '@/pages/EventList/types';
 import { message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'umi';
@@ -10,7 +11,6 @@ import type {
   EventConfigTabKey,
   EventConfigVersion,
   EventConfigVersionInfo,
-  EventDetail,
   EventLoadProp,
 } from '../types';
 import { getPageTitle, selectBestVersion, selectSelectedVersion } from '../utils';
@@ -20,7 +20,7 @@ export const useEventConfig = () => {
 
   // 基础状态
   const [eventNo, setEventNo] = useState<string>('');
-  const [eventDetail, setEventDetail] = useState<EventDetail | null>(null);
+  const [eventItem, setEventItem] = useState<EventItem | null>(null);
   const [currentVersion, setCurrentVersion] = useState<EventConfigVersion | null>(null);
   const [isDraftMode, setIsDraftMode] = useState<boolean>(false);
   const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export const useEventConfig = () => {
       setLoading(true);
       const event = await getEventByEventNo(eventNo);
       if (event.code === '0') {
-        setEventDetail(event.data);
+        setEventItem(event.data);
       } else {
         message.error('加载事件详情失败');
         throw new Error(event.message || '加载事件详情失败');
@@ -136,12 +136,12 @@ export const useEventConfig = () => {
   }, []);
 
   // 生成页面标题
-  const pageTitle = getPageTitle(eventDetail, eventNo);
+  const pageTitle = getPageTitle(eventItem, eventNo);
 
   return {
     // 状态
     eventNo,
-    eventDetail,
+    eventItem,
     currentVersion,
     isDraftMode,
     isReadOnly,
