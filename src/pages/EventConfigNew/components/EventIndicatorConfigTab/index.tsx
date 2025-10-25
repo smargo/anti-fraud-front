@@ -2,6 +2,7 @@
  * 事件指标配置Tab组件 - 完全按照原页面逻辑实现
  */
 
+import { DataSourceItem } from '@/pages/DataSourceList/types';
 import { dataSourceApi } from '@/services/antifraud/datasource';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
@@ -43,7 +44,7 @@ const EventIndicatorConfigTab: React.FC<EventIndicatorConfigTabProps> = ({
   const [indicatorDetailVisible, setIndicatorDetailVisible] = React.useState(false);
   const [selectedIndicator, setSelectedIndicator] = React.useState<IndicatorVO | null>(null);
   const [selectedStatement, setSelectedStatement] = React.useState<StatementVO | null>(null);
-  const [selectedDataSource, setSelectedDataSource] = React.useState<DataSourceVO | null>(null);
+  const [selectedDataSource, setSelectedDataSource] = React.useState<DataSourceItem | null>(null);
 
   // 显示指标详情
   const showIndicatorDetail = async (record: any) => {

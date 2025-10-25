@@ -3,7 +3,7 @@
  */
 
 export interface DataSourceItem {
-  id?: number;
+  id?: string;
   dataSourceNo: string;
   dataSourceName: string;
   dataSourceType: string;
@@ -15,6 +15,15 @@ export interface DataSourceItem {
   createdBy?: string;
   lastModifiedDate?: string;
   lastModifiedBy?: string;
+}
+
+export interface DataSourceQueryVO {
+  dataSourceNo?: string;
+  dataSourceName?: string;
+  dataSourceType?: string;
+  keyword?: string;
+  current?: number;
+  pageSize?: number;
 }
 
 export interface DataSourceFormValues {
@@ -34,4 +43,3 @@ export interface DataSourceFormProps {
   isEdit?: boolean;
   forceReset?: boolean;
 }
-

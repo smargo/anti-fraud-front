@@ -1,33 +1,10 @@
+import { DataSourceItem, DataSourceQueryVO } from '@/pages/DataSourceList/types';
 import { ApiResponse, ResultPage } from '@/types';
 import { request } from '@umijs/max';
 
-export interface DataSourceVO {
-  id: number;
-  dataSourceNo: string;
-  dataSourceName: string;
-  dataSourceType: string;
-  dataSourceConnectString: string;
-  dataSourceUserName: string;
-  dataSourcePassword: string;
-  dataSourceParam: string;
-  createdDate: string;
-  createdBy: string;
-  lastModifiedDate: string;
-  lastModifiedBy: string;
-}
-
-export interface DataSourceQueryVO {
-  dataSourceNo?: string;
-  dataSourceName?: string;
-  dataSourceType?: string;
-  keyword?: string;
-  current?: number;
-  pageSize?: number;
-}
-
 export const dataSourceApi = {
   // 根据ID获取数据源
-  getById: async (id: number): Promise<ApiResponse<DataSourceVO>> => {
+  getById: async (id: number): Promise<ApiResponse<DataSourceItem>> => {
     const response = await request(`/api/datasource/${id}`, {
       method: 'GET',
     });
@@ -35,7 +12,7 @@ export const dataSourceApi = {
   },
 
   // 根据数据源编号获取数据源
-  getByDataSourceNo: async (dataSourceNo: string): Promise<ApiResponse<DataSourceVO>> => {
+  getByDataSourceNo: async (dataSourceNo: string): Promise<ApiResponse<DataSourceItem>> => {
     const response = await request(`/api/datasource/by-data-source-no/${dataSourceNo}`, {
       method: 'GET',
     });
@@ -43,7 +20,7 @@ export const dataSourceApi = {
   },
 
   // 分页查询数据源
-  dataSourcePage: async (params: DataSourceQueryVO): Promise<ResultPage<DataSourceVO>> => {
+  dataSourcePage: async (params: DataSourceQueryVO): Promise<ResultPage<DataSourceItem>> => {
     const response = await request('/api/datasource/page', {
       method: 'GET',
       params,
@@ -52,7 +29,7 @@ export const dataSourceApi = {
   },
 
   // 获取所有数据源配置
-  getAllConfigs: async (): Promise<ApiResponse<DataSourceVO[]>> => {
+  getAllConfigs: async (): Promise<ApiResponse<DataSourceItem[]>> => {
     const response = await request('/api/datasource/configs', {
       method: 'GET',
     });
@@ -68,7 +45,7 @@ export const dataSourceApi = {
   },
 
   // 创建数据源
-  createDataSource: async (dataSource: Partial<DataSourceVO>) => {
+  createDataSource: async (dataSource: Partial<DataSourceItem>) => {
     const response = await request('/api/datasource/config', {
       method: 'POST',
       data: dataSource,
@@ -77,7 +54,7 @@ export const dataSourceApi = {
   },
 
   // 更新数据源
-  updateDataSource: async (dataSourceNo: string, dataSource: Partial<DataSourceVO>) => {
+  updateDataSource: async (dataSourceNo: string, dataSource: Partial<DataSourceItem>) => {
     const response = await request(`/api/datasource/config/${dataSourceNo}`, {
       method: 'PUT',
       data: dataSource,
@@ -98,7 +75,7 @@ export const dataSourceApi = {
     keyword: string = '',
     current: number = 1,
     pageSize: number = 20,
-  ): Promise<ResultPage<DataSourceVO>> => {
+  ): Promise<ResultPage<DataSourceItem>> => {
     const response = await request('/api/datasource/search', {
       method: 'GET',
       params: { keyword, current, pageSize },
