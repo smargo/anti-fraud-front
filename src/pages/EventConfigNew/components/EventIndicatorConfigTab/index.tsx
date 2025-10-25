@@ -2,6 +2,7 @@
  * 事件指标配置Tab组件 - 完全按照原页面逻辑实现
  */
 
+import { dataSourceApi } from '@/services/antifraud/datasource';
 import { PlusOutlined } from '@ant-design/icons';
 import { ProTable } from '@ant-design/pro-table';
 import {
@@ -19,7 +20,6 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { dataSourceApi, DataSourceVO } from '../../services/dataSourceApi';
 import {
   deleteEventIndicator,
   queryEventIndicatorsWithNames,

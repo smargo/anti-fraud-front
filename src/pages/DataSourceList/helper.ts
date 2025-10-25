@@ -20,7 +20,7 @@ export const formatDateTime = (date: string, separator: string = '-') => {
  */
 export const handleDataSourceDelete = async (dataSourceNo: string, onSuccess?: () => void) => {
   try {
-    const response = await dataSourceApi.delete(dataSourceNo);
+    const response = await dataSourceApi.deleteDataSource(dataSourceNo);
     if (response.code === '0') {
       message.success('删除成功');
       onSuccess?.();
@@ -46,7 +46,7 @@ export const handleDataSourceFormSubmit = async (
 ) => {
   try {
     if (editingDataSource) {
-      const response = await dataSourceApi.update(editingDataSource.dataSourceNo, {
+      const response = await dataSourceApi.updateDataSource(editingDataSource.dataSourceNo, {
         ...values,
         id: editingDataSource.id,
       });
@@ -57,7 +57,7 @@ export const handleDataSourceFormSubmit = async (
         return;
       }
     } else {
-      const response = await dataSourceApi.create(values);
+      const response = await dataSourceApi.createDataSource(values);
       if (response.code === '0') {
         message.success('创建成功');
       } else {
@@ -80,7 +80,7 @@ export const handleDataSourceFormSubmit = async (
  */
 export const fetchDataSourceList = async (params: any) => {
   try {
-    const response = await dataSourceApi.list(params);
+    const response = await dataSourceApi.dataSourcePage(params);
     return response;
   } catch (error) {
     console.error('获取数据源列表失败:', error);

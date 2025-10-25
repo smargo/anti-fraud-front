@@ -32,7 +32,7 @@ const StatementForm: React.FC<StatementFormProps> = ({
   // 加载所有数据源
   const loadAllDataSources = async () => {
     try {
-      const response = await dataSourceApi.list({ current: 1, pageSize: 10000 }); // 假设数据源不会超过10000条
+      const response = await dataSourceApi.getAllConfigs();
       setDataSourceOptions(response.data || []);
     } catch (error) {
       console.error('加载数据源失败:', error);
