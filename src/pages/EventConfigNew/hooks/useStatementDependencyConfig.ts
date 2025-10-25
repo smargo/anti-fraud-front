@@ -2,6 +2,10 @@
  * 语句依赖配置Hook
  */
 
+import {
+  StatementDependencyFormValues,
+  StatementDependencyItem,
+} from '@/pages/StatementDependencyList/types';
 import type { ActionType } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { useCallback, useRef, useState } from 'react';
@@ -11,7 +15,6 @@ import {
   queryStatementDependenciesWithNames,
   updateStatementDependency,
 } from '../services/statementDependencyConfigApi';
-import type { StatementDependencyFormValues, StatementDependencyItem } from '../types';
 
 export const useStatementDependencyConfig = (
   eventNo: string,

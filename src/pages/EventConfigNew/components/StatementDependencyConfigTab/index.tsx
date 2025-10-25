@@ -2,16 +2,17 @@
  * 语句依赖配置Tab组件
  */
 
-import React from 'react';
-import { Card, Button, Space, Popconfirm, message, Tag, Tooltip } from 'antd';
+import { StatementDependencyItem } from '@/pages/StatementDependencyList/types';
 import { PlusOutlined } from '@ant-design/icons';
+import type { ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { Button, Card, Popconfirm, Space, Tooltip } from 'antd';
 import moment from 'moment';
+import React from 'react';
 import { useStatementDependencyConfig } from '../../hooks/useStatementDependencyConfig';
+import type { StatementDependencyConfigTabProps } from '../../types';
 import StatementDependencyModal from './StatementDependencyModal';
 import StatementDependencyViewModal from './StatementDependencyViewModal';
-import type { StatementDependencyItem, StatementDependencyConfigTabProps } from '../../types';
 
 const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> = ({
   eventNo,
@@ -45,7 +46,7 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
       dataIndex: 'eventNo',
       key: 'eventNo',
       width: 200,
-      search: false
+      search: false,
     },
     {
       title: '语句编号',
@@ -55,12 +56,14 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '100px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '100px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -79,12 +82,14 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '130px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '130px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -99,12 +104,14 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '100px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '100px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -123,12 +130,14 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
       ellipsis: true,
       render: (text: string) => (
         <Tooltip placement="topLeft">
-          <div style={{ 
-            maxWidth: '130px', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
-            whiteSpace: 'nowrap' 
-          }}>
+          <div
+            style={{
+              maxWidth: '130px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {text || '无'}
           </div>
         </Tooltip>
@@ -150,13 +159,10 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
       width: 200,
       render: (_: any, record: StatementDependencyItem) => (
         <Space size="middle">
-          <Button 
-            type="link" 
-            onClick={() => showViewModal(record)}
-          >
+          <Button type="link" onClick={() => showViewModal(record)}>
             查看
           </Button>
-          <a 
+          <a
             onClick={isReadOnly ? undefined : () => showEditModal(record)}
             style={{ color: isReadOnly ? '#ccc' : undefined }}
           >
@@ -169,9 +175,15 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
             cancelText="取消"
             disabled={isReadOnly}
           >
-            <a 
+            <a
               style={{ color: isReadOnly ? '#ccc' : 'red' }}
-              onClick={isReadOnly ? undefined : () => {}}
+              onClick={
+                isReadOnly
+                  ? undefined
+                  : () => {
+                      console.log('删除语句依赖');
+                    }
+              }
             >
               删除
             </a>
@@ -200,10 +212,10 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
             defaultCollapsed: false,
           }}
           toolBarRender={() => [
-            <Button 
-              type="primary" 
-              icon={<PlusOutlined />} 
-              onClick={showCreateModal} 
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={showCreateModal}
               key="add"
               disabled={isReadOnly}
             >
@@ -220,7 +232,11 @@ const StatementDependencyConfigTab: React.FC<StatementDependencyConfigTabProps> 
         eventNo={eventNo}
         versionCode={versionCode}
         forceReset={forceReset}
-        onSubmit={editingStatementDependency ? handleUpdateStatementDependency : handleCreateStatementDependency}
+        onSubmit={
+          editingStatementDependency
+            ? handleUpdateStatementDependency
+            : handleCreateStatementDependency
+        }
         onCancel={closeModal}
       />
 

@@ -2,40 +2,19 @@
  * 语句依赖API服务
  */
 
-import { ApiResponse } from '@/types/index';
-import { request } from '@umijs/max';
-import type {
-  PaginationParams,
+import {
   StatementDependencyFormValues,
   StatementDependencyItem,
-} from '../types';
-import { StatementDependencyItemPageResponse } from '../types';
-
-// 查询语句依赖列表
-export const queryStatementDependencies = async (
-  params: PaginationParams,
-): Promise<ApiResponse<StatementDependencyItem[]>> => {
-  const page: { data: StatementDependencyItem[]; total: number; success: boolean } = await request(
-    '/api/statement-dependency/list',
-    {
-      method: 'GET',
-      params,
-    },
-  );
-  return {
-    code: page.success ? 'SUCCESS' : 'FAILED',
-    message: '',
-    records: page.data,
-    total: page.total,
-    success: page.success,
-  } as unknown as ApiResponse<StatementDependencyItem[]>;
-};
+} from '@/pages/StatementDependencyList/types';
+import { ApiResponse, ResultPage } from '@/types/index';
+import { request } from '@umijs/max';
+import type { PaginationParams } from '../types';
 
 // 查询语句依赖列表（带名称）
 export const queryStatementDependenciesWithNames = async (
   params: PaginationParams,
-): Promise<StatementDependencyItemPageResponse> => {
-  const page: StatementDependencyItemPageResponse = await request(
+): Promise<ResultPage<StatementDependencyItem>> => {
+  const page: ResultPage<StatementDependencyItem> = await request(
     '/api/statement-dependency/list-with-names',
     {
       method: 'GET',
@@ -67,7 +46,7 @@ export const updateStatementDependency = async (
 };
 
 // 删除语句依赖
-export const deleteStatementDependency = async (id: string): Promise<ApiResponse> => {
+export const deleteStatementDependency = async (id: string): Promise<ApiResponse<boolean>> => {
   return await request(`/api/statement-dependency/${id}`, {
     method: 'DELETE',
   });
