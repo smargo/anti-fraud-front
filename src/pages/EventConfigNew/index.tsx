@@ -118,7 +118,7 @@ const EventConfig: React.FC = () => {
 
   // 处理版本更新
   const handleVersionUpdate = () => {
-    loadVersionInfo(eventNo);
+    loadVersionInfo(eventNo, currentVersion?.versionCode || '');
   };
 
   // 处理创建版本成功

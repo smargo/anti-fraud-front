@@ -13,7 +13,7 @@ import type {
   EventDetail,
   EventLoadProp,
 } from '../types';
-import { getPageTitle, selectBestVersion } from '../utils';
+import { getPageTitle, selectBestVersion, selectSelectedVersion } from '../utils';
 
 export const useEventConfig = () => {
   const location = useLocation();
@@ -44,7 +44,7 @@ export const useEventConfig = () => {
     if (eventNoParam) {
       setEventNo(eventNoParam);
       loadEventDetail(eventNoParam);
-      loadVersionInfo(eventNoParam);
+      loadVersionInfo(eventNoParam, '');
     }
   }, [location.search]);
 
@@ -68,21 +68,25 @@ export const useEventConfig = () => {
   }, []);
 
   // 加载版本信息
-  const loadVersionInfo = useCallback(async (eventNo: string) => {
+  const loadVersionInfo = useCallback(async (eventNo: string, selectedVersionCode: string) => {
     try {
       setLoading(true);
       const info = await getVersionInfo(eventNo);
       setVersionInfo(info);
 
       // 自动选择最佳版本
-      const bestVersion = selectBestVersion(info.versionHistory);
-      if (bestVersion) {
-        setCurrentVersion(bestVersion);
-        setIsDraftMode(bestVersion.status === 'DRAFT');
+      // 如果指定版本则使用指定版本
+      const displaceVersion = !selectedVersionCode
+        ? selectBestVersion(info.versionHistory)
+        : selectSelectedVersion(info.versionHistory, selectedVersionCode);
+
+      if (displaceVersion) {
+        setCurrentVersion(displaceVersion);
+        setIsDraftMode(displaceVersion.status === 'DRAFT');
         setIsReadOnly(
-          bestVersion.status === 'ACTIVE' ||
-            bestVersion.status === 'APPROVED' ||
-            bestVersion.status === 'ARCHIVED',
+          displaceVersion.status === 'ACTIVE' ||
+            displaceVersion.status === 'APPROVED' ||
+            displaceVersion.status === 'ARCHIVED',
         );
       } else {
         setCurrentVersion(null);
@@ -92,7 +96,7 @@ export const useEventConfig = () => {
 
       setConfigEventLoadProp({
         eventNo: eventNo,
-        specifyVersion: bestVersion,
+        specifyVersion: displaceVersion,
       });
     } catch (error) {
       message.error('加载版本信息失败');
